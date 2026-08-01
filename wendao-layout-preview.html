@@ -31,7 +31,7 @@ button{font:inherit}
   height:100dvh;
   margin:auto;
   display:grid;
-  grid-template-rows:auto auto minmax(138px,28dvh) auto 1fr;
+  grid-template-rows:auto auto minmax(176px,34dvh) auto 1fr;
   background:var(--paper);
   overflow:hidden
 }
@@ -94,7 +94,7 @@ button{font:inherit}
 }
 .scene{
   min-height:0;
-  padding:12px 14px;
+  padding:13px 14px 12px;
   border-bottom:1px solid var(--line);
   background:#f8f0e3;
   overflow:hidden
@@ -113,11 +113,31 @@ button{font:inherit}
   font:600 21px/1.2 serif
 }
 .scene-text{
-  max-height:74px;
+  max-height:64px;
   overflow:hidden;
   color:#4a4e48;
   font-size:13px;
   line-height:1.55
+}
+.scene-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-top:8px
+}
+.info-pill{
+  padding:6px 7px;
+  border:1px solid #d0c0a7;
+  border-radius:7px;
+  background:#fff9ed;
+  color:#555b53;
+  font-size:11px;
+  line-height:1.35
+}
+.info-pill b{
+  display:block;
+  margin-bottom:2px;
+  color:var(--green)
 }
 .people{
   display:flex;
@@ -146,13 +166,13 @@ button{font:inherit}
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:5px;
-  padding:8px 10px;
+  padding:6px 10px 7px;
   border-bottom:1px solid var(--line);
   background:#ded2bd
 }
 .tab{
   position:relative;
-  min-height:42px;
+  min-height:38px;
   border:1px solid #9c8f78;
   border-radius:7px;
   background:#fff9ed;
@@ -247,10 +267,12 @@ button{font:inherit}
   line-height:1.45
 }
 @media(max-height:690px){
-  .shell{grid-template-rows:auto auto minmax(116px,25dvh) auto 1fr}
-  .scene-text{max-height:52px}
+  .shell{grid-template-rows:auto auto minmax(152px,31dvh) auto 1fr}
+  .scene-text{max-height:44px}
+  .scene-grid{grid-template-columns:1fr 1fr}
+  .info-pill{padding:5px 6px;font-size:10px}
   .brand h1{font-size:22px}
-  .tab{min-height:38px}
+  .tab{min-height:36px}
 }
 </style>
 </head>
@@ -281,6 +303,12 @@ button{font:inherit}
     <h2>灶火刚旺起来</h2>
     <div class="scene-text">
       你买下的饭馆还很简陋，后厨只有一口旧锅。清晨有两个脚夫来问热汤价钱，隔壁铺子的掌柜也探头看了一眼。刚刚你整理了门面，口碑略有提升。
+    </div>
+    <div class="scene-grid">
+      <div class="info-pill"><b>刚刚发生</b>打理门面，口碑 +1</div>
+      <div class="info-pill"><b>今日建议</b>库存偏低，可采购食材</div>
+      <div class="info-pill"><b>经营状态</b>Lv.1｜库存 8｜人手 0</div>
+      <div class="info-pill"><b>见闻</b>沈禾今日从药行带回消息</div>
     </div>
     <div class="people">
       <span class="chip">沈禾在这里</span>
