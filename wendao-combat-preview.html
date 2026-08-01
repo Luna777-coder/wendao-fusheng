@@ -7,7 +7,7 @@
 <style>
 :root{
   --paper:#f2eadb;
-  --paper2:#e4d7c1;
+  --paper2:#eadfcd;
   --ink:#2b302c;
   --muted:#746f63;
   --red:#843a31;
@@ -15,9 +15,7 @@
   --green:#50675a;
   --line:#c6b89f;
   --gold:#9b743a;
-  --good:#43634f;
-  --bad:#8a3d35;
-  --safe-bottom:env(safe-area-inset-bottom,0px)
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
@@ -25,7 +23,7 @@ body{
   margin:0;
   background:#17201c;
   color:var(--ink);
-  font-family:"Microsoft YaHei","PingFang SC",sans-serif
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
 }
 button{font:inherit}
 .shell{
@@ -33,9 +31,9 @@ button{font:inherit}
   height:100dvh;
   margin:auto;
   display:grid;
-  grid-template-rows:auto auto minmax(188px,35dvh) auto 1fr;
+  grid-template-rows:auto auto minmax(184px,33dvh) auto 1fr;
   background:var(--paper);
-  overflow:hidden
+  overflow:hidden;
 }
 .top{
   display:flex;
@@ -44,18 +42,17 @@ button{font:inherit}
   gap:12px;
   padding:12px 14px 9px;
   border-bottom:1px solid var(--line);
-  background:#efe5d2
+  background:#efe5d2;
 }
 .brand h1{
   margin:0;
   color:var(--red);
   font:700 25px/1.1 serif;
-  letter-spacing:1px
 }
 .brand p{
   margin:3px 0 0;
   color:var(--muted);
-  font-size:11px
+  font-size:11px;
 }
 .menu{
   width:40px;
@@ -64,7 +61,7 @@ button{font:inherit}
   border-radius:50%;
   background:#fff9ed;
   color:var(--red);
-  font-size:18px
+  font-size:18px;
 }
 .status{
   display:grid;
@@ -72,35 +69,35 @@ button{font:inherit}
   gap:5px;
   padding:8px 10px;
   border-bottom:1px solid var(--line);
-  background:#eadfcd
+  background:var(--paper2);
 }
 .stat{
   min-width:0;
   padding:6px 2px;
   border:1px solid var(--line);
-  border-radius:5px;
+  border-radius:6px;
   background:#fff8eb;
-  text-align:center
+  text-align:center;
 }
 .stat b{
   display:block;
   color:var(--red2);
   font-size:14px;
   line-height:1.1;
-  white-space:nowrap
+  white-space:nowrap;
 }
 .stat span{
   display:block;
   margin-top:3px;
   color:var(--muted);
-  font-size:9px
+  font-size:9px;
 }
 .scene{
   min-height:0;
   padding:12px 14px 11px;
   border-bottom:1px solid var(--line);
   background:#f8f0e3;
-  overflow:hidden
+  overflow:hidden;
 }
 .scene-head{
   display:flex;
@@ -108,124 +105,115 @@ button{font:inherit}
   gap:8px;
   margin-bottom:5px;
   color:var(--gold);
-  font-size:11px
+  font-size:11px;
 }
 .scene h2{
   margin:0 0 6px;
   color:var(--red2);
-  font:600 20px/1.2 serif
+  font:600 22px/1.18 serif;
 }
 .scene-text{
-  max-height:58px;
-  overflow:hidden;
   color:#4a4e48;
   font-size:13px;
-  line-height:1.5
+  line-height:1.5;
+  max-height:58px;
+  overflow:hidden;
 }
-.scene-grid{
+.scene-summary{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  margin-top:8px
-}
-.info-pill{
-  padding:6px 7px;
-  border:1px solid #d0c0a7;
-  border-radius:7px;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:start;
+  margin-top:8px;
+  padding:8px 9px;
+  border:1px solid #cdbb9d;
+  border-radius:8px;
   background:#fff9ed;
-  color:#555b53;
-  font-size:11px;
-  line-height:1.35
 }
-.info-pill b{
+.scene-summary b{
   display:block;
   margin-bottom:2px;
-  color:var(--green)
-}
-.people{
-  display:none;
-  flex-wrap:wrap;
-  gap:5px;
-  margin-top:8px
-}
-.chip{
-  padding:3px 7px;
-  border:1px solid #bba98b;
-  border-radius:99px;
-  background:#fff9ed;
   color:var(--green);
-  font-size:11px
+  font-size:13px;
 }
-.chip.hot{
-  border-color:#a35042;
-  color:#8a342c;
-  background:#f1ded4
+.scene-summary span{
+  display:block;
+  color:#555b53;
+  font-size:12px;
+  line-height:1.4;
+}
+.scene-summary em{
+  font-style:normal;
+  color:var(--red2);
+  font-weight:700;
+  font-size:13px;
+  white-space:nowrap;
 }
 .goal{
-  margin-top:8px;
-  padding:7px 8px;
+  margin-top:7px;
+  padding-left:8px;
   border-left:3px solid var(--green);
-  background:#e7dfcf;
   color:#4f5b52;
   font-size:12px;
-  line-height:1.4
+  line-height:1.4;
 }
 .tabs{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:5px;
   padding:7px 10px 8px;
-  border-bottom:1px solid var(--line);
   border-top:1px solid var(--line);
-  background:#ded2bd
+  border-bottom:1px solid var(--line);
+  background:#ded2bd;
 }
 .tab{
   min-height:38px;
   border:1px solid #9c8f78;
-  border-radius:7px;
+  border-radius:8px;
   background:#fff9ed;
   color:var(--ink);
   font-weight:700;
-  font-size:12px
+  font-size:12px;
 }
 .tab.active{
   border-color:var(--red);
   background:#ead2c8;
-  color:var(--red2)
+  color:var(--red2);
 }
 .panel{
   min-height:0;
   padding:10px 12px calc(10px + var(--safe-bottom));
   overflow:auto;
-  background:var(--paper)
+  background:var(--paper);
 }
 .panel h3{
   margin:0 0 8px;
   color:var(--red2);
-  font:600 17px serif
+  font:600 18px serif;
 }
 .panel-desc{
   margin:0 0 9px;
   color:var(--muted);
   font-size:12px;
-  line-height:1.55
+  line-height:1.55;
 }
-.card{
+.card,.timeline-item{
   margin-bottom:8px;
   padding:10px;
   border:1px solid var(--line);
   border-radius:8px;
-  background:#fff9ed
+  background:#fff9ed;
 }
-.card b{
+.card b,.timeline-item b{
   display:block;
   margin-bottom:4px;
   color:var(--red2);
-  font-size:14px
+  font-size:14px;
 }
-.card small{
+.card small,.timeline-item small{
+  display:block;
   color:var(--muted);
-  line-height:1.5
+  line-height:1.5;
 }
 .choice{
   width:100%;
@@ -239,13 +227,10 @@ button{font:inherit}
   border:1px solid #9b907d;
   border-radius:8px;
   background:#fff9ed;
-  text-align:left
+  text-align:left;
 }
 .choice:active{transform:translateY(1px);background:#f3e3d1}
-.choice:disabled{
-  opacity:.55;
-  filter:grayscale(.2)
-}
+.choice:disabled{opacity:.55}
 .icon{
   display:grid;
   place-items:center;
@@ -255,17 +240,17 @@ button{font:inherit}
   border-radius:8px;
   background:#f1e4d2;
   color:var(--red2);
-  font-weight:700
+  font-weight:700;
 }
 .choice strong{
   display:block;
-  color:var(--red2)
+  color:var(--red2);
 }
 .choice small{
   display:block;
   margin-top:3px;
   color:var(--muted);
-  line-height:1.45
+  line-height:1.45;
 }
 .factor{
   display:grid;
@@ -273,34 +258,35 @@ button{font:inherit}
   gap:8px;
   margin-bottom:6px;
   font-size:12px;
-  line-height:1.45
+  line-height:1.45;
 }
 .factor span{
   color:#fff;
   text-align:center;
   border-radius:99px;
-  padding:2px 6px
+  padding:2px 6px;
+  background:var(--green);
 }
-.plus span{background:var(--good)}
-.minus span{background:var(--bad)}
+.factor.minus span{background:var(--red)}
 .attrs{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px
+  gap:6px;
 }
 .attr{
   padding:7px 5px;
   border:1px solid #d0c0a7;
   border-radius:7px;
   background:#fff9ed;
-  text-align:center
+  text-align:center;
 }
 .attr b{display:block;color:var(--red2)}
 .attr span{font-size:10px;color:var(--muted)}
 @media(max-height:700px){
-  .shell{grid-template-rows:auto auto minmax(168px,32dvh) auto 1fr}
-  .scene-text{max-height:42px}
-  .info-pill{padding:5px 6px;font-size:10px}
+  .shell{grid-template-rows:auto auto minmax(166px,30dvh) auto 1fr}
+  .scene h2{font-size:20px}
+  .scene-text{max-height:40px}
+  .scene-summary{padding:6px 8px}
   .brand h1{font-size:22px}
   .tabs{padding-top:6px;padding-bottom:7px}
 }
@@ -321,23 +307,23 @@ button{font:inherit}
   <section class="scene">
     <div class="scene-head">
       <span id="place">青石城 · 茶馆</span>
-      <span id="weather">天气：薄雾 · 城外传闻增多</span>
+      <span id="sceneMeta">薄雾 · 城外传闻增多</span>
     </div>
     <h2 id="sceneTitle">北坡有兽影</h2>
     <div class="scene-text" id="sceneText"></div>
-    <div class="scene-grid">
-      <div class="info-pill"><b>刚刚发生</b><span id="lastEvent">你听见两名脚夫谈起北坡拖痕。</span></div>
-      <div class="info-pill"><b>今日建议</b><span id="suggestion">先打听，再决定是否冒险。</span></div>
-      <div class="info-pill"><b>战斗判断</b><span id="odds">尚未接敌。</span></div>
-      <div class="info-pill"><b>人物反应</b><span id="npcReaction">沈祈提醒你别把好奇当本事。</span></div>
+    <div class="scene-summary">
+      <div>
+        <b id="summaryTitle">当前重点</b>
+        <span id="summaryText">先确认危险来源，再决定是否做战斗准备。</span>
+      </div>
+      <em id="summaryTag">未接敌</em>
     </div>
-    <div class="people" id="people"></div>
-    <div class="goal" id="goal">当前目标：在三天内完成一次可理解的战斗，从准备、接敌到结算。</div>
+    <div class="goal" id="goal">目标：在三天内完成一次从传闻、准备、接敌到结算的首战体验。</div>
   </section>
 
   <nav class="tabs">
     <button class="tab active" data-tab="action">行动</button>
-    <button class="tab" data-tab="battle">战斗</button>
+    <button class="tab" data-tab="bag">背包</button>
     <button class="tab" data-tab="person">属性</button>
     <button class="tab" data-tab="journal">记录</button>
     <button class="tab" data-tab="map">地图</button>
@@ -357,32 +343,14 @@ const state = {
   spirit: 3,
   tab: "action",
   stage: "rumor",
-  prep: {
-    intel: false,
-    armor: false,
-    companion: false,
-    terrain: false,
-    practice: false,
-    soothed: false
-  },
-  attrs: {
-    hp: 82,
-    physical: 17,
-    magic: 8,
-    defense: 11,
-    wisdom: 13,
-    stealth: 12,
-    social: 14,
-    body: 16,
-    mind: 12
-  },
-  log: [
-    "茶馆脚夫说：北坡草木被压出一道弧形拖痕，不像寻常野兽。"
-  ],
-  result: null
+  prep:{intel:false, armor:false, companion:false, terrain:false, practice:false},
+  attrs:{hp:82, physical:17, magic:8, defense:11, wisdom:13, stealth:12, social:14, body:16, mind:12},
+  items:["干粮 x2"],
+  log:["茶馆脚夫说：北坡草木被压出一道弧形拖痕，不像寻常野兽。"],
+  result:null
 };
 
-const $ = (id) => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
 function statusLabel(){
   return [
@@ -395,20 +363,14 @@ function statusLabel(){
   ].map(([label,value]) => `<div class="stat"><b>${value}</b><span>${label}</span></div>`).join("");
 }
 
-function setTab(tab){
-  state.tab = tab;
-  render();
-}
-
 function addLog(text){
   state.log.unshift(text);
   state.log = state.log.slice(0, 8);
-  $("lastEvent").textContent = text;
 }
 
 function spendAp(cost){
   if(state.ap < cost){
-    addLog("行动力不足。这个预览页不做挨饿和睡觉循环，你可以点右上角重置。");
+    addLog("行动力不足。这个预览页不做睡觉循环，可以点右上角重置。");
     return false;
   }
   state.ap -= cost;
@@ -427,13 +389,12 @@ function choosePrep(kind){
     if(!spendAp(1)) return;
     state.prep.intel = true;
     state.money += 2;
-    addLog("你向脚夫和茶博士追问细节，确认兽影受了伤，常从北坡废亭旁经过。");
-    $("suggestion").textContent = "已获得情报。明日可准备装备或约人同行。";
+    addLog("你追问脚夫和茶博士，确认魂兽受伤，常从北坡废亭旁经过。");
     nextDay();
     state.stage = "prepare";
   }
   if(kind === "ignore"){
-    addLog("你没有立刻追查，只把北坡兽影记在心里。沈祈说：活着比逞强重要。");
+    addLog("你暂时记下传闻，没有贸然出城。沈祈说：活着比逞强重要。");
     nextDay();
     state.stage = "prepare";
   }
@@ -443,6 +404,7 @@ function choosePrep(kind){
     state.money -= 38;
     state.prep.armor = true;
     state.attrs.defense += 4;
+    state.items.push("旧锁甲 x1");
     addLog("你买下一件旧锁甲。它不体面，但能挡住山兽第一下撞击。");
   }
   if(kind === "companion"){
@@ -453,7 +415,7 @@ function choosePrep(kind){
   if(kind === "terrain"){
     if(!spendAp(1)) return;
     state.prep.terrain = true;
-    addLog("你提前绕到北坡废亭，发现一段塌墙正好能阻住突进。");
+    addLog("你提前看过北坡废亭，发现一段塌墙正好能阻住突进。");
   }
   if(kind === "practice"){
     if(!spendAp(1)) return;
@@ -468,7 +430,6 @@ function choosePrep(kind){
 function goBattle(){
   nextDay();
   state.stage = "battle";
-  state.tab = "battle";
   addLog("第三日清晨，你抵达北坡。薄雾里有低沉喘息，废亭后露出一截带血的角。");
   render();
 }
@@ -482,111 +443,111 @@ function battleScore(action){
   if(state.prep.armor){ score += 8; plus.push("旧锁甲：减少第一轮受伤风险 +8"); }
   if(state.prep.companion){ score += 10; plus.push("沈祈同行：失手时有人接应 +10"); }
   if(state.prep.practice){ score += 6; plus.push("临战练习：架势更稳 +6"); }
-  if(action === "stand"){ score += 7; plus.push("正面迎击：兵修基础对突进目标略有优势 +7"); }
+  if(action === "stand"){ score += 7; plus.push("架势迎击：兵修对突进目标略有优势 +7"); }
   if(action === "ambush"){
     score += state.prep.terrain ? 12 : 3;
-    plus.push(state.prep.terrain ? "设伏：地形准备完整 +12" : "临时设伏：准备不足，仅有小幅优势 +3");
+    plus.push(state.prep.terrain ? "借地形设伏：准备完整 +12" : "临时设伏：准备不足 +3");
   }
   if(action === "soothe"){
     score += state.attrs.social >= 14 ? 8 : 0;
     score += state.prep.intel ? 5 : -6;
-    if(state.attrs.social >= 14) plus.push("社交较高：语气稳定，敌意下降 +8");
+    if(state.attrs.social >= 14) plus.push("社交较高：敌意下降 +8");
     if(state.prep.intel) plus.push("知道它受伤：安抚方向正确 +5");
-    else minus.push("不了解伤势：靠近时判断不准 -6");
+    else minus.push("不了解伤势：靠近判断不准 -6");
   }
   if(action === "run"){
     score = 70 + (state.prep.companion ? 8 : 0);
     plus.push("主动撤离：目标改为保命，成功率较高");
   }
   if(state.health < 75){ score -= 8; minus.push("健康偏低：动作迟缓 -8"); }
-  if(!state.prep.armor && action !== "run"){ score -= 7; minus.push("防具简陋：被撞伤风险增加 -7"); }
+  if(!state.prep.armor && action !== "run"){ score -= 7; minus.push("防具简陋：受伤风险增加 -7"); }
   if(action === "stand" && !state.prep.terrain){ score -= 5; minus.push("没有控场准备：硬接突进更危险 -5"); }
-  score = Math.max(15, Math.min(95, score));
-  return {score, plus, minus};
+  return {score:Math.max(15, Math.min(95, score)), plus, minus};
 }
 
 function resolveBattle(action){
   const data = battleScore(action);
-  let title = "";
-  let text = "";
-  let reward = "";
+  let title, text, reward, after;
   if(action === "run"){
     title = "撤离成功";
-    text = "你没有逞强，沿着来路慢慢退下山坡。魂兽没有追出太远，只在雾里发出低吼。";
-    reward = "保住健康，获得北坡危险情报。沈祈认可你的谨慎。";
+    text = "你没有逞强，沿着来路慢慢退下山坡。魂兽没有追出太远，只在雾里低吼。";
+    reward = "保住健康，获得北坡危险情报。";
+    after = "沈祈认可你的谨慎。";
     state.health -= 1;
   } else if(data.score >= 75){
     title = "小胜";
     text = action === "soothe"
-      ? "你没有先动手，而是用低声和缓的语气绕开它的伤口。魂兽最终退入林中，留下几片带灵气的鳞。"
+      ? "你没有先动手，而是绕开它的伤口低声安抚。魂兽最终退入林中，留下几片带灵气的鳞。"
       : "你抓住它突进后的停顿，借塌墙和武器逼退了它。它没有死，却记住了你的气息。";
-    reward = "获得魂兽鳞片、北坡线索、修为进度 +8。沈祈对你的判断更信任。";
+    reward = "获得魂兽鳞片、北坡线索、修为进度 +8。";
+    after = "沈祈对你的判断更信任。";
     state.spirit += 1;
+    state.items.push("魂兽鳞片 x1", "北坡线索 x1");
   } else if(data.score >= 50){
     title = "险胜";
-    text = "你挡住了最危险的一次冲撞，但手臂被震得发麻。魂兽拖着伤腿逃走，地上留下一道奇怪的黑色血痕。";
-    reward = "健康 -8，获得黑血线索、修为进度 +5。沈祈会劝你下次先准备药。";
+    text = "你挡住最危险的一次冲撞，但手臂被震得发麻。魂兽拖着伤腿逃走，地上留下一道黑色血痕。";
+    reward = "健康 -8，获得黑血线索、修为进度 +5。";
+    after = "沈祈会劝你下次先准备药。";
     state.health -= 8;
+    state.items.push("黑血线索 x1");
   } else {
     title = "被救";
     text = "你判断慢了一步，魂兽从雾中撞来。沈祈把你拖到塌墙后，才避开第二次扑击。";
-    reward = "健康 -16，欠沈祈一次人情。获得失败情报：凡身硬拼城外异兽很危险。";
+    reward = "健康 -16，欠沈祈一次人情。";
+    after = "失败情报：凡身硬拼城外异兽很危险。";
     state.health -= 16;
   }
   state.health = Math.max(20, state.health);
-  state.result = {title, text, reward, score:data.score, plus:data.plus, minus:data.minus, action};
+  state.result = {title, text, reward, after, score:data.score, plus:data.plus, minus:data.minus};
   state.stage = "done";
-  state.tab = "battle";
-  addLog(`${title}：${reward}`);
+  state.tab = "action";
+  addLog(`${title}：${reward}${after}`);
   render();
 }
 
 function sceneCopy(){
-  if(state.stage === "rumor"){
-    return {
-      place:"青石城 · 茶馆",
-      title:"北坡有兽影",
-      text:"茶馆里人声很杂。两个脚夫压低声音，说北坡废亭旁有拖痕，像是某种受伤的魂兽。沈祈看了你一眼，没催你去，也没劝你别管。",
-      suggestion:"先打听，再决定是否冒险。",
-      odds:"尚未接敌。",
-      reaction:"沈祈提醒你别把好奇当本事。",
-      goal:"当前目标：决定是否追查北坡兽影，为第一次战斗做前置准备。",
-      people:["沈祈在这里","茶博士有消息","脚夫可打听"]
-    };
-  }
-  if(state.stage === "prepare"){
-    return {
-      place:"青石城 · 市集",
-      title:"出城前的准备",
-      text:"北坡离城不远，但雾天容易迷路。你可以花钱买旧锁甲，也可以找沈祈同行，或者提前去废亭附近看地形。准备越多，战斗时越容易看懂胜负原因。",
-      suggestion:"建议至少做一项准备，再前往北坡。",
-      odds:"准备会改变最终成功率。",
-      reaction:state.prep.companion ? "沈祈已答应同行。" : "沈祈在等你开口。",
-      goal:"当前目标：用有限行动力选择战斗前准备，然后进入第三日首战。",
-      people:["沈祈可同行","铁匠卖旧锁甲","猎户知道山路"]
-    };
-  }
+  if(state.stage === "rumor") return {
+    place:"青石城 · 茶馆",
+    meta:"薄雾 · 城外传闻增多",
+    title:"北坡有兽影",
+    text:"茶馆里人声很杂。两个脚夫压低声音，说北坡废亭旁有拖痕，像是某种受伤的魂兽。沈祈看了你一眼，没催你去，也没劝你别管。",
+    summaryTitle:"当前重点",
+    summaryText:"先确认危险来源，再决定是否做战斗准备。",
+    summaryTag:"未接敌",
+    goal:"目标：追查传闻，或暂时记下，第二天再做准备。"
+  };
+  if(state.stage === "prepare") return {
+    place:"青石城 · 市集",
+    meta:"薄雾 · 可准备出城",
+    title:"出城前的准备",
+    text:"北坡离城不远，但雾天容易迷路。你可以准备装备、找沈祈同行、观察地形，或练习架势。准备越多，战斗结果越容易被理解。",
+    summaryTitle:"准备会改变结果",
+    summaryText:"旧锁甲、同行、地形和练习都会进入判定。",
+    summaryTag:`行动 ${state.ap}/5`,
+    goal:"目标：至少做一项准备，然后前往北坡。"
+  };
   if(state.stage === "battle"){
+    const best = Math.max(battleScore("stand").score, battleScore("ambush").score, battleScore("soothe").score, battleScore("run").score);
     return {
       place:"城外 · 北坡废亭",
+      meta:"薄雾 · 接敌",
       title:"薄雾中的喘息",
       text:"废亭半塌，墙根有新鲜血迹。一只地武魂兽伏在雾里，肩背随呼吸起伏。它受伤了，但受伤的兽也最容易发狂。",
-      suggestion:"选择战斗方式前，先看优势和劣势。",
-      odds:"不同选择会调用不同属性。",
-      reaction:state.prep.companion ? "沈祈低声说：我看你手势，必要时拉你。" : "这里没有同伴接应。",
-      goal:"当前目标：完成第一次冲突判定，观察战斗反馈是否足够清楚。",
-      people:["受伤地武魂兽","北坡废亭","退路尚可"]
+      summaryTitle:"当前判断",
+      summaryText:"选择方式前先看优势劣势。战斗已经并入行动页，不再单独占底部按钮。",
+      summaryTag:`最高 ${best}%`,
+      goal:"目标：选择迎击、设伏、安抚或撤离，完成首战判定。"
     };
   }
   return {
     place:"城外 · 北坡归途",
+    meta:"战斗结束 · 可回城",
     title:state.result.title,
     text:state.result.text,
-    suggestion:"战斗结束后应把结果带回经营、关系、修行和任务。",
-    odds:`本次判定：${state.result.score}%`,
-    reaction:state.result.reward,
-    goal:"当前目标已完成：一次首战体验从传闻、准备、接敌到结算完整闭环。",
-    people:["沈祈有后续对话","魂兽线索已记录","可返回青石城"]
+    summaryTitle:"本次收获",
+    summaryText:`${state.result.reward}${state.result.after}`,
+    summaryTag:`判定 ${state.result.score}%`,
+    goal:"目标：把战斗结果带回背包、记录、人物关系和后续行动。"
   };
 }
 
@@ -594,81 +555,79 @@ function renderScene(){
   const s = sceneCopy();
   $("subtitle").textContent = `首战体验预览 · 浮生1年1月${state.day}日 · ${state.day < 3 ? "清晨" : "薄雾"}`;
   $("place").textContent = s.place;
+  $("sceneMeta").textContent = s.meta;
   $("sceneTitle").textContent = s.title;
   $("sceneText").textContent = s.text;
-  $("suggestion").textContent = s.suggestion;
-  $("odds").textContent = s.odds;
-  $("npcReaction").textContent = s.reaction;
+  $("summaryTitle").textContent = s.summaryTitle;
+  $("summaryText").textContent = s.summaryText;
+  $("summaryTag").textContent = s.summaryTag;
   $("goal").textContent = s.goal;
-  $("people").innerHTML = s.people.map((p,i)=>`<span class="chip ${i===0 ? "hot" : ""}">${p}</span>`).join("");
 }
 
 function renderActionPanel(){
-  if(state.stage === "rumor"){
-    return `
-      <h3>第 1 天：传闻</h3>
-      <p class="panel-desc">第一次战斗不要突然发生。先让玩家听到危险、知道可以准备、也知道可以不管。</p>
-      <button class="choice" onclick="choosePrep('intel')"><span class="icon">问</span><span><strong>打听更多消息</strong><small>消耗 1 行动力。确认魂兽受伤、出没路线和废亭位置。进入第 2 天。</small></span></button>
-      <button class="choice" onclick="choosePrep('ignore')"><span class="icon">记</span><span><strong>暂时记下传闻</strong><small>不消耗行动力。你没有贸然出城，但第二天仍可做准备。</small></span></button>
-    `;
-  }
-  if(state.stage === "prepare"){
-    return `
-      <h3>第 2 天：准备</h3>
-      <p class="panel-desc">这里展示“经营式战斗”的核心：不是进场互砍，而是准备会改变结果。</p>
-      <button class="choice" ${state.prep.armor ? "disabled" : ""} onclick="choosePrep('armor')"><span class="icon">甲</span><span><strong>买旧锁甲</strong><small>花 38 铜钱，消耗 1 行动力。防御 +4，降低受伤风险。</small></span></button>
-      <button class="choice" ${state.prep.companion ? "disabled" : ""} onclick="choosePrep('companion')"><span class="icon">伴</span><span><strong>请沈祈同行</strong><small>消耗 1 行动力。失败时可能被救，也会产生关系反馈。</small></span></button>
-      <button class="choice" ${state.prep.terrain ? "disabled" : ""} onclick="choosePrep('terrain')"><span class="icon">地</span><span><strong>观察北坡地形</strong><small>消耗 1 行动力。设伏、撤离和判断敌人路线会更有利。</small></span></button>
-      <button class="choice" ${state.prep.practice ? "disabled" : ""} onclick="choosePrep('practice')"><span class="icon">练</span><span><strong>临战练习</strong><small>消耗 1 行动力。物理攻击 +2，心性 +1。</small></span></button>
-      <button class="choice" onclick="goBattle()"><span class="icon">出</span><span><strong>前往北坡</strong><small>进入第 3 天，触发第一次战斗。准备不足也可以去，但风险更高。</small></span></button>
-    `;
-  }
-  if(state.stage === "battle") return renderBattlePanel();
-  return renderResultPanel();
+  if(state.stage === "rumor") return `
+    <h3>第 1 天：传闻</h3>
+    <p class="panel-desc">先让玩家听到危险、知道可以准备，也知道可以暂时不管。</p>
+    <button class="choice" onclick="choosePrep('intel')"><span class="icon">问</span><span><strong>打听更多消息</strong><small>消耗 1 行动力。确认魂兽受伤、出没路线和废亭位置。进入第 2 天。</small></span></button>
+    <button class="choice" onclick="choosePrep('ignore')"><span class="icon">记</span><span><strong>暂时记下传闻</strong><small>不消耗行动力。你没有贸然出城，但第二天仍可做准备。</small></span></button>
+  `;
+  if(state.stage === "prepare") return `
+    <h3>第 2 天：准备</h3>
+    <p class="panel-desc">这里体现经营式战斗：行动前准备会改变战斗结果。</p>
+    <button class="choice" ${state.prep.armor ? "disabled" : ""} onclick="choosePrep('armor')"><span class="icon">甲</span><span><strong>买旧锁甲</strong><small>花 38 铜钱，消耗 1 行动力。防御 +4，降低受伤风险。</small></span></button>
+    <button class="choice" ${state.prep.companion ? "disabled" : ""} onclick="choosePrep('companion')"><span class="icon">伴</span><span><strong>请沈祈同行</strong><small>消耗 1 行动力。失败时可能被救，也会产生关系反馈。</small></span></button>
+    <button class="choice" ${state.prep.terrain ? "disabled" : ""} onclick="choosePrep('terrain')"><span class="icon">地</span><span><strong>观察北坡地形</strong><small>消耗 1 行动力。设伏、撤离和判断敌人路线会更有利。</small></span></button>
+    <button class="choice" ${state.prep.practice ? "disabled" : ""} onclick="choosePrep('practice')"><span class="icon">练</span><span><strong>临战练习</strong><small>消耗 1 行动力。物理攻击 +2，心性 +1。</small></span></button>
+    <button class="choice" onclick="goBattle()"><span class="icon">出</span><span><strong>前往北坡</strong><small>进入第 3 天，触发第一次战斗。准备不足也可以去，但风险更高。</small></span></button>
+  `;
+  if(state.stage === "battle") return renderEncounterPanel();
+  return renderBattleReport();
 }
 
-function renderBattlePanel(){
-  const stand = battleScore("stand");
-  const ambush = battleScore("ambush");
-  const soothe = battleScore("soothe");
-  const run = battleScore("run");
+function renderEncounterPanel(){
   const factors = battleScore("stand");
+  const options = [
+    ["枪","架势迎击","stand",battleScore("stand").score,"调用体魄、物理攻击、防御。适合兵修正面对抗。"],
+    ["伏","借地形设伏","ambush",battleScore("ambush").score,"若提前观察地形，收益明显提高。"],
+    ["和","尝试安抚魂兽","soothe",battleScore("soothe").score,"调用社交、灵智和情报，可能开启魂兽路线。"],
+    ["退","立刻撤离","run",battleScore("run").score,"不算胜利，但保命，也是一种经营判断。"]
+  ];
   return `
     <h3>第 3 天：北坡兽影</h3>
-    <p class="panel-desc">本页不会显示隐藏骰子，而是先告诉你影响因素。正式游戏里可以保留“最终成功率 + 优劣原因”。</p>
+    <p class="panel-desc">战斗现在属于行动页的一类事件。下方先显示优劣原因，再让玩家选择处理方式。</p>
     <div class="card">
-      <b>当前已知因素</b>
-      ${factors.plus.map(x=>`<div class="factor plus"><span>优势</span><div>${x}</div></div>`).join("") || `<div class="factor plus"><span>优势</span><div>暂无明显优势。</div></div>`}
-      ${factors.minus.map(x=>`<div class="factor minus"><span>劣势</span><div>${x}</div></div>`).join("") || ""}
+      <b>已知因素</b>
+      ${factors.plus.map(x=>`<div class="factor"><span>优势</span><div>${x}</div></div>`).join("") || `<div class="factor"><span>优势</span><div>暂无明显优势。</div></div>`}
+      ${factors.minus.map(x=>`<div class="factor minus"><span>劣势</span><div>${x}</div></div>`).join("")}
     </div>
-    <button class="choice" onclick="resolveBattle('stand')"><span class="icon">枪</span><span><strong>架势迎击</strong><small>预计 ${stand.score}%。调用体魄、物理攻击、防御。适合兵修正面对抗。</small></span></button>
-    <button class="choice" onclick="resolveBattle('ambush')"><span class="icon">伏</span><span><strong>借地形设伏</strong><small>预计 ${ambush.score}%。若提前观察地形，收益明显提高。</small></span></button>
-    <button class="choice" onclick="resolveBattle('soothe')"><span class="icon">和</span><span><strong>尝试安抚魂兽</strong><small>预计 ${soothe.score}%。调用社交、灵智和情报，可能开启魂兽路线。</small></span></button>
-    <button class="choice" onclick="resolveBattle('run')"><span class="icon">退</span><span><strong>立刻撤离</strong><small>预计 ${run.score}%。不算胜利，但保命，也是一种经营判断。</small></span></button>
+    ${options.map(o=>`<button class="choice" onclick="resolveBattle('${o[2]}')"><span class="icon">${o[0]}</span><span><strong>${o[1]}</strong><small>预计 ${o[3]}%。${o[4]}</small></span></button>`).join("")}
   `;
 }
 
-function renderResultPanel(){
+function renderBattleReport(){
   return `
-    <h3>战斗结算</h3>
-    <p class="panel-desc">重点不是“赢没赢”，而是结果带来伤势、线索、关系和下一步目标。</p>
-    <div class="card">
-      <b>${state.result.title} · 判定 ${state.result.score}%</b>
-      <small>${state.result.text}</small>
-    </div>
-    <div class="card">
-      <b>后续影响</b>
-      <small>${state.result.reward}</small>
-    </div>
-    <button class="choice" onclick="setTab('journal')"><span class="icon">录</span><span><strong>查看战斗记录</strong><small>看这次事件如何进入任务、人物关系和线索簿。</small></span></button>
+    <h3>北坡首战 · 战报</h3>
+    <p class="panel-desc">这里是完整反馈。第三层只保留结果摘要，避免玩家不知道该看哪里。</p>
+    <div class="timeline-item"><b>结果</b><small>${state.result.title} · 判定 ${state.result.score}%。${state.result.text}</small></div>
+    <div class="timeline-item"><b>收获</b><small>${state.result.reward}</small></div>
+    <div class="timeline-item"><b>后续入口</b><small>可去背包查看战利品，去记录查看过程，或回到行动页继续经营和找人。</small></div>
+    <button class="choice" onclick="setTab('bag')"><span class="icon">包</span><span><strong>查看背包</strong><small>确认魂兽鳞片、线索和装备如何进入后续经营。</small></span></button>
     <button class="choice" onclick="resetPreview()"><span class="icon">重</span><span><strong>重新体验</strong><small>换一种准备和战斗选择，比较反馈差异。</small></span></button>
+  `;
+}
+
+function renderBagPanel(){
+  return `
+    <h3>背包 / 储物</h3>
+    <p class="panel-desc">战斗按钮改为背包。战斗发生在行动里，战利品、药、装备和线索在这里管理。</p>
+    ${state.items.map(item=>`<div class="card"><b>${item}</b><small>${item.includes("鳞片") ? "可出售、入药或研究，后续可接魂兽相关事件。" : item.includes("线索") ? "已加入记录，可能影响北坡后续调查。" : item.includes("锁甲") ? "防御 +4，适合前期挡伤。" : "出城和长途行动的基础补给。"}</small></div>`).join("")}
   `;
 }
 
 function renderPersonPanel(){
   return `
     <h3>人物属性</h3>
-    <p class="panel-desc">这个预览采用你提出的外属性六维 + 内属性三维。它们不只是展示数字，而是影响战斗选项。</p>
+    <p class="panel-desc">外属性六维 + 内属性三维。它们不只是数字，而是影响战斗和事件选项。</p>
     <div class="card"><b>外属性六维</b><div class="attrs">
       <div class="attr"><b>${state.attrs.hp}</b><span>血量</span></div>
       <div class="attr"><b>${state.attrs.physical}</b><span>物理攻击</span></div>
@@ -682,23 +641,23 @@ function renderPersonPanel(){
       <div class="attr"><b>${state.attrs.body}</b><span>体魄</span></div>
       <div class="attr"><b>${state.attrs.mind}</b><span>心性</span></div>
     </div></div>
-    <div class="card"><b>属性说明</b><small>体魄影响能否硬接冲撞和穿甲负担；灵智影响看懂异常血迹；心性影响临敌不乱；社交可用于安抚、求援和避免战斗。</small></div>
+    <div class="card"><b>本次相关</b><small>体魄影响硬接冲撞，灵智影响看懂异常血迹，心性影响临敌不乱，社交可用于安抚和避免战斗。</small></div>
   `;
 }
 
 function renderJournalPanel(){
   return `
     <h3>事件记录</h3>
-    <p class="panel-desc">正式游戏里，战斗结果应进入任务、人物、案件或经营系统，而不是只弹一句话。</p>
-    ${state.log.map(item=>`<div class="card"><small>${item}</small></div>`).join("")}
+    <p class="panel-desc">记录页只保留时间线，不再重复第三层摘要。</p>
+    ${state.log.map((item,index)=>`<div class="timeline-item"><b>${index === 0 ? "最新记录" : "过程"}</b><small>${item}</small></div>`).join("")}
   `;
 }
 
 function renderMapPanel(){
   return `
     <h3>地点</h3>
-    <p class="panel-desc">地图页在战斗预览里只展示首战相关地点。正式游戏里可把危险度、NPC、收益和准备建议放在这里。</p>
-    <div class="card"><b>青石城 · 茶馆</b><small>传闻来源。可打听城外消息，也可能遇到脚夫、商队和巡逻队。</small></div>
+    <p class="panel-desc">地图页展示可去地点、危险度和相关人物。</p>
+    <div class="card"><b>青石城 · 茶馆</b><small>传闻来源。可打听城外消息，可能遇到脚夫、商队和巡逻队。</small></div>
     <div class="card"><b>市集 · 铁匠摊</b><small>可以买到旧锁甲、短刀、木盾等前期装备。</small></div>
     <div class="card"><b>城外 · 北坡废亭</b><small>首次冲突地点。危险中等，适合测试准备、撤离和非击杀结果。</small></div>
   `;
@@ -706,10 +665,15 @@ function renderMapPanel(){
 
 function renderPanel(){
   if(state.tab === "action") return renderActionPanel();
-  if(state.tab === "battle") return state.stage === "battle" ? renderBattlePanel() : (state.result ? renderResultPanel() : `<h3>战斗</h3><p class="panel-desc">还没有接敌。先在行动页推进到第 3 天。</p>`);
+  if(state.tab === "bag") return renderBagPanel();
   if(state.tab === "person") return renderPersonPanel();
   if(state.tab === "journal") return renderJournalPanel();
   return renderMapPanel();
+}
+
+function setTab(tab){
+  state.tab = tab;
+  render();
 }
 
 function render(){
@@ -719,10 +683,7 @@ function render(){
   $("panel").innerHTML = renderPanel();
 }
 
-function resetPreview(){
-  location.reload();
-}
-
+function resetPreview(){ location.reload(); }
 document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
 $("resetBtn").addEventListener("click", resetPreview);
 render();
