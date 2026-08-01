@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>问道浮生</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17201d;color:#292d29;font-family:"Microsoft YaHei",sans-serif}button,input{font:inherit}
+main{width:min(100%,560px);min-height:100vh;margin:auto;background:#eee8d8;padding:22px 16px 90px}
+header{border-bottom:1px solid #938c78;padding-bottom:14px}h1{margin:0;color:#7b3028;font-family:serif;font-size:30px;letter-spacing:0}
+.sub{color:#69685e;margin:5px 0 0}.panel{padding:16px 0;border-bottom:1px solid #bbb39d}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{text-align:center;background:#ded7c4;padding:10px 4px;border-radius:4px}
+.stat b{display:block;color:#7b3028;font-size:18px}.event{min-height:150px}.event h2{margin:0 0 8px;font-size:21px}
+.event p{line-height:1.7;margin:0;color:#505148}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+button{min-height:48px;border:1px solid #756f60;border-radius:4px;background:#f8f3e6;color:#292d29;font-weight:700}
+button:active{background:#d6c9aa}.primary{background:#7b3028;color:white;border-color:#7b3028}.wide{grid-column:1/-1}
+.log{font-size:14px;color:#67675f;line-height:1.6;max-height:110px;overflow:auto}.hidden{display:none}
+input{width:100%;height:48px;border:1px solid #8e8878;border-radius:4px;padding:0 12px;background:#fffdf6;margin:12px 0}
+footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,560px);padding:10px 16px;background:#ded7c4;color:#666;text-align:center;font-size:13px}
+</style>
+</head>
+<body><main>
+<header><h1>问道浮生</h1><p class="sub">凡尘谋生，山野问道</p></header>
+<section id="start" class="panel"><h2>创建角色</h2><input id="name" maxlength="8" placeholder="输入道号"><button class="primary wide" onclick="begin()">踏入尘世</button></section>
+<section id="game" class="hidden">
+<div class="panel stats"><div class="stat"><b id="turn">1/5</b>季度</div><div class="stat"><b id="coin">20</b>铜钱</div><div class="stat"><b id="food">10</b>食物</div><div class="stat"><b id="qi">0</b>修为</div></div>
+<div class="panel event"><h2 id="title"></h2><p id="text"></p><div id="actions" class="actions"></div></div>
+<div class="panel"><b>浮生录</b><div id="log" class="log"></div></div>
+</section><footer>进度会自动保存在当前浏览器</footer>
+<script>
+const events=[["山雨欲来","乌云压住远山，村民正抢收田里的谷物。",[["帮忙抢收",8,4,0],["闭门修炼",0,-2,4]]],["林中异响","采药途中，幽深林间传来低沉兽吼。",[["循声探索",5,-2,3],["谨慎返回",2,0,0]]],["云游道人","一位老道人在路旁摆下残棋，邀你对弈。",[["坐下对弈",-3,0,6],["赶路谋生",7,-1,0]]],["坊市开张","各地商贩聚集，灵草与粮食皆可交易。",[["购置粮食",-5,8,0],["替人搬货",9,-3,0]]],["月照寒潭","月华落入潭中，四周灵气悄然汇聚。",[["静坐吐纳",0,-2,7],["捕鱼果腹",3,6,0]]]];
+let s={turn:1,coin:20,food:10,qi:0,name:"",logs:[]};
+function begin(){s.name=document.querySelector("#name").value.trim()||"无名客";showGame();next()}
+function showGame(){start.classList.add("hidden");game.classList.remove("hidden")}
+function next(){if(s.turn>5)return finish();let e=events[(s.turn-1)%events.length];title.textContent=`第${s.turn}季 · ${e[0]}`;text.textContent=e[1];actions.innerHTML="";e[2].forEach(a=>{let b=document.createElement("button");b.textContent=a[0];b.onclick=()=>choose(a);actions.appendChild(b)});render()}
+function choose(a){s.coin+=a[1];s.food+=a[2]-2;s.qi+=a[3];s.logs.unshift(`${s.turn}季：${a[0]}（钱${fmt(a[1])}，粮${fmt(a[2]-2)}，修为${fmt(a[3])}）`);s.turn++;save();next()}
+function fmt(n){return n>=0?`+${n}`:`${n}`}function render(){turn.textContent=`${Math.min(s.turn,5)}/5`;coin.textContent=s.coin;food.textContent=s.food;qi.textContent=s.qi;log.innerHTML=s.logs.join("<br>")}
+function finish(){title.textContent=s.food<0?"饥寒交迫":s.qi>=15?"初窥仙途":"浮生未歇";text.textContent=`${s.name}度过五季，积攒${s.coin}枚铜钱、${s.food}份食物与${s.qi}点修为。`;actions.innerHTML='<button class="primary wide" onclick="restart()">再入轮回</button>';render()}
+function save(){localStorage.setItem("wendao",JSON.stringify(s))}function restart(){localStorage.removeItem("wendao");location.reload()}
+let old=localStorage.getItem("wendao");if(old){s=JSON.parse(old);showGame();next()}
+</script></main></body>
+</html>
