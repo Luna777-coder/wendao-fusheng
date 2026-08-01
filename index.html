@@ -1,41 +1,754 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>问道浮生</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#17201d;color:#292d29;font-family:"Microsoft YaHei",sans-serif}button,input{font:inherit}
-main{width:min(100%,560px);min-height:100vh;margin:auto;background:#eee8d8;padding:22px 16px 90px}
-header{border-bottom:1px solid #938c78;padding-bottom:14px}h1{margin:0;color:#7b3028;font-family:serif;font-size:30px;letter-spacing:0}
-.sub{color:#69685e;margin:5px 0 0}.panel{padding:16px 0;border-bottom:1px solid #bbb39d}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{text-align:center;background:#ded7c4;padding:10px 4px;border-radius:4px}
-.stat b{display:block;color:#7b3028;font-size:18px}.event{min-height:150px}.event h2{margin:0 0 8px;font-size:21px}
-.event p{line-height:1.7;margin:0;color:#505148}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-button{min-height:48px;border:1px solid #756f60;border-radius:4px;background:#f8f3e6;color:#292d29;font-weight:700}
-button:active{background:#d6c9aa}.primary{background:#7b3028;color:white;border-color:#7b3028}.wide{grid-column:1/-1}
-.log{font-size:14px;color:#67675f;line-height:1.6;max-height:110px;overflow:auto}.hidden{display:none}
-input{width:100%;height:48px;border:1px solid #8e8878;border-radius:4px;padding:0 12px;background:#fffdf6;margin:12px 0}
-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,560px);padding:10px 16px;background:#ded7c4;color:#666;text-align:center;font-size:13px}
+:root{
+  --ink:#252a27;
+  --muted:#6d7069;
+  --paper:#f3eddf;
+  --paper-dark:#e4dccb;
+  --line:#c8bda9;
+  --red:#873b31;
+  --red-dark:#642a25;
+  --green:#53685b;
+  --gold:#a47935;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--ink);
+  background:#1b2420;
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{
+  width:min(100%,680px);
+  min-height:100vh;
+  margin:auto;
+  padding:18px 16px 38px;
+  background:
+    linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+    var(--paper);
+  background-size:100% 5px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--line);
+}
+.brand h1{
+  margin:0;
+  color:var(--red);
+  font-family:serif;
+  font-size:34px;
+  letter-spacing:2px;
+}
+.brand p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+.save-state{
+  color:var(--muted);
+  font-size:12px;
+  text-align:right;
+  line-height:1.7;
+}
+.intro{
+  padding:42px 8px 20px;
+  text-align:center;
+}
+.intro h2{
+  margin:0 0 12px;
+  color:var(--red-dark);
+  font-family:serif;
+  font-size:27px;
+  font-weight:500;
+}
+.intro p{
+  max-width:430px;
+  margin:0 auto 25px;
+  color:var(--muted);
+  line-height:1.9;
+}
+.name-input{
+  width:100%;
+  height:50px;
+  margin-bottom:12px;
+  padding:0 14px;
+  border:1px solid #9f9584;
+  border-radius:4px;
+  background:#fffaf0;
+  color:var(--ink);
+  outline:none;
+}
+.name-input:focus{border-color:var(--red)}
+.primary{
+  color:#fff;
+  background:var(--red);
+  border-color:var(--red);
+}
+.primary:hover{background:var(--red-dark)}
+.wide{width:100%}
+button{
+  min-height:47px;
+  padding:9px 13px;
+  border:1px solid #918777;
+  border-radius:4px;
+  background:#fffaf0;
+  color:var(--ink);
+  transition:.15s ease;
+}
+button:hover{
+  border-color:var(--red);
+  color:var(--red-dark);
+}
+button:active{transform:translateY(1px)}
+.game{display:none}
+.game.active{display:block}
+.dashboard{
+  margin-top:16px;
+  padding:13px;
+  border:1px solid var(--line);
+  background:rgba(255,250,240,.7);
+}
+.chapter-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:9px;
+  font-size:13px;
+}
+.chapter-row strong{color:var(--red-dark)}
+.progress{
+  height:7px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#d8cfbe;
+}
+.progress i{
+  display:block;
+  width:5%;
+  height:100%;
+  background:var(--red);
+  transition:width .25s ease;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:12px;
+}
+.stat{
+  min-height:66px;
+  padding:9px 5px;
+  border:1px solid var(--line);
+  background:var(--paper-dark);
+  text-align:center;
+}
+.stat b{
+  display:block;
+  margin-bottom:3px;
+  color:var(--red-dark);
+  font-size:20px;
+}
+.stat span{
+  color:var(--muted);
+  font-size:12px;
+}
+.event{
+  margin-top:14px;
+  padding:20px 17px;
+  border:1px solid var(--line);
+  background:rgba(255,250,240,.78);
+}
+.chapter-label{
+  margin-bottom:7px;
+  color:var(--gold);
+  font-size:12px;
+  letter-spacing:1px;
+}
+.event h2{
+  margin:0 0 13px;
+  color:var(--red-dark);
+  font-family:serif;
+  font-size:26px;
+  font-weight:500;
+}
+.event-text{
+  min-height:104px;
+  color:#454940;
+  line-height:1.95;
+  white-space:pre-line;
+}
+.choices{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+.choice{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  text-align:left;
+}
+.choice small{
+  flex:0 0 auto;
+  color:var(--muted);
+  font-size:11px;
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:14px;
+}
+.info-box{
+  padding:13px;
+  border-top:2px solid var(--green);
+  background:rgba(228,220,203,.7);
+}
+.info-box h3{
+  margin:0 0 8px;
+  color:var(--green);
+  font-size:14px;
+}
+.info-box p{
+  min-height:24px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+.log-box{
+  margin-top:14px;
+  padding:14px;
+  border-top:1px solid var(--line);
+}
+.log-box h3{
+  margin:0 0 8px;
+  color:var(--red-dark);
+  font-size:14px;
+}
+.log{
+  max-height:170px;
+  overflow:auto;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+}
+.log div{border-bottom:1px dashed #d0c6b4}
+.restart{
+  width:100%;
+  margin-top:15px;
+  color:var(--muted);
+  background:transparent;
+}
+.ending{
+  display:none;
+  margin-top:16px;
+  padding:25px 18px;
+  border:1px solid var(--line);
+  background:rgba(255,250,240,.8);
+  text-align:center;
+}
+.ending.active{display:block}
+.ending h2{
+  margin:0 0 12px;
+  color:var(--red-dark);
+  font-family:serif;
+  font-size:29px;
+  font-weight:500;
+}
+.ending p{color:#4e5149;line-height:1.9}
+@media(max-width:430px){
+  .brand h1{font-size:29px}
+  .event h2{font-size:23px}
+  .event-text{min-height:125px}
+  .info-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
-<body><main>
-<header><h1>问道浮生</h1><p class="sub">凡尘谋生，山野问道</p></header>
-<section id="start" class="panel"><h2>创建角色</h2><input id="name" maxlength="8" placeholder="输入道号"><button class="primary wide" onclick="begin()">踏入尘世</button></section>
-<section id="game" class="hidden">
-<div class="panel stats"><div class="stat"><b id="turn">1/5</b>季度</div><div class="stat"><b id="coin">20</b>铜钱</div><div class="stat"><b id="food">10</b>食物</div><div class="stat"><b id="qi">0</b>修为</div></div>
-<div class="panel event"><h2 id="title"></h2><p id="text"></p><div id="actions" class="actions"></div></div>
-<div class="panel"><b>浮生录</b><div id="log" class="log"></div></div>
-</section><footer>进度会自动保存在当前浏览器</footer>
+
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+      <h1>问道浮生</h1>
+      <p>凡尘谋生，山野问道</p>
+    </div>
+    <div class="save-state" id="saveState">未开始<br>尚未存档</div>
+  </header>
+
+  <section class="intro" id="startScreen">
+    <h2>一念入尘，二念问道</h2>
+    <p>
+      你从一场大雨中醒来，身上只有一柄旧伞和几枚铜钱。
+      前路可以通往市井、山林，也可以通往无人知晓的修行之路。
+    </p>
+    <input class="name-input" id="nameInput" maxlength="8" placeholder="请输入你的道号">
+    <button class="primary wide" id="beginButton">踏入尘世</button>
+  </section>
+
+  <section class="game" id="gameScreen">
+    <div class="dashboard">
+      <div class="chapter-row">
+        <strong id="chapterText">第 1 / 20 章</strong>
+        <span id="seasonText">初秋</span>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+      <div class="stats">
+        <div class="stat"><b id="coin">20</b><span>铜钱</span></div>
+        <div class="stat"><b id="food">12</b><span>干粮</span></div>
+        <div class="stat"><b id="energy">8</b><span>体力</span></div>
+        <div class="stat"><b id="qi">0</b><span>修为</span></div>
+        <div class="stat"><b id="fame">0</b><span>声望</span></div>
+        <div class="stat"><b id="jade">0</b><span>灵石</span></div>
+      </div>
+    </div>
+
+    <article class="event">
+      <div class="chapter-label" id="chapterLabel">浮生初章</div>
+      <h2 id="eventTitle"></h2>
+      <div class="event-text" id="eventText"></div>
+      <div class="choices" id="choices"></div>
+    </article>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <h3>当前目标</h3>
+        <p id="goalText">在陌生城镇站稳脚跟。</p>
+      </div>
+      <div class="info-box">
+        <h3>随身物品</h3>
+        <p id="itemsText">旧伞、粗布包</p>
+      </div>
+    </div>
+
+    <div class="log-box">
+      <h3>浮生录</h3>
+      <div class="log" id="log"></div>
+    </div>
+
+    <button class="restart" id="restartButton">放弃当前旅程并重新开始</button>
+  </section>
+
+  <section class="ending" id="endingScreen">
+    <h2 id="endingTitle"></h2>
+    <p id="endingText"></p>
+    <button class="primary wide" id="againButton">重新踏上旅途</button>
+  </section>
+</main>
+
 <script>
-const events=[["山雨欲来","乌云压住远山，村民正抢收田里的谷物。",[["帮忙抢收",8,4,0],["闭门修炼",0,-2,4]]],["林中异响","采药途中，幽深林间传来低沉兽吼。",[["循声探索",5,-2,3],["谨慎返回",2,0,0]]],["云游道人","一位老道人在路旁摆下残棋，邀你对弈。",[["坐下对弈",-3,0,6],["赶路谋生",7,-1,0]]],["坊市开张","各地商贩聚集，灵草与粮食皆可交易。",[["购置粮食",-5,8,0],["替人搬货",9,-3,0]]],["月照寒潭","月华落入潭中，四周灵气悄然汇聚。",[["静坐吐纳",0,-2,7],["捕鱼果腹",3,6,0]]]];
-let s={turn:1,coin:20,food:10,qi:0,name:"",logs:[]};
-function begin(){s.name=document.querySelector("#name").value.trim()||"无名客";showGame();next()}
-function showGame(){start.classList.add("hidden");game.classList.remove("hidden")}
-function next(){if(s.turn>5)return finish();let e=events[(s.turn-1)%events.length];title.textContent=`第${s.turn}季 · ${e[0]}`;text.textContent=e[1];actions.innerHTML="";e[2].forEach(a=>{let b=document.createElement("button");b.textContent=a[0];b.onclick=()=>choose(a);actions.appendChild(b)});render()}
-function choose(a){s.coin+=a[1];s.food+=a[2]-2;s.qi+=a[3];s.logs.unshift(`${s.turn}季：${a[0]}（钱${fmt(a[1])}，粮${fmt(a[2]-2)}，修为${fmt(a[3])}）`);s.turn++;save();next()}
-function fmt(n){return n>=0?`+${n}`:`${n}`}function render(){turn.textContent=`${Math.min(s.turn,5)}/5`;coin.textContent=s.coin;food.textContent=s.food;qi.textContent=s.qi;log.innerHTML=s.logs.join("<br>")}
-function finish(){title.textContent=s.food<0?"饥寒交迫":s.qi>=15?"初窥仙途":"浮生未歇";text.textContent=`${s.name}度过五季，积攒${s.coin}枚铜钱、${s.food}份食物与${s.qi}点修为。`;actions.innerHTML='<button class="primary wide" onclick="restart()">再入轮回</button>';render()}
-function save(){localStorage.setItem("wendao",JSON.stringify(s))}function restart(){localStorage.removeItem("wendao");location.reload()}
-let old=localStorage.getItem("wendao");if(old){s=JSON.parse(old);showGame();next()}
-</script></main></body>
+const chapters = [
+  {
+    season:"初秋", label:"第一卷 · 入尘",
+    title:"雨夜醒来",
+    text:"一场秋雨把官道洗得发亮。你在破庙的屋檐下醒来，远处有灯火，也有野兽踩过枯叶的声音。明日之前，你必须决定去处。",
+    goal:"找到一个可以暂时安身的地方。",
+    choices:[
+      ["赶往城镇","去投奔城门下的脚夫","coin:5,energy:-1,fame:1"],
+      ["留在破庙","烘干衣物，静听雨声","energy:1,qi:2"],
+      ["沿山路走","寻找传说中的药草","energy:-2,qi:1,item:药草"]
+    ]
+  },
+  {
+    season:"初秋", label:"第一卷 · 入尘",
+    title:"城门盘查",
+    text:"城门的守卫拦住了你。没有路引的人，通常只能在城外过夜。守卫看了看你的旧伞，似乎想起了什么。",
+    goal:"取得进入城镇的资格。",
+    choices:[
+      ["如实说明来历","守卫没有为难你，但记住了你的名字","fame:2,energy:-1"],
+      ["交出几枚铜钱","规矩有时比道理更快","coin:-6"],
+      ["展示药草","守卫的妻子正需要治咳的草药","item:-药草,fame:4"]
+    ]
+  },
+  {
+    season:"初秋", label:"第一卷 · 入尘",
+    title:"一碗热粥",
+    text:"城内的粥铺还亮着灯。掌柜正在收拾桌椅，见你衣衫湿透，默默把最后一碗粥推了过来。",
+    goal:"补充食物，了解城镇的消息。",
+    choices:[
+      ["用钱买下","热粥让你恢复了精神","coin:-4,food:5,energy:2"],
+      ["替掌柜收拾","一碗粥换半夜的活计","food:4,energy:1,fame:1"],
+      ["询问山中消息","掌柜提到了三日后的山集","qi:1,fame:1"]
+    ]
+  },
+  {
+    season:"白露", label:"第一卷 · 入尘",
+    title:"山集邀约",
+    text:"第二天清晨，一名采药少年请你同行。山集每月只开一次，那里可以买到奇物，也可能遇到不该遇见的人。",
+    goal:"决定是否接触修行者的世界。",
+    choices:[
+      ["跟随采药","山路难走，但少年似乎很可靠","energy:-2,item:山参,qi:3"],
+      ["留在城中做工","稳定的收入也是一种修行","coin:10,food:-2,fame:2"],
+      ["独自前往","你不愿把命交给陌生人","energy:-3,qi:2,jade:1"]
+    ]
+  },
+  {
+    season:"白露", label:"第二卷 · 山河",
+    title:"雾中石碑",
+    text:"山腰的浓雾里立着一块残碑。碑上的字迹已经模糊，只剩下‘守心’二字。你靠近时，耳边传来并不存在的水声。",
+    goal:"理解残碑留下的第一道考验。",
+    choices:[
+      ["静坐观碑","杂念渐渐沉下去","energy:-1,qi:6"],
+      ["寻找机关","碑后藏着一枚旧铜印","item:铜印,coin:5"],
+      ["立即离开","你不确定这是不是陷阱","energy:1,fame:1"]
+    ]
+  },
+  {
+    season:"白露", label:"第二卷 · 山河",
+    title:"断桥之上",
+    text:"暴雨冲毁了木桥。对岸有一户人家，桥边则困着一个背着书箱的年轻人。他说自己必须在日落前过桥。",
+    goal:"处理眼前的难题。",
+    choices:[
+      ["修补木桥","你们忙了一个时辰，终于让桥勉强可走","energy:-3,fame:5"],
+      ["背人过桥","书箱很重，年轻人却把一枚灵石塞给你","energy:-4,jade:2,food:-1"],
+      ["绕路离开","山路漫长，但无人受伤","energy:-1,food:-2"]
+    ]
+  },
+  {
+    season:"秋分", label:"第二卷 · 山河",
+    title:"无名药庐",
+    text:"你在林中发现一间药庐。白发医者不问姓名，只问你是否愿意替他守一晚炉火。",
+    goal:"获得医者的信任。",
+    choices:[
+      ["守炉火","炉火映照着你的眉眼，医者教你辨识灵气","energy:-2,qi:5,item:凝神散"],
+      ["请教医术","一夜交谈后，你学会了救治外伤","fame:3,item:止血草"],
+      ["借宿一晚","你睡了个踏实的觉","energy:3,food:2"]
+    ]
+  },
+  {
+    season:"秋分", label:"第二卷 · 山河",
+    title:"山魈拦路",
+    text:"一只受伤的山魈挡在路中。它龇牙低吼，却没有真正扑上来。它的脚边有一只破裂的竹筒。",
+    goal:"不要让恐惧替你做决定。",
+    choices:[
+      ["为它包扎","山魈退到一旁，留下竹筒中的灵石","energy:-2,jade:2,fame:2"],
+      ["投食安抚","它吃完干粮，带你找到近路","food:-4,energy:2"],
+      ["拔刀驱赶","你平安通过，却在石壁上留下了血痕","energy:-2,qi:-1,fame:-2"]
+    ]
+  },
+  {
+    season:"霜降", label:"第三卷 · 人间",
+    title:"夜泊渡口",
+    text:"渡口的船夫只收灵石，不收铜钱。河对岸的灯火像一串散落的星星，远处似乎有琴声。",
+    goal:"前往河对岸的青石城。",
+    choices:[
+      ["拿灵石渡河","河水下有鱼鳞般的光","jade:-1,qi:3"],
+      ["替船夫撑船","你在夜色里学会辨认水脉","energy:-3,fame:3,qi:2"],
+      ["沿岸步行","绕远路，但不用付钱","energy:-2,food:-3"]
+    ]
+  },
+  {
+    season:"霜降", label:"第三卷 · 人间",
+    title:"青石城的棋局",
+    text:"青石城的茶楼里，有人以一盘棋招募门客。棋局看似平静，落子之间却暗藏试探。",
+    goal:"在陌生势力面前保持清醒。",
+    choices:[
+      ["认真对弈","你输了棋，却赢得了对方的尊重","qi:4,fame:4"],
+      ["观察众人","你发现茶楼掌柜正在偷听","fame:2,item:棋谱"],
+      ["拒绝入局","不属于你的局，不必强行参与","energy:2"]
+    ]
+  },
+  {
+    season:"霜降", label:"第三卷 · 人间",
+    title:"失窃的玉佩",
+    text:"茶楼外，一个女孩哭着说家传玉佩不见了。人群把目光投向一个卖糖人的老人。",
+    goal:"判断事实，而不是顺着人群。",
+    choices:[
+      ["检查现场","玉佩其实落在马车缝里","fame:6,coin:4"],
+      ["替老人说话","女孩的家人愿意重新查问","fame:4"],
+      ["置身事外","你不想惹麻烦","fame:-1"]
+    ]
+  },
+  {
+    season:"立冬", label:"第三卷 · 人间",
+    title:"雪中借宿",
+    text:"初雪封路。你敲开一户农家的门，屋里的老人认出了你携带的铜印。",
+    goal:"弄清楚铜印的来历。",
+    choices:[
+      ["拿出铜印询问","老人说它属于一位失踪的守山人","qi:5,fame:2"],
+      ["主动帮忙劈柴","你换来一晚温暖的炕","energy:3,food:3"],
+      ["隐瞒铜印","有些秘密知道得越少越好","energy:1"]
+    ]
+  },
+  {
+    season:"立冬", label:"第四卷 · 问心",
+    title:"雪夜来客",
+    text:"深夜，一个戴斗笠的人来到门外。他自称来自玄霄观，问你是否见过一块铜印。",
+    goal:"选择是否相信修行者。",
+    choices:[
+      ["如实相告","斗笠人没有抢夺，只留下了入观凭证","item:入观凭证,qi:4"],
+      ["只说一半","你保住了铜印，但对方看出了戒心","fame:-1,jade:1"],
+      ["拒绝回答","他在雪中站了很久，最后转身离开","energy:-1,qi:2"]
+    ]
+  },
+  {
+    season:"大雪", label:"第四卷 · 问心",
+    title:"玄霄观门",
+    text:"玄霄观藏在雪线之上。守门弟子让你选择：留下扫雪三月，或直接接受问心试炼。",
+    goal:"决定修行的方式。",
+    choices:[
+      ["留下扫雪","日复一日的重复让心变得安静","energy:-2,qi:8,fame:2"],
+      ["接受试炼","你在幻境中看见最想要的东西","qi:5,energy:-3"],
+      ["暂不入观","你还没有准备好舍弃尘世","coin:8,food:-2"]
+    ]
+  },
+  {
+    season:"大雪", label:"第四卷 · 问心",
+    title:"镜中故人",
+    text:"试炼中，一面古镜映出你曾经放弃的人和事。镜中人问：如果再给你一次机会，你会怎么选？",
+    goal:"面对自己真正的遗憾。",
+    choices:[
+      ["承认后悔","镜面碎裂，一缕清光落入眉心","qi:10"],
+      ["说自己无悔","幻境没有惩罚你，却也没有放你离开","energy:-3,fame:1"],
+      ["转身离去","你不再与过去争辩","energy:2,qi:3"]
+    ]
+  },
+  {
+    season:"冬至", label:"第五卷 · 风起",
+    title:"山门风声",
+    text:"北方传来妖兽越境的消息。玄霄观准备派人下山，青石城也在召集守城者。你已经无法继续旁观。",
+    goal:"决定自己要守护什么。",
+    choices:[
+      ["前往青石城","城中百姓需要一个愿意站出来的人","fame:8,energy:-3"],
+      ["留守玄霄观","守住山门，便是守住后方","qi:8,energy:-2"],
+      ["独自调查","你沿着妖兽留下的痕迹深入荒野","energy:-4,jade:2,qi:5"]
+    ]
+  },
+  {
+    season:"冬至", label:"第五卷 · 风起",
+    title:"荒村灯火",
+    text:"荒村里还有灯火。村民说妖兽并未伤人，只是每夜叼走一袋粮食。村口的脚印却不像野兽。",
+    goal:"找出事件背后的真相。",
+    choices:[
+      ["夜守粮仓","你抓到了一名饥饿的流民","food:-2,fame:5"],
+      ["追踪脚印","脚印通向一处废弃矿洞","energy:-3,qi:5"],
+      ["把粮食留下","你没有追问，村民记住了这份善意","food:-5,fame:8"]
+    ]
+  },
+  {
+    season:"小寒", label:"第五卷 · 风起",
+    title:"矿洞深处",
+    text:"矿洞里堆着被挖出的灵石。一个受伤的商队首领说，只要你帮他运走灵石，就能立刻得到一大笔钱。",
+    goal:"在利益与因果之间做出选择。",
+    choices:[
+      ["揭露私采","矿洞归还山民，你获得观中认可","fame:10,qi:4"],
+      ["拿一部分离开","钱是真的，隐患也是真的","coin:20,fame:-5,jade:2"],
+      ["救治伤者","你放弃追问矿石来源","energy:-2,fame:5,item:疗伤药"]
+    ]
+  },
+  {
+    season:"小寒", label:"第六卷 · 浮生",
+    title:"长夜问道",
+    text:"风雪最深的时候，你再次来到那块残碑前。铜印、灵石和一路经历都在此刻有了回响。",
+    goal:"让自己的道路形成答案。",
+    choices:[
+      ["以守心入道","你终于明白，修行不是逃离众生","qi:12,fame:4"],
+      ["以济世入道","你愿意用有限的力量，照看更多人","fame:12,qi:6"],
+      ["以自在入道","天地很大，你不愿被任何门派定义","energy:4,qi:8,jade:1"]
+    ]
+  },
+  {
+    season:"大寒", label:"终卷 · 浮生",
+    title:"雪尽天明",
+    text:"天亮了。远山的雪开始融化，河流重新向东。你回头望去，来时的路已经看不清了，但每一步都留下了自己的答案。",
+    goal:"完成这段旅程。",
+    choices:[
+      ["走向山巅","你要看看雪线之上的世界","qi:8"],
+      ["回到城镇","人间仍有许多琐碎而真实的事","fame:8,coin:10"],
+      ["继续远行","没有终点的路，也可以认真走下去","energy:3,qi:5,jade:1"]
+    ]
+  }
+];
+
+let state = {
+  name:"",
+  chapter:0,
+  coin:20,
+  food:12,
+  energy:8,
+  qi:0,
+  fame:0,
+  jade:0,
+  items:["旧伞","粗布包"],
+  logs:[]
+};
+
+const $ = id => document.getElementById(id);
+
+function formatChange(value){
+  return value >= 0 ? "+" + value : String(value);
+}
+
+function parseEffect(effect){
+  if(!effect) return "";
+  const result = [];
+
+  effect.split(",").forEach(part => {
+    const [key, raw] = part.split(":");
+    if(key === "item"){
+      const item = raw.startsWith("-") ? raw.slice(1) : raw;
+      if(raw.startsWith("-")){
+        state.items = state.items.filter(x => x !== item);
+        result.push("失去" + item);
+      }else{
+        if(!state.items.includes(item)) state.items.push(item);
+        result.push("获得" + item);
+      }
+      return;
+    }
+
+    const value = Number(raw);
+    if(!Number.isFinite(value) || !(key in state)) return;
+    state[key] += value;
+    result.push(`${key}${formatChange(value)}`);
+  });
+
+  state.food = Math.min(state.food, 30);
+  state.energy = Math.max(0, Math.min(state.energy, 15));
+  state.coin = Math.max(0, state.coin);
+  state.qi = Math.max(0, state.qi);
+  state.fame = Math.max(-10, state.fame);
+  return result.join("，");
+}
+
+function consume(){
+  state.food -= 1;
+  if(state.food < 0){
+    state.energy = Math.max(0, state.energy - 2);
+    return "干粮不足，体力额外下降";
+  }
+  return "";
+}
+
+function showGame(){
+  $("startScreen").style.display = "none";
+  $("gameScreen").classList.add("active");
+  $("endingScreen").classList.remove("active");
+}
+
+function render(){
+  const current = Math.min(state.chapter, chapters.length);
+  $("chapterText").textContent = `第 ${current} / ${chapters.length} 章`;
+  $("progressBar").style.width = `${Math.max(5, (current / chapters.length) * 100)}%`;
+  $("coin").textContent = state.coin;
+  $("food").textContent = state.food;
+  $("energy").textContent = state.energy;
+  $("qi").textContent = state.qi;
+  $("fame").textContent = state.fame;
+  $("jade").textContent = state.jade;
+  $("itemsText").textContent = state.items.join("、");
+  $("log").innerHTML = state.logs.map(x => `<div>${x}</div>`).join("");
+  $("saveState").innerHTML = `${state.name}<br>已自动存档`;
+}
+
+function playChapter(){
+  if(state.chapter >= chapters.length){
+    finish();
+    return;
+  }
+
+  const chapter = chapters[state.chapter];
+  $("seasonText").textContent = chapter.season;
+  $("chapterLabel").textContent = chapter.label;
+  $("eventTitle").textContent = chapter.title;
+  $("eventText").textContent = chapter.text;
+  $("goalText").textContent = chapter.goal;
+  $("choices").innerHTML = "";
+
+  chapter.choices.forEach(choice => {
+    const button = document.createElement("button");
+    button.className = "choice";
+    button.innerHTML = `<span>${choice[0]}</span><small>${choice[1]}</small>`;
+    button.addEventListener("click", () => choose(choice));
+    $("choices").appendChild(button);
+  });
+
+  render();
+}
+
+function choose(choice){
+  const chapterNumber = state.chapter + 1;
+  const effectText = parseEffect(choice[2]);
+  const foodText = consume();
+
+  state.logs.unshift(
+    `第${chapterNumber}章：${choice[0]}。${effectText}${foodText ? "；" + foodText : ""}`
+  );
+
+  state.chapter += 1;
+  save();
+  playChapter();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function save(){
+  localStorage.setItem("wendao-fusheng-save", JSON.stringify(state));
+}
+
+function finish(){
+  let title = "浮生未歇";
+  let text = `${state.name}走过二十章，留下了属于自己的答案。`;
+
+  if(state.qi >= 65 && state.fame >= 25){
+    title = "人间仙途";
+    text = `${state.name}没有舍弃人间，也没有放弃问道。你以修为护一方百姓，最终成为传说中最接近“真人”的修行者。`;
+  }else if(state.qi >= 65){
+    title = "清虚入道";
+    text = `${state.name}在长夜中悟得清虚之意，从此踏入山巅。世人很少再见到你，只知道每逢大雪，山中便会传来钟声。`;
+  }else if(state.fame >= 30){
+    title = "一城灯火";
+    text = `${state.name}回到了青石城。你没有成仙，却让许多人在风雪夜里有了可以回去的灯火。`;
+  }else if(state.coin >= 50){
+    title = "富足此生";
+    text = `${state.name}凭一路见闻积累了财富，在城中开了一间小铺。修行未完，但日子终于不再被饥寒追赶。`;
+  }
+
+  $("gameScreen").classList.remove("active");
+  $("endingScreen").classList.add("active");
+  $("endingTitle").textContent = title;
+  $("endingText").textContent = `${text}\n\n最终修为 ${state.qi}，声望 ${state.fame}，铜钱 ${state.coin}，灵石 ${state.jade}。`;
+}
+
+function restart(){
+  localStorage.removeItem("wendao-fusheng-save");
+  location.reload();
+}
+
+$("beginButton").addEventListener("click", () => {
+  state.name = $("nameInput").value.trim() || "无名客";
+  showGame();
+  playChapter();
+  save();
+});
+
+$("restartButton").addEventListener("click", () => {
+  if(confirm("确定要放弃当前存档并重新开始吗？")) restart();
+});
+
+$("againButton").addEventListener("click", restart);
+
+const oldSave = localStorage.getItem("wendao-fusheng-save");
+if(oldSave){
+  try{
+    state = JSON.parse(oldSave);
+    showGame();
+    playChapter();
+  }catch(error){
+    localStorage.removeItem("wendao-fusheng-save");
+  }
+}
+</script>
+</body>
 </html>
