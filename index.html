@@ -695,29 +695,18 @@ button:disabled{cursor:not-allowed;opacity:.42}
         <select id="playerGender">
           <option value="male">男性</option>
           <option value="female">女性</option>
-          <option value="nonbinary">非二元／自定义</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="playerPronoun">希望他人如何称呼你</label>
-        <select id="playerPronoun">
-          <option value="ta">姓名／道号</option>
-          <option value="he">他</option>
-          <option value="she">她</option>
-          <option value="they">其</option>
         </select>
       </div>
 
       <div class="field">
         <label for="romancePreference">情感倾向</label>
         <select id="romancePreference">
-          <option value="any">性别不限</option>
-          <option value="female">只考虑女性</option>
-          <option value="male">只考虑男性</option>
-          <option value="none">暂不考虑恋爱</option>
+          <option value="male">男</option>
+          <option value="female">女</option>
+          <option value="any">双</option>
+          <option value="unknown">暂不清楚</option>
         </select>
-        <small>这只影响恋爱可能，不影响友情、信任和合作关系。</small>
+        <small>这只影响恋爱可能，不影响友情、合伙和雇佣关系。</small>
       </div>
 
       <div class="field">
@@ -726,7 +715,6 @@ button:disabled{cursor:not-allowed;opacity:.42}
           <option value="random">随机</option>
           <option value="female">女性</option>
           <option value="male">男性</option>
-          <option value="nonbinary">非二元／自定义</option>
         </select>
         <small>初遇角色只是潜在的重要人物，并非系统指定的伴侣。</small>
       </div>
@@ -804,7 +792,7 @@ button:disabled{cursor:not-allowed;opacity:.42}
           <span id="factionSummary"></span>
         </div>
         <div class="card">
-          <b>案件进度</b>
+          <b>阶段主线</b>
           <span id="caseSummary"></span>
         </div>
       </div>
@@ -855,6 +843,7 @@ const LEGACY_V5_KEY = "wendao-fusheng-v5";
 const SLOT_PREFIX = "wendao-fusheng-v7-slot-";
 
 const $ = id => document.getElementById(id);
+const MAX_AP = 5;
 
 const weaponNames = ["无", "木剑", "青锋剑", "玄铁剑"];
 const armorNames = ["无", "布甲", "皮甲", "玄铁甲"];
@@ -862,8 +851,7 @@ const methodNames = ["无", "吐纳诀", "守心诀", "两仪心法"];
 
 const genderNames = {
   male:"男性",
-  female:"女性",
-  nonbinary:"非二元"
+  female:"女性"
 };
 
 const professions = {
@@ -890,6 +878,51 @@ const professions = {
     desc:"以潜行、闪避和情报为根基，适合追踪、伏击、暗查与风险探索。",
     branches:["隐弓","咒刃"],
     hidden:["伪装者"]
+  }
+};
+
+const buildingData = {
+  courtyard:{
+    name:"小院",
+    icon:"院",
+    cost:110,
+    desc:"生活稳定，降低租住压力，适合独居、道侣或伙伴共同生活。",
+    benefit:"每日结算健康更稳定，最多容纳四人。"
+  },
+  restaurant:{
+    name:"饭馆",
+    icon:"饭",
+    cost:135,
+    desc:"经营饭食与酒水，接触市井客源，能获得稳定铜钱收入。",
+    benefit:"每日结算获得铜钱与见闻，食物压力降低。"
+  },
+  weaponShop:{
+    name:"武器铺",
+    icon:"兵",
+    cost:155,
+    desc:"售卖与修补兵器，适合兵修，也能接触护卫和猎兽委托。",
+    benefit:"每日获得铜钱，偶尔获得灵石或兵器见闻。"
+  },
+  apothecary:{
+    name:"药铺",
+    icon:"药",
+    cost:150,
+    desc:"收药、配药、治外伤，适合法修与疗愈相关路线。",
+    benefit:"每日获得铜钱，健康恢复更稳，易接触毒理线索。"
+  },
+  teaHouse:{
+    name:"茶馆",
+    icon:"茶",
+    cost:140,
+    desc:"茶客往来，是情报、传闻与人情关系的入口。",
+    benefit:"每日获得见闻，社交和情报收益更高。"
+  },
+  bookRoom:{
+    name:"书斋",
+    icon:"书",
+    cost:130,
+    desc:"抄书、授课、藏卷，适合修心、读卷和低阶修行。",
+    benefit:"每日获得少量修为，灵智与心性成长更稳。"
   }
 };
 
@@ -1351,7 +1384,7 @@ function freshState(){
       name:"",
       gender:"male",
       pronoun:"ta",
-      preference:"any"
+      preference:"unknown"
     },
     companion:{
       name:"",
@@ -1375,9 +1408,18 @@ function freshState(){
     food:10,
     health:100,
     qi:0,
-    ap:3,
+    ap:MAX_AP,
     members:1,
     house:false,
+    building:"",
+    buildings:[],
+    mainStage:"buyFirstBuilding",
+    partnerJob:{
+      name:"",
+      income:0,
+      seenToday:false,
+      lastReport:""
+    },
     weapon:0,
     armor:0,
     method:0,
@@ -1470,7 +1512,7 @@ function makeCompanion(genderChoice){
   let gender = genderChoice;
 
   if(gender === "random"){
-    gender = randomItem(["female","male","nonbinary"]);
+    gender = randomItem(["female","male"]);
   }
 
   const names = {
@@ -1554,6 +1596,7 @@ function mergeState(data){
     specialty:data.specialty||"",
     player:{...base.player,...(data.player||{})},
     companion:{...base.companion,...(data.companion||{})},
+    partnerJob:{...base.partnerJob,...(data.partnerJob||{})},
     stats:{...base.stats,...(data.stats||{})},
     factions:{...base.factions,...(data.factions||{})},
     npcRelations:{...base.npcRelations,...(data.npcRelations||{})},
@@ -1572,6 +1615,12 @@ function mergeState(data){
     clues:Array.isArray(data.clues)?data.clues:[],
     logs:Array.isArray(data.logs)?data.logs:[]
   };
+
+  merged.buildings=Array.isArray(data.buildings)?data.buildings:[];
+  merged.building=data.building||merged.buildings[0]||"";
+  merged.mainStage=data.mainStage||(
+    merged.buildings.length?"reachGantQi":"buyFirstBuilding"
+  );
 
   if(merged.profession&&!merged.specialty){
     merged.specialty=professions[merged.profession].branches[0];
@@ -1620,7 +1669,7 @@ function clampState(){
   state.food=Math.max(0,Math.floor(Number(state.food)||0));
   state.health=Math.max(0,Math.min(100,Math.floor(Number(state.health)||0)));
   state.qi=Math.max(0,Math.floor(Number(state.qi)||0));
-  state.ap=Math.max(0,Math.min(3,Math.floor(Number(state.ap)||0)));
+  state.ap=Math.max(0,Math.min(MAX_AP,Math.floor(Number(state.ap)||0)));
 
   ["trust","closeness","affection"].forEach(key=>{
     state.companion[key]=Math.max(-20,Math.min(100,state.companion[key]||0));
@@ -1710,7 +1759,7 @@ function applyEffects(effects={}){
 function orientationCompatible(){
   const pref=state.player.preference;
 
-  if(pref==="none")return false;
+  if(pref==="unknown")return false;
   if(pref==="any")return true;
   return pref===state.companion.gender;
 }
@@ -1732,8 +1781,8 @@ function weekdayName(){
 }
 
 function periodName(){
-  if(state.ap===3)return "清晨";
-  if(state.ap===2)return "午后";
+  if(state.ap>=4)return "清晨";
+  if(state.ap>=2)return "午后";
   if(state.ap===1)return "黄昏";
   return "夜深";
 }
@@ -1767,7 +1816,41 @@ function realmProgressText(){
 }
 
 function capacity(){
-  return state.house?6:0;
+  if(state.building==="courtyard")return 4;
+  if(state.house||state.buildings.length)return 3;
+  return 1;
+}
+
+function ownedBuildingText(){
+  if(!state.buildings.length)return "尚无产业";
+
+  return state.buildings.map(id=>buildingData[id]?.name||id).join("、");
+}
+
+function mainStageText(){
+  const realm=realmInfo().name;
+
+  if(!state.buildings.length){
+    return "第一主线：在青石城买下第一处建筑。可以选择小院、饭馆、武器铺、药铺、茶馆或书斋。";
+  }
+
+  if(realm==="凡身"){
+    return `第二主线：经营${ownedBuildingText()}，并修炼至感气。国家大事暂时与你距离很远，先把日子站稳。`;
+  }
+
+  if(realm==="感气"){
+    return "第三主线：让产业稳定运转，并积累两名可信任的城中关系，准备进入引气阶段。";
+  }
+
+  if(realm==="引气"){
+    return "第四主线：青石城开始出现异常委托。你可以选择处理兽灾、商路或城中修行者失踪。";
+  }
+
+  if(realm==="凝元"){
+    return "第五主线：你已经能看到更深的暗流。王子旧案只会以边缘线索出现，不再强迫推进。";
+  }
+
+  return "筑基之后，五方势力和战争真相才会真正向你打开。";
 }
 
 function healthDescription(){
@@ -1784,12 +1867,13 @@ function relationLabel(){
 
 function relationshipSummary(){
   const c=state.companion;
+  const genderLabel=genderNames[c.gender]||"未知";
 
   if(!c.present){
     return `${c.name}已离开青石城｜最终关系：${c.relationType}`;
   }
 
-  return `${c.name}（${genderNames[c.gender]}）｜${relationLabel()}｜信任 ${c.trust}｜亲近 ${c.closeness}｜好感 ${c.affection}｜分歧 ${c.conflict}`;
+  return `${c.name}（${genderLabel}）｜${relationLabel()}｜信任 ${c.trust}｜亲近 ${c.closeness}｜好感 ${c.affection}｜分歧 ${c.conflict}`;
 }
 
 function professionRank(){
@@ -2017,8 +2101,8 @@ function tutorialInfo(){
       text:"新的一天开始后，寻找带红点的地点，并与一名特殊人物交谈。"
     },
     {
-      title:"第六步：取得第一条线索",
-      text:"前往药行核对账册，或在其他地点调查世子之死。"
+      title:"第六步：确认阶段主线",
+      text:"打开“任务与人物”，查看第一阶段目标：攒钱购买第一处建筑。旧案传闻暂时不是强制目标。"
     }
   ];
 
@@ -2055,11 +2139,11 @@ function advanceTutorial(action){
     t.talked=true;
     t.step=5;
     toast("引导完成：第一次与特殊人物交谈");
-  }else if(t.step===5&&action==="clue"){
+  }else if(t.step===5&&action==="journal"){
     t.clue=true;
     t.step=6;
     t.active=false;
-    log("新手引导完成：你已经掌握地图、工作、吃饭、人物日程和调查。");
+    log("新手引导完成：你已经掌握地图、工作、吃饭、人物日程和阶段主线。");
     toast("新手引导已经完成");
   }
 
@@ -2080,19 +2164,20 @@ function suggestedGoal(){
     return `食物只够维持约 ${Math.floor(state.food/Math.max(1,state.members))} 天，建议前往市集或城外补充。`;
   }
 
-  if(!state.caseResolved&&state.clues.length<2){
-    return "世子之死仍有疑点。药行账册是较安全的调查起点。";
+  if(!state.buildings.length){
+    const cheapest=Math.min(...Object.values(buildingData).map(item=>item.cost));
+    return `第一目标是买下第一处建筑。最便宜的建筑需要 ${cheapest} 枚铜钱，你现在有 ${state.coin} 枚。`;
   }
 
-  if(!state.house&&state.coin>=90){
-    return "你已经接近永久房屋所需的 120 枚铜钱。";
+  if(realmInfo().name==="凡身"){
+    return `你已经拥有${ownedBuildingText()}。下一步是经营产业并修炼至感气，解锁修行委托。`;
   }
 
-  if(!state.caseResolved&&state.clues.length>=6){
-    return "证据已经足够。可以回住处整理并提交世子案证据。";
+  if(realmInfo().name==="感气"){
+    return "你已能感知灵气。建议经营产业、认识可靠帮手，并准备引气突破。";
   }
 
-  return "你可以谋生、修炼、经营关系、购买房屋，或继续调查世子案。";
+  return mainStageText();
 }
 
 function updateBadges(){
@@ -2175,7 +2260,7 @@ function render(){
     $("phaseText").textContent="旅途终止";
     $("progress").style.width="0%";
     $("actionButton").firstChild.textContent="无法行动";
-    $("ap").textContent="0/3";
+    $("ap").textContent=`0/${MAX_AP}`;
   }else{
     const here=npcsHere();
 
@@ -2191,9 +2276,9 @@ function render(){
 
     $("goal").textContent=suggestedGoal();
     $("phaseText").textContent=`${currentDate()} · ${periodName()}`;
-    $("progress").style.width=`${state.ap/3*100}%`;
+    $("progress").style.width=`${state.ap/MAX_AP*100}%`;
     $("actionButton").firstChild.textContent=state.ap>0?"当前地点行动":"安排晚饭";
-    $("ap").textContent=`${state.ap}/3`;
+    $("ap").textContent=`${state.ap}/${MAX_AP}`;
 
     $("cultivationSummary").textContent=realmProgressText();
     $("dailySummary").textContent=
@@ -2202,7 +2287,7 @@ function render(){
       `药行 ${state.factions.medicine}｜巡检司 ${state.factions.guard}｜书院 ${state.factions.academy}\n${statSummary()}`;
     $("caseSummary").textContent=state.caseResolved
       ? `已结案：${state.caseResult}`
-      : `线索 ${state.clues.length}/8｜警觉 ${state.suspicion}`;
+      : `${mainStageText()}｜线索 ${state.clues.length}/8`;
   }
 
   $("coin").textContent=state.coin;
@@ -2213,7 +2298,7 @@ function render(){
   $("relationshipSummary").textContent=relationshipSummary();
   $("assetSummary").textContent=
     `${weaponNames[state.weapon]}、${armorNames[state.armor]}、${methodNames[state.method]}｜`+
-    `${state.house?"永久房屋，最多六人":"租住小屋"}｜人口/房位 ${state.members}/${capacity()}`;
+    `${ownedBuildingText()}｜人口/房位 ${state.members}/${capacity()}`;
 
   $("foodStat").classList.toggle("warning",state.food<state.members*2);
   $("healthStat").classList.toggle("warning",state.health<60);
@@ -2361,8 +2446,10 @@ function determineRelationship(){
 
   if(type==="伴侣"||type==="长期伙伴"||type==="亲密朋友"){
     state.members=2;
+    assignPartnerJob();
   }else{
     state.members=1;
+    state.partnerJob={name:"",income:0,seenToday:false,lastReport:""};
   }
 
   state.mode="profession";
@@ -2440,6 +2527,53 @@ function openProfessionChoice(){
   });
 }
 
+function assignPartnerJob(){
+  if(state.partnerJob.name)return;
+
+  const jobs=[
+    {
+      name:"药行短工",
+      income:7,
+      report:c=>`${c.name}今日在药行整理药柜，听见掌柜抱怨北境药材涨价。`
+    },
+    {
+      name:"市集账房",
+      income:6,
+      report:c=>`${c.name}替市集铺户核账，带回几枚铜钱，也记下了今日粮价。`
+    },
+    {
+      name:"书院抄手",
+      income:5,
+      report:c=>`${c.name}在书院抄录旧卷，回来时说有几册地方志被人借走未还。`
+    }
+  ];
+
+  const job=randomItem(jobs);
+  state.partnerJob.name=job.name;
+  state.partnerJob.income=job.income;
+  state.partnerJob.report=job.report.toString();
+}
+
+function partnerDailyReport(){
+  if(!state.companion.present||state.members<2||!state.partnerJob.name){
+    return "";
+  }
+
+  const c=state.companion;
+  const income=state.partnerJob.income;
+  state.coin+=income;
+
+  const reports={
+    "药行短工":`${c.name}今日在药行整理药柜，听见掌柜抱怨北境药材涨价。${c.pronoun}把 ${income} 枚铜钱交给你打理。`,
+    "市集账房":`${c.name}替市集铺户核账，带回几枚铜钱，也记下了今日粮价。${c.pronoun}把 ${income} 枚铜钱放进家用匣。`,
+    "书院抄手":`${c.name}在书院抄录旧卷，回来时说有几册地方志被人借走未还。${c.pronoun}把 ${income} 枚铜钱交给你。`
+  };
+
+  const text=reports[state.partnerJob.name]||`${c.name}今日也在城中谋生，并交回 ${income} 枚铜钱。`;
+  state.partnerJob.lastReport=text;
+  return text;
+}
+
 function openSpecialtyChoice(profession){
   const info=professions[profession];
   let html=`
@@ -2497,7 +2631,7 @@ function startFreeMode(profession,specialty){
   state.specialty=specialty||professions[profession].branches[0];
   state.mode="free";
   state.day=1;
-  state.ap=3;
+  state.ap=MAX_AP;
   state.location="home";
   state.ateToday=false;
   state.tutorial.active=true;
@@ -2520,7 +2654,8 @@ function startFreeMode(profession,specialty){
   }
 
   log(`自由生活开始：你选择${professions[profession].name}·${state.specialty}。`);
-  log("青石城传来消息：临川王世子暴毙，死因被草草定为急病。");
+  log("十年战争虽已停火，青石城仍靠商路、修士和凡人互相支撑。你的第一目标，是买下一处真正属于自己的立足之地。");
+  log("城里偶尔有人提起旧年王子之死，但那离凡身修士还很远。眼下先活稳、攒钱、修行。");
 
   forceCloseModal();
   render();
@@ -2533,9 +2668,10 @@ function startFreeMode(profession,specialty){
       • 铜钱：购买食物、装备与房屋。<br>
       • 食物：晚饭会实际消耗，不能长期忽略。<br>
       • 健康：影响行动力、成功率和工作效率。<br>
-      • 行动力：正常情况下每日三点。<br>
-      • 境界：由修为累积后自动突破。<br>
-      • 人物关系：每名角色分别记录信任与亲近。
+      • 行动力：正常情况下每日五点。<br>
+      • 境界：凡身先经营立足，感气后解锁修行委托，引气后出现城市异常。<br>
+      • 阶段主线：第一目标是购买小院、饭馆、武器铺、药铺、茶馆或书斋之一。<br>
+      • 人物关系：每名角色分别记录信任与亲近，单人路线也可以后续雇佣或结识新伙伴。
     </div>
     <button class="main-btn primary wide" id="beginTutorial">查看第一步</button>
   `);
@@ -2633,7 +2769,7 @@ function openActions(){
   let html=`
     <h2>${places[state.location].name}</h2>
     <p class="modal-desc">
-      当前为${periodName()}，剩余 ${state.ap}/3 点行动力。
+      当前为${periodName()}，剩余 ${state.ap}/${MAX_AP} 点行动力。
     </p>
     <div class="choice-list">
   `;
@@ -2660,10 +2796,10 @@ function openActions(){
         );
       }
 
-      if(!state.caseResolved&&state.clues.length>=6){
+      if(!state.caseResolved&&state.clues.length>=6&&["凝元","筑基"].includes(realmInfo().name)){
         html+=actionButton(
           "整理并提交世子案证据",
-          "至少六条线索可以尝试结案，八条线索更容易得到完整结果。",
+          "凝元之后，你才有足够修为与人脉承受旧案反噬。",
           "resolveCase"
         );
       }
@@ -2784,8 +2920,9 @@ function openActions(){
   if(npcsHere().length&&state.ap>0){
     html+=actionButton(
       "与在场人物交谈",
-      `当前可交谈：${npcsHere().map(id=>npcInfo(id).name).join("、")}。`,
-      "social"
+      `当前可交谈：${npcsHere().map(id=>npcInfo(id).name).join("、")}。日常闲聊不消耗行动力。`,
+      "social",
+      0
     );
   }
 
@@ -3068,7 +3205,7 @@ function openSocial(){
 
   let html=`
     <h2>与人交谈</h2>
-    <p class="modal-desc">交谈消耗一点行动力，并可能解锁新线索。</p>
+    <p class="modal-desc">日常闲聊不消耗行动力。后续会把“深入打听线索”单独作为消耗行动力的选项。</p>
     <div class="choice-list">
   `;
 
@@ -3096,14 +3233,8 @@ function openSocial(){
 }
 
 function talkToNPC(id){
-  if(state.ap<1){
-    toast("行动力不足");
-    return;
-  }
-
   const before=JSON.parse(JSON.stringify(state));
   state.seen.npcs[id]=true;
-  state.ap--;
 
   let text="你们交换了几句近况。";
 
@@ -3400,6 +3531,64 @@ function dailyRandomEvent(){
   return event.text;
 }
 
+function buildingDailyYield(){
+  if(!state.buildings.length){
+    return "";
+  }
+
+  const lines=[];
+
+  state.buildings.forEach(id=>{
+    const building=buildingData[id];
+
+    if(id==="courtyard"){
+      state.health+=2;
+      lines.push(`小院收拾得更像一个家，夜里能安稳睡下。健康 +2。`);
+    }
+
+    if(id==="restaurant"){
+      const coin=10+Math.floor(Math.random()*6);
+      state.coin+=coin;
+      state.food+=2;
+      lines.push(`饭馆今日卖出几锅热汤与炊饼，留下 ${coin} 枚铜钱和 2 份余粮。`);
+    }
+
+    if(id==="weaponShop"){
+      const coin=9+Math.floor(Math.random()*5);
+      state.coin+=coin;
+      if(Math.random()<.25){
+        state.spiritStone+=1;
+        lines.push(`武器铺替一名过路修士修剑，收入 ${coin} 枚铜钱，并得 1 枚灵石抵账。`);
+      }else{
+        lines.push(`武器铺替巡丁打磨刀口，收入 ${coin} 枚铜钱。`);
+      }
+    }
+
+    if(id==="apothecary"){
+      const coin=8+Math.floor(Math.random()*5);
+      state.coin+=coin;
+      state.health+=2;
+      lines.push(`药铺卖出跌打药和安神散，收入 ${coin} 枚铜钱，你也顺手调养了身体。健康 +2。`);
+    }
+
+    if(id==="teaHouse"){
+      const coin=7+Math.floor(Math.random()*5);
+      state.coin+=coin;
+      state.stats.social+=1;
+      lines.push(`茶馆今日来了商队脚夫和书院学生，收入 ${coin} 枚铜钱，也听到几句边境商路传闻。社交 +1。`);
+    }
+
+    if(id==="bookRoom"){
+      state.coin+=6;
+      state.qi+=2;
+      state.stats.insight+=1;
+      lines.push(`书斋替人抄录契书，收入 6 枚铜钱。夜里读卷时心神沉静，修为 +2，灵智 +1。`);
+    }
+  });
+
+  return lines.join("<br>");
+}
+
 function endDay(){
   if(!state.alive){
     toast("旅途已经终止");
@@ -3428,16 +3617,18 @@ function endDay(){
   }
 
   const concernText=npcConcernEvent();
+  const partnerText=state.alive?partnerDailyReport():"";
+  const buildingText=state.alive?buildingDailyYield():"";
   const eventText=state.alive?dailyRandomEvent():"";
 
   if(state.health>=70&&state.hungerStreak===0){
     state.health+=3;
   }
 
-  let nextAP=3;
+  let nextAP=MAX_AP;
 
-  if(state.health<60)nextAP=2;
-  if(state.health<30)nextAP=1;
+  if(state.health<60)nextAP=4;
+  if(state.health<30)nextAP=2;
   if(state.hungerStreak>=2)nextAP=Math.max(1,nextAP-1);
 
   let crisisText="";
@@ -3466,9 +3657,11 @@ function endDay(){
     <div class="result-box">
       ${rentText?`• ${esc(rentText)}<br>`:""}
       ${concernText?`• ${esc(concernText)}<br>`:""}
+      ${partnerText?`• ${esc(partnerText)}<br>`:""}
+      ${buildingText?`• ${buildingText}<br>`:""}
       ${eventText?`• ${esc(eventText)}<br>`:""}
       ${crisisText?`• ${esc(crisisText)}<br>`:""}
-      ${state.alive?`• 明日行动力：${nextAP}/3。<br>`:""}
+      ${state.alive?`• 明日行动力：${nextAP}/${MAX_AP}。<br>`:""}
       • 当前健康：${state.health}/100（${healthDescription()}）。
     </div>
     <button class="main-btn primary wide" id="newDay">${state.alive?"开始今日":"查看结局"}</button>
@@ -3616,14 +3809,46 @@ function shopProducts(){
       }
     },
     {
-      name:"永久房屋居住权",
-      desc:state.house?"已拥有，最多六人永久居住。":"免除租金，最多容纳六人。",
+      name:"小院地契",
+      desc:state.buildings.includes("courtyard")?"已拥有小院。":`${buildingData.courtyard.desc} ${buildingData.courtyard.benefit}`,
       currency:"coin",
-      cost:120,
-      max:state.house,
-      buy:()=>state.house=true
+      cost:buildingData.courtyard.cost,
+      buildingId:"courtyard",
+      max:state.buildings.includes("courtyard"),
+      buy:()=>buyBuilding("courtyard")
     }
-  ];
+  ].concat(
+    Object.entries(buildingData)
+      .filter(([id])=>id!=="courtyard")
+      .map(([id,building])=>({
+        name:`${building.name}契书`,
+        desc:state.buildings.includes(id)
+          ?`已拥有${building.name}。`
+          :`${building.desc} ${building.benefit}`,
+        currency:"coin",
+        cost:building.cost,
+        buildingId:id,
+        max:state.buildings.includes(id),
+        buy:()=>buyBuilding(id)
+      }))
+  );
+}
+
+function buyBuilding(id){
+  if(state.buildings.includes(id))return;
+
+  state.buildings.push(id);
+  state.building=state.building||id;
+
+  if(id==="courtyard"){
+    state.house=true;
+  }
+
+  if(state.mainStage==="buyFirstBuilding"){
+    state.mainStage="reachGantQi";
+  }
+
+  log(`产业：买下${buildingData[id].name}。${buildingData[id].benefit}`);
 }
 
 function openShop(){
@@ -3676,12 +3901,28 @@ function buyProduct(index){
   product.buy();
   log(`市集：购买${product.name}。`);
   render();
+
+  if(product.buildingId){
+    openModal(`
+      <h2>买下${buildingData[product.buildingId].name}</h2>
+      <div class="result-box success">
+        你终于在青石城拥有了一处真正属于自己的地方。<br>
+        ${buildingData[product.buildingId].benefit}<br><br>
+        下一阶段主线：经营产业，并修炼至感气。
+      </div>
+      <button class="main-btn primary wide" id="continueAfterBuyBuilding">继续</button>
+    `);
+    $("continueAfterBuyBuilding").onclick=()=>openShop();
+    return;
+  }
+
   openShop();
 }
 
 function openJournal(){
   state.seen.journal=true;
   state.seen.tutorialStep=state.tutorial.step;
+  advanceTutorial("journal");
   state.clues.forEach(id=>{
     if(!state.seen.clues.includes(id))state.seen.clues.push(id);
   });
@@ -3707,14 +3948,16 @@ function openJournal(){
   }else{
     html+=`
       <div class="task">
-        <b>${state.caseResolved?"继续自己的生活":"调查世子之死"}</b>
-        <small>${state.caseResolved
-          ?"案件已经结束，你可以继续谋生、修行、经营关系或购买房屋。"
-          :`当前取得 ${state.clues.length}/8 条线索。六条线索可以尝试结案。`}</small>
+        <b>阶段主线</b>
+        <small>${mainStageText()}</small>
+      </div>
+      <div class="task">
+        <b>当前资产</b>
+        <small>已拥有：${ownedBuildingText()}。铜钱 ${state.coin}，灵石 ${state.spiritStone}。</small>
       </div>
       <div class="task">
         <b>维持健康与食物</b>
-        <small>当前健康 ${state.health}/100，食物 ${state.food}，家庭人口 ${state.members}。</small>
+        <small>当前健康 ${state.health}/100，食物 ${state.food}，家庭人口 ${state.members}。单人路线不会额外惩罚，后续可雇佣伙计或结识新伙伴。</small>
       </div>
     `;
   }
@@ -3758,6 +4001,12 @@ function openJournal(){
       ${relationMeter("亲近",state.companion.closeness)}
       ${relationMeter("好感",state.companion.affection)}
       ${relationMeter("分歧",state.companion.conflict,true)}
+      ${state.partnerJob.name?`
+        <div class="notice">
+          工作：${esc(state.partnerJob.name)}｜每日交给你打理 ${state.partnerJob.income} 枚铜钱。<br>
+          ${state.partnerJob.lastReport?esc(state.partnerJob.lastReport):"今日还没有新的见闻。"}
+        </div>
+      `:""}
     </div>
   `;
 
@@ -3773,7 +4022,7 @@ function openJournal(){
     `;
   });
 
-  html+=`<h3>案件线索</h3>`;
+  html+=`<h3>旧案传闻</h3>`;
 
   if(state.clues.length){
     state.clues.forEach(id=>{
@@ -3787,13 +4036,13 @@ function openJournal(){
   }else{
     html+=`
       <div class="clue">
-        <b>暂无明确线索</b>
-        <small>可以前往巡检司、药行、书院、王府或城外继续调查。</small>
+        <b>暂不需要介入</b>
+        <small>王子旧案和战争真相只是青石城背景的一部分。凡身阶段的核心目标是经营立足，达到感气、引气后才会逐渐出现更深的线索。</small>
       </div>
     `;
   }
 
-  if(!state.caseResolved&&state.clues.length>=6){
+  if(!state.caseResolved&&state.clues.length>=6&&["凝元","筑基"].includes(realmInfo().name)){
     html+=`
       <button class="main-btn primary wide" id="resolveFromJournal">
         整理并提交世子案证据
@@ -4021,7 +4270,7 @@ $("begin").onclick=()=>{
   state=freshState();
   state.player.name=$("nameInput").value.trim()||"无名客";
   state.player.gender=$("playerGender").value;
-  state.player.pronoun=$("playerPronoun").value;
+  state.player.pronoun=state.player.gender==="male"?"他":"她";
   state.player.preference=$("romancePreference").value;
   state.companion=makeCompanion($("companionGender").value);
 
