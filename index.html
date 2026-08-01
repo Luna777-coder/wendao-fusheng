@@ -831,6 +831,7 @@ button:disabled{cursor:not-allowed;opacity:.42}
 <script>
 const SAVE_KEY = "wendao-fusheng-v6";
 const LEGACY_V5_KEY = "wendao-fusheng-v5";
+const SLOT_PREFIX = "wendao-fusheng-v6-slot-";
 
 const $ = id => document.getElementById(id);
 
@@ -1394,7 +1395,8 @@ function freshState(){
       closeSide:"right",
       backdrop:true,
       guidance:true,
-      redDots:true
+      redDots:true,
+      reducedMotion:false
     }
   };
 }
@@ -3351,4 +3353,302 @@ function openJournal(){
       `;
     });
   }else{
-    html+=`<
+    html+=`
+      <div class="clue">
+        <b>暂无明确线索</b>
+        <small>可以前往巡检司、药行、书院、王府或城外继续调查。</small>
+      </div>
+    `;
+  }
+
+  if(!state.caseResolved&&state.clues.length>=6){
+    html+=`
+      <button class="main-btn primary wide" id="resolveFromJournal">
+        整理并提交世子案证据
+      </button>
+    `;
+  }
+
+  openModal(html);
+
+  if($("resolveFromJournal")){
+    $("resolveFromJournal").onclick=openCaseResolution;
+  }
+
+  render();
+}
+
+function slotInfo(index){
+  const raw=localStorage.getItem(SLOT_PREFIX+index);
+
+  if(!raw){
+    return {
+      empty:true,
+      title:`存档槽 ${index}`,
+      detail:"空"
+    };
+  }
+
+  try{
+    const data=mergeState(JSON.parse(raw));
+    const savedAt=data.savedAt?new Date(data.savedAt):null;
+    const time=savedAt&&!Number.isNaN(savedAt.getTime())
+      ?savedAt.toLocaleString("zh-CN")
+      :"未知时间";
+
+    return {
+      empty:false,
+      title:`存档槽 ${index}`,
+      detail:`${data.player.name||"无名客"}｜${data.mode==="free"?`第 ${data.day} 日`:`序章第 ${(data.turn||0)+1} 回合`}｜${time}`
+    };
+  }catch(error){
+    return {
+      empty:true,
+      broken:true,
+      title:`存档槽 ${index}`,
+      detail:"存档损坏"
+    };
+  }
+}
+
+function saveSlot(index){
+  const data={
+    ...state,
+    savedAt:new Date().toISOString()
+  };
+
+  localStorage.setItem(SLOT_PREFIX+index,JSON.stringify(data));
+  toast(`已保存到存档槽 ${index}`);
+  openMenu();
+}
+
+function loadSlot(index){
+  const raw=localStorage.getItem(SLOT_PREFIX+index);
+
+  if(!raw){
+    toast("这个存档槽为空");
+    return;
+  }
+
+  try{
+    state=mergeState(JSON.parse(raw));
+    forceCloseModal();
+    enterGame();
+    render();
+    toast(`已读取存档槽 ${index}`);
+  }catch(error){
+    toast("存档读取失败");
+  }
+}
+
+function deleteSlot(index){
+  if(!localStorage.getItem(SLOT_PREFIX+index)){
+    toast("这个存档槽为空");
+    return;
+  }
+
+  if(confirm(`确定删除存档槽 ${index} 吗？`)){
+    localStorage.removeItem(SLOT_PREFIX+index);
+    toast(`已删除存档槽 ${index}`);
+    openMenu();
+  }
+}
+
+function openMenu(){
+  const slots=[1,2,3].map(slotInfo);
+
+  let html=`
+    <h2>菜单</h2>
+    <p class="modal-desc">
+      自动存档会在状态变化后保存。手动存档槽不会被新旅程自动覆盖。
+    </p>
+    <h3>手动存档</h3>
+  `;
+
+  slots.forEach(slot=>{
+    html+=`
+      <div class="task">
+        <b>${slot.title}</b>
+        <small>${slot.detail}</small>
+        <div class="start-actions">
+          <button class="main-btn primary" data-save="${slot.title.slice(-1)}">保存</button>
+          <button class="main-btn" data-load="${slot.title.slice(-1)}" ${slot.empty?"disabled":""}>读取</button>
+          <button class="danger-btn" data-delete="${slot.title.slice(-1)}" ${slot.empty?"disabled":""}>删除</button>
+        </div>
+      </div>
+    `;
+  });
+
+  html+=`
+    <h3>设置</h3>
+    <div class="setting">
+      <span>新手引导</span>
+      <button class="toggle ${state.settings.guidance?"on":""}" data-toggle="guidance" aria-label="切换新手引导">
+        <i></i>
+      </button>
+    </div>
+    <div class="setting">
+      <span>红点提示</span>
+      <button class="toggle ${state.settings.redDots?"on":""}" data-toggle="redDots" aria-label="切换红点提示">
+        <i></i>
+      </button>
+    </div>
+    <div class="setting">
+      <span>点击背景关闭弹窗</span>
+      <button class="toggle ${state.settings.backdrop?"on":""}" data-toggle="backdrop" aria-label="切换背景关闭">
+        <i></i>
+      </button>
+    </div>
+    <div class="setting">
+      <span>减少动态效果</span>
+      <button class="toggle ${state.settings.reducedMotion?"on":""}" data-toggle="reducedMotion" aria-label="切换动态效果">
+        <i></i>
+      </button>
+    </div>
+    <div class="setting">
+      <span>关闭按钮位置</span>
+      <select id="closeSideSelect">
+        <option value="right" ${state.settings.closeSide==="right"?"selected":""}>右侧</option>
+        <option value="left" ${state.settings.closeSide==="left"?"selected":""}>左侧</option>
+      </select>
+    </div>
+    <button class="danger-btn wide" id="restartGame">重新开始自动存档</button>
+  `;
+
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-save]").forEach(button=>{
+    button.onclick=()=>saveSlot(button.dataset.save);
+  });
+
+  $("modalBody").querySelectorAll("[data-load]").forEach(button=>{
+    button.onclick=()=>loadSlot(button.dataset.load);
+  });
+
+  $("modalBody").querySelectorAll("[data-delete]").forEach(button=>{
+    button.onclick=()=>deleteSlot(button.dataset.delete);
+  });
+
+  $("modalBody").querySelectorAll("[data-toggle]").forEach(button=>{
+    button.onclick=()=>{
+      const key=button.dataset.toggle;
+      state.settings[key]=!state.settings[key];
+      save();
+      openMenu();
+    };
+  });
+
+  $("closeSideSelect").onchange=event=>{
+    state.settings.closeSide=event.target.value;
+    save();
+    openMenu();
+  };
+
+  $("restartGame").onclick=()=>{
+    if(confirm("确定清除自动存档并重新开始吗？手动存档槽不会被删除。")){
+      localStorage.removeItem(SAVE_KEY);
+      localStorage.removeItem(LEGACY_V5_KEY);
+      location.reload();
+    }
+  };
+}
+
+function mainAction(){
+  if(state.mode==="prologue"){
+    openPrologueChoices();
+  }else if(state.mode==="profession"){
+    openProfessionChoice();
+  }else{
+    openActions();
+  }
+}
+
+function enterGame(){
+  $("start").style.display="none";
+  $("game").classList.add("active");
+}
+
+$("begin").onclick=()=>{
+  const manualSlotsExist=[1,2,3].some(index=>
+    localStorage.getItem(SLOT_PREFIX+index)
+  );
+
+  if(
+    (localStorage.getItem(SAVE_KEY)||manualSlotsExist)&&
+    !confirm("开始新旅程会覆盖自动存档，但不会删除手动存档槽。确定继续吗？")
+  ){
+    return;
+  }
+
+  state=freshState();
+  state.player.name=$("nameInput").value.trim()||"无名客";
+  state.player.gender=$("playerGender").value;
+  state.player.pronoun=$("playerPronoun").value;
+  state.player.preference=$("romancePreference").value;
+  state.companion=makeCompanion($("companionGender").value);
+
+  log(`${state.player.name}踏入青石城，旅程由此开始。`);
+  enterGame();
+  render();
+};
+
+$("continueGame").onclick=()=>{
+  const loaded=loadAuto();
+
+  if(!loaded){
+    toast("没有可读取的自动存档");
+    return;
+  }
+
+  state=loaded;
+  enterGame();
+  render();
+};
+
+$("actionButton").onclick=mainAction;
+$("mapButton").onclick=openMap;
+$("shopButton").onclick=openShop;
+$("journalButton").onclick=openJournal;
+$("topMenu").onclick=openMenu;
+$("closeModal").onclick=closeModal;
+
+$("overlay").onclick=event=>{
+  if(
+    event.target===$("overlay")&&
+    state.settings.backdrop&&
+    $("closeModal").style.display!=="none"
+  ){
+    closeModal();
+  }
+};
+
+let lastFrame=0;
+let dotPhase=0;
+
+function animationLoop(time){
+  if(time-lastFrame>=33){
+    lastFrame=time;
+    dotPhase=(dotPhase+1)%100;
+
+    if(!state.settings.reducedMotion){
+      $("motionDot").style.opacity=
+        String(.45+.55*Math.sin(dotPhase/12)**2);
+    }
+  }
+
+  requestAnimationFrame(animationLoop);
+}
+
+requestAnimationFrame(animationLoop);
+
+const existing=loadAuto();
+
+if(existing){
+  $("continueGame").style.display="";
+  $("continueGame").textContent=existing.mode==="free"
+    ?`继续：自由生活第 ${existing.day||1} 日`
+    :`继续：序章第 ${(existing.turn||0)+1} 回合`;
+}
+</script>
+</body>
+</html>
