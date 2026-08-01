@@ -33,7 +33,7 @@ button:disabled{cursor:not-allowed;opacity:.42}
   width:min(100%,720px);
   min-height:100dvh;
   margin:auto;
-  padding-bottom:calc(94px + var(--safe-bottom));
+  padding-bottom:calc(18px + var(--safe-bottom));
   background:var(--paper)
 }
 .header{
@@ -273,6 +273,50 @@ button:disabled{cursor:not-allowed;opacity:.42}
 }
 .free-only{display:none}
 .free-only.active{display:grid}
+.panel{
+  margin-top:11px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#f7efe2
+}
+.panel h3{
+  margin:0 0 8px;
+  color:var(--red2);
+  font:600 17px serif
+}
+.panel-desc{
+  margin:0 0 11px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6
+}
+.mini-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+.attr-row{
+  display:grid;
+  grid-template-columns:82px 1fr 34px;
+  align-items:center;
+  gap:8px;
+  margin:7px 0;
+  color:var(--muted);
+  font-size:12px
+}
+.attr-bar{
+  height:8px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#d7c9b3
+}
+.attr-bar i{
+  display:block;
+  height:100%;
+  background:var(--green)
+}
+.locked-icon{opacity:.48;filter:grayscale(1)}
 .log{
   margin-top:12px;
   padding:12px;
@@ -291,20 +335,17 @@ button:disabled{cursor:not-allowed;opacity:.42}
   border-bottom:1px dashed #cec1ab
 }
 .bottom-bar{
-  position:fixed;
-  z-index:20;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
+  position:static;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-  width:min(100%,720px);
-  padding:9px 10px calc(9px + var(--safe-bottom));
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+  width:100%;
+  padding:12px 14px 0;
   background:rgba(228,218,199,.97);
   border-top:1px solid var(--line);
   backdrop-filter:blur(12px)
 }
+.nav-btn.active{border-color:var(--red);background:#eadbca;color:var(--red2)}
 .nav-btn{
   position:relative;
   min-height:48px;
@@ -767,6 +808,34 @@ button:disabled{cursor:not-allowed;opacity:.42}
         </div>
       </article>
 
+      <nav class="bottom-bar">
+        <button class="nav-btn" id="mapButton">
+          地图
+          <span class="badge" id="mapBadge">!</span>
+        </button>
+
+        <button class="nav-btn primary" id="actionButton">
+          行动
+          <span class="badge" id="actionBadge">!</span>
+        </button>
+
+        <button class="nav-btn" id="manageButton">
+          经营
+          <span class="badge" id="manageBadge">!</span>
+        </button>
+
+        <button class="nav-btn" id="journalButton">
+          任务
+          <span class="badge" id="journalBadge">!</span>
+        </button>
+
+        <button class="nav-btn" id="personButton">
+          人物
+        </button>
+      </nav>
+
+      <section class="panel free-only" id="panel"></section>
+
       <div class="cards">
         <div class="card">
           <b>人物关系</b>
@@ -803,27 +872,6 @@ button:disabled{cursor:not-allowed;opacity:.42}
       </div>
     </div>
 
-    <nav class="bottom-bar">
-      <button class="nav-btn" id="mapButton">
-        地图
-        <span class="badge" id="mapBadge">!</span>
-      </button>
-
-      <button class="nav-btn primary" id="actionButton">
-        作出选择
-        <span class="badge" id="actionBadge">!</span>
-      </button>
-
-      <button class="nav-btn" id="shopButton">
-        市集
-        <span class="badge" id="shopBadge">!</span>
-      </button>
-
-      <button class="nav-btn" id="journalButton">
-        任务与人物
-        <span class="badge" id="journalBadge">!</span>
-      </button>
-    </nav>
   </section>
 </main>
 
@@ -1399,6 +1447,7 @@ function freshState(){
       conflict:0
     },
     mode:"prologue",
+    uiPanel:"action",
     turn:0,
     lastCommitment:false,
     lastPartnership:false,
@@ -1413,6 +1462,7 @@ function freshState(){
     house:false,
     building:"",
     buildings:[],
+    buildingState:{},
     mainStage:"buyFirstBuilding",
     partnerJob:{
       name:"",
@@ -1475,6 +1525,7 @@ function freshState(){
     seen:{
       journal:false,
       shop:false,
+      manage:false,
       places:{},
       npcs:{},
       clues:[],
@@ -1597,6 +1648,7 @@ function mergeState(data){
     player:{...base.player,...(data.player||{})},
     companion:{...base.companion,...(data.companion||{})},
     partnerJob:{...base.partnerJob,...(data.partnerJob||{})},
+    buildingState:{...base.buildingState,...(data.buildingState||{})},
     stats:{...base.stats,...(data.stats||{})},
     factions:{...base.factions,...(data.factions||{})},
     npcRelations:{...base.npcRelations,...(data.npcRelations||{})},
@@ -2192,7 +2244,9 @@ function updateBadges(){
     state.location==="home"&&!state.ateToday&&state.ap===0
   );
 
-  const shopNotice=enabled&&state.mode==="free"&&state.alive&&!state.seen.shop;
+  const manageNotice=enabled&&state.mode==="free"&&state.alive&&(
+    !state.buildings.length||!state.seen.manage
+  );
 
   const newClues=state.clues.filter(id=>!state.seen.clues.includes(id));
   const guide=tutorialInfo();
@@ -2204,7 +2258,7 @@ function updateBadges(){
 
   $("mapBadge").classList.toggle("show",mapNotice);
   $("actionBadge").classList.toggle("show",actionNotice);
-  $("shopBadge").classList.toggle("show",shopNotice);
+  $("manageBadge").classList.toggle("show",manageNotice);
   $("journalBadge").classList.toggle("show",journalNotice);
 
   if(newClues.length>0){
@@ -2219,8 +2273,11 @@ function render(){
 
   const free=state.mode==="free";
   $("freeInfo").classList.toggle("active",free);
+  $("panel").classList.toggle("active",free);
   $("mapButton").disabled=!free||!state.alive;
-  $("shopButton").disabled=!free||!state.alive;
+  $("manageButton").disabled=!free||!state.alive;
+  $("journalButton").disabled=!free;
+  $("personButton").disabled=!free;
   $("actionButton").disabled=free&&!state.alive;
 
   const guide=tutorialInfo();
@@ -2277,7 +2334,7 @@ function render(){
     $("goal").textContent=suggestedGoal();
     $("phaseText").textContent=`${currentDate()} · ${periodName()}`;
     $("progress").style.width=`${state.ap/MAX_AP*100}%`;
-    $("actionButton").firstChild.textContent=state.ap>0?"当前地点行动":"安排晚饭";
+    $("actionButton").firstChild.textContent="行动";
     $("ap").textContent=`${state.ap}/${MAX_AP}`;
 
     $("cultivationSummary").textContent=realmProgressText();
@@ -2309,6 +2366,7 @@ function render(){
     :"旅程刚刚开始。";
 
   updateBadges();
+  renderPanel();
   save();
 }
 
@@ -2527,6 +2585,225 @@ function openProfessionChoice(){
   });
 }
 
+function setPanel(panel){
+  if(state.mode!=="free"){
+    mainAction();
+    return;
+  }
+
+  state.uiPanel=panel;
+  render();
+}
+
+function navActive(){
+  ["map","action","manage","journal","person"].forEach(panel=>{
+    const ids={
+      map:"mapButton",
+      action:"actionButton",
+      manage:"manageButton",
+      journal:"journalButton",
+      person:"personButton"
+    };
+    const el=$(ids[panel]);
+    if(el)el.classList.toggle("active",state.uiPanel===panel);
+  });
+}
+
+function ensureBuildingState(id){
+  if(!state.buildingState[id]){
+    state.buildingState[id]={
+      level:1,
+      reputation:1,
+      inventory:8,
+      employees:[],
+      flow:"平淡"
+    };
+  }
+
+  return state.buildingState[id];
+}
+
+function employeeCard(employee){
+  return `
+    <div class="task">
+      <b>${esc(employee.name)}｜${employee.type}｜${employee.personality}</b>
+      <small>工资 ${employee.wage}/日｜优点：${employee.strength}｜缺点：${employee.weakness}</small>
+    </div>
+  `;
+}
+
+function renderMapPanel(){
+  let html=`<h3>地图</h3><p class="panel-desc">移动不消耗行动力。红点表示新人物或未查看事件。</p><div class="map-grid">`;
+
+  Object.entries(places).forEach(([id,place])=>{
+    const locked=id==="palace"&&state.factions.guard<4&&!state.clues.includes("route");
+
+    html+=`
+      <button class="map-place ${state.location===id?"active":""}" data-panel-place="${id}" ${locked?"disabled":""}>
+        ${placeHasNotice(id)&&state.settings.redDots?'<i class="map-dot"></i>':""}
+        <b>${place.name}</b>
+        <small>${locked?"暂时难以进入。":place.desc}</small>
+      </button>
+    `;
+  });
+
+  html+="</div>";
+  $("panel").innerHTML=html;
+
+  $("panel").querySelectorAll("[data-panel-place]").forEach(button=>{
+    button.onclick=()=>moveTo(button.dataset.panelPlace);
+  });
+}
+
+function panelActionButton(name,desc,id,cost=1,disabled=false){
+  return actionButton(name,desc,id,cost,disabled);
+}
+
+function renderActionPanel(){
+  let html=`<h3>行动</h3><p class="panel-desc">${places[state.location].name}｜剩余 ${state.ap}/${MAX_AP} 点行动力。行动结果会显示在上方场景层。</p><div class="choice-list">`;
+
+  if(state.location==="home"){
+    if(state.ap>0){
+      html+=panelActionButton("静心修炼",`运转${methodNames[state.method]}，提高修为。`,"cultivate");
+      html+=panelActionButton("休养身体","消耗一份食物，恢复健康。","recover");
+      if(state.companion.present){
+        html+=panelActionButton(`与${state.companion.name}相处`,`当前关系：${state.companion.relationType}。`,"companionTime");
+      }
+    }
+    html+=panelActionButton(state.ateToday?"结束今日":"安排晚饭","吃饭不消耗行动力，但影响健康与家庭关系。","dinner",0);
+  }else{
+    html+=`<button class="choice with-icon" id="openLocationActionsInline"><span class="choice-icon">行</span><span class="choice-body"><strong>查看当前位置行动</strong><small>打开当前地点的完整行动列表。</small><em>根据行动可能消耗行动力</em></span></button>`;
+  }
+
+  if(npcsHere().length){
+    html+=panelActionButton("与在场人物交谈",`可交谈：${npcsHere().map(id=>npcInfo(id).name).join("、")}。日常闲聊不消耗行动力。`,"social",0);
+  }
+
+  html+="</div>";
+  $("panel").innerHTML=html;
+
+  $("panel").querySelectorAll("[data-action]").forEach(button=>{
+    button.onclick=()=>runAction(button.dataset.action);
+  });
+
+  if($("openLocationActionsInline")){
+    $("openLocationActionsInline").onclick=openActions;
+  }
+}
+
+function renderManagePanel(){
+  state.seen.manage=true;
+
+  if(!state.buildings.length){
+    $("panel").innerHTML=`
+      <h3>经营</h3>
+      <p class="panel-desc">你还没有自己的建筑。第一阶段目标是买下小院、饭馆、武器铺、药铺、茶馆或书斋之一。</p>
+      <button class="choice with-icon" id="openMarketForBuilding">
+        <span class="choice-icon">契</span>
+        <span class="choice-body">
+          <strong>去市集查看契书</strong>
+          <small>购买第一处建筑后，经营、升级和雇佣人手会在这里展开。</small>
+          <em>不消耗行动力</em>
+        </span>
+      </button>
+    `;
+    $("openMarketForBuilding").onclick=openShop;
+    return;
+  }
+
+  const id=state.building||state.buildings[0];
+  const building=buildingData[id];
+  const data=ensureBuildingState(id);
+  const employees=data.employees||[];
+
+  $("panel").innerHTML=`
+    <h3>${building.name}经营</h3>
+    <p class="panel-desc">${building.desc}</p>
+    <div class="mini-grid">
+      <div class="clue"><b>等级</b><small>Lv.${data.level}</small></div>
+      <div class="clue"><b>口碑</b><small>${data.reputation}</small></div>
+      <div class="clue"><b>库存</b><small>${data.inventory}</small></div>
+      <div class="clue"><b>今日客流</b><small>${data.flow}</small></div>
+    </div>
+    <h3>经营行动</h3>
+    <div class="choice-list">
+      ${actionButton("打理店面","整理门面、账本和客人动线，提高口碑。","manageTidy")}
+      ${actionButton("采购库存","花费铜钱补充经营库存。","manageStock")}
+      ${actionButton("招募伙计","寻找一名凡人或修士伙计。","manageRecruit")}
+      ${actionButton("升级建筑","消耗铜钱提升建筑等级，提高收益。","manageUpgrade",1,data.level>=3)}
+    </div>
+    <h3>人手</h3>
+    ${employees.length?employees.map(employeeCard).join(""):`<div class="task"><b>暂无伙计</b><small>可以通过招募获得性格、工资和能力不同的帮手。</small></div>`}
+  `;
+
+  $("panel").querySelectorAll("[data-action]").forEach(button=>{
+    button.onclick=()=>runManageAction(button.dataset.action);
+  });
+}
+
+function attrRow(name,value){
+  const shown=Math.max(0,Math.min(100,value));
+  return `
+    <div class="attr-row">
+      <span>${name}</span>
+      <div class="attr-bar"><i style="width:${shown}%"></i></div>
+      <b>${value}</b>
+    </div>
+  `;
+}
+
+function renderPersonPanel(){
+  const s=state.stats;
+
+  $("panel").innerHTML=`
+    <h3>人物</h3>
+    <p class="panel-desc">${state.player.name||"无名客"}｜${genderNames[state.player.gender]||"未知"}｜倾向：${state.player.preference==="any"?"双":state.player.preference==="unknown"?"暂不清楚":genderNames[state.player.preference]||state.player.preference}｜${professionText()}｜${realmProgressText()}</p>
+    <h3>外属性六维</h3>
+    ${attrRow("血量",s.hp)}
+    ${attrRow("物理攻击",s.physical)}
+    ${attrRow("魔法攻击",s.magical)}
+    ${attrRow("防御",s.defense)}
+    ${attrRow("灵智",s.insight)}
+    ${attrRow("潜行闪避",s.agility)}
+    <h3>内属性三维</h3>
+    ${attrRow("社交",s.social)}
+    ${attrRow("体魄",s.physique)}
+    ${attrRow("心性",s.will)}
+    <div class="task">
+      <b>属性用途</b>
+      <small>体魄影响重武器、重甲、工作效率和挨饿承受；灵智影响法修、识破伪装和线索理解；心性影响突破、抗压和关系冲突；社交影响招人、谈价和求助；潜行闪避影响影修、跟踪和脱身。</small>
+    </div>
+    <h3>关系与同住者</h3>
+    <div class="task">
+      <b>${esc(state.companion.name||"初遇之人")}｜${state.companion.relationType}</b>
+      <small>信任 ${state.companion.trust}｜亲近 ${state.companion.closeness}｜好感 ${state.companion.affection}｜分歧 ${state.companion.conflict}</small>
+    </div>
+    ${state.partnerJob.name?`<div class="task"><b>同住者工作：${esc(state.partnerJob.name)}</b><small>每日交给你打理 ${state.partnerJob.income} 枚铜钱。${state.partnerJob.lastReport||"今日还没有新的见闻。"}</small></div>`:""}
+  `;
+}
+
+function renderJournalPanel(){
+  $("panel").innerHTML=`
+    <h3>任务</h3>
+    <div class="task"><b>阶段主线</b><small>${mainStageText()}</small></div>
+    <div class="task"><b>当前资产</b><small>${ownedBuildingText()}｜铜钱 ${state.coin}｜灵石 ${state.spiritStone}</small></div>
+    <div class="task"><b>修为规则</b><small>凡身先经营立足；感气解锁修行委托；引气出现城市异常；凝元才逐渐触及旧案边缘；筑基后才真正接触五方势力和战争真相。</small></div>
+    <div class="task"><b>旧案传闻</b><small>当前线索 ${state.clues.length}/8。凡身阶段不强制调查，经营与修炼优先。</small></div>
+  `;
+}
+
+function renderPanel(){
+  if(state.mode!=="free"||!state.alive||!$("panel"))return;
+
+  navActive();
+
+  if(state.uiPanel==="map")renderMapPanel();
+  else if(state.uiPanel==="manage")renderManagePanel();
+  else if(state.uiPanel==="journal")renderJournalPanel();
+  else if(state.uiPanel==="person")renderPersonPanel();
+  else renderActionPanel();
+}
+
 function assignPartnerJob(){
   if(state.partnerJob.name)return;
 
@@ -2597,12 +2874,27 @@ function openSpecialtyChoice(profession){
     `;
   });
 
+  info.hidden.forEach(hidden=>{
+    html+=`
+      <button class="choice with-icon" disabled>
+        <span class="choice-icon locked-icon">?</span>
+        <span class="choice-body">
+          <strong>${hidden}</strong>
+          <small>隐藏职业，需要后续事件、魂兽、特殊人物或主线条件解锁。</small>
+          <em>未解锁</em>
+        </span>
+      </button>
+    `;
+  });
+
   html+=`
     </div>
-    <div class="notice">隐藏路线：${info.hidden.join("、")}。当前只记录为世界线索，不直接解锁。</div>
+    <button class="main-btn wide" id="backToProfessions">返回修行方向</button>
   `;
 
   openModal(html,true);
+
+  $("backToProfessions").onclick=openProfessionChoice;
 
   $("modalBody").querySelectorAll("[data-specialty]").forEach(button=>{
     button.onclick=()=>startFreeMode(profession,button.dataset.specialty);
@@ -3839,6 +4131,7 @@ function buyBuilding(id){
 
   state.buildings.push(id);
   state.building=state.building||id;
+  ensureBuildingState(id);
 
   if(id==="courtyard"){
     state.house=true;
@@ -3849,6 +4142,97 @@ function buyBuilding(id){
   }
 
   log(`产业：买下${buildingData[id].name}。${buildingData[id].benefit}`);
+}
+
+function randomEmployee(){
+  const names=["阿槐","宋小满","裴九","柳青","秦照","周禾","许平","陆鱼"];
+  const personalities=["勤快","嘴甜","寡言","精明","胆小","好奇","稳重","急性子"];
+  const types=["凡人","凡人","修士"];
+  const strengths=["手脚麻利","会算账","懂客人脸色","识得药材","会修器具","消息灵通"];
+  const weaknesses=["容易紧张","偶尔偷懒","要价较高","不擅争执","身体一般","爱打听闲话"];
+
+  const type=randomItem(types);
+
+  return {
+    name:randomItem(names),
+    type,
+    personality:randomItem(personalities),
+    strength:randomItem(strengths),
+    weakness:randomItem(weaknesses),
+    wage:type==="修士"?8:5
+  };
+}
+
+function runManageAction(id){
+  if(!state.buildings.length){
+    toast("还没有可经营的建筑");
+    return;
+  }
+
+  if(state.ap<1){
+    toast("今日行动力不足");
+    return;
+  }
+
+  const buildingId=state.building||state.buildings[0];
+  const building=buildingData[buildingId];
+  const data=ensureBuildingState(buildingId);
+  let text="";
+
+  if(id==="manageTidy"){
+    state.ap--;
+    data.reputation+=1;
+    state.stats.social+=1;
+    text=`你亲自打理${building.name}，擦净门面、整理账本，也和几位熟客多说了几句。口碑 +1，社交 +1。`;
+  }
+
+  if(id==="manageStock"){
+    if(state.coin<12){
+      toast("至少需要 12 枚铜钱采购库存");
+      return;
+    }
+    state.ap--;
+    state.coin-=12;
+    data.inventory+=10;
+    text=`你花 12 枚铜钱补了一批经营所需材料。库存 +10。`;
+  }
+
+  if(id==="manageRecruit"){
+    if(state.coin<10){
+      toast("至少需要 10 枚铜钱张贴招募告示");
+      return;
+    }
+    state.ap--;
+    state.coin-=10;
+    const employee=randomEmployee();
+    data.employees.push(employee);
+    text=`你张贴告示后，${employee.type}${employee.name}前来应聘。${employee.personality}，优点是${employee.strength}，缺点是${employee.weakness}。`;
+  }
+
+  if(id==="manageUpgrade"){
+    const cost=data.level*70;
+    if(data.level>=3){
+      toast("当前试玩版建筑最高 3 级");
+      return;
+    }
+    if(state.coin<cost){
+      toast(`升级需要 ${cost} 枚铜钱`);
+      return;
+    }
+    state.ap--;
+    state.coin-=cost;
+    data.level+=1;
+    data.reputation+=2;
+    text=`你投入 ${cost} 枚铜钱扩建${building.name}。建筑升至 Lv.${data.level}，口碑 +2。`;
+  }
+
+  data.flow=randomItem(["清淡","平稳","热闹","挑剔"]);
+  log(`经营：${text}`);
+  $("story").textContent=text;
+  $("goal").textContent=mainStageText();
+  render();
+  state.uiPanel="manage";
+  renderPanel();
 }
 
 function openShop(){
@@ -4246,7 +4630,7 @@ function mainAction(){
   }else if(state.mode==="profession"){
     openProfessionChoice();
   }else{
-    openActions();
+    setPanel("action");
   }
 }
 
@@ -4293,9 +4677,10 @@ $("continueGame").onclick=()=>{
 };
 
 $("actionButton").onclick=mainAction;
-$("mapButton").onclick=openMap;
-$("shopButton").onclick=openShop;
-$("journalButton").onclick=openJournal;
+$("mapButton").onclick=()=>setPanel("map");
+$("manageButton").onclick=()=>setPanel("manage");
+$("journalButton").onclick=()=>setPanel("journal");
+$("personButton").onclick=()=>setPanel("person");
 $("topMenu").onclick=openMenu;
 $("closeModal").onclick=closeModal;
 
