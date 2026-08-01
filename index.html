@@ -3,96 +3,558 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>问道浮生</title>
+<title>问道浮生 · 自由行动试玩版</title>
 <style>
 :root{
-  --paper:#f3eddf;--paper2:#e5dcc9;--ink:#282c29;--muted:#737268;
-  --red:#843a31;--red2:#642a25;--green:#53685b;--gold:#9d7437;
-  --line:#c7baa3;--safe-bottom:env(safe-area-inset-bottom,0px)
+  --paper:#f3eddf;
+  --paper2:#e5dcc9;
+  --ink:#282c29;
+  --muted:#737268;
+  --red:#843a31;
+  --red2:#642a25;
+  --green:#53685b;
+  --gold:#9d7437;
+  --line:#c7baa3;
+  --safe-bottom:env(safe-area-inset-bottom,0px)
 }
 *{box-sizing:border-box}
 html{background:#17201c}
-body{margin:0;color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#17201c}
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#17201c
+}
 button,input,select{font:inherit}
 button{cursor:pointer;-webkit-tap-highlight-color:transparent}
-.app{width:min(100%,680px);min-height:100dvh;margin:auto;padding-bottom:calc(90px + var(--safe-bottom));background:var(--paper)}
-.header{padding:15px 16px 12px;background:#efe7d6;border-bottom:1px solid var(--line)}
-.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand h1{margin:0;color:var(--red);font:700 29px/1.1 serif;letter-spacing:2px}
-.brand p{margin:5px 0 0;color:var(--muted);font-size:12px}
-.icon-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:#fff9ed;color:var(--red);font-size:20px}
-.start{padding:48px 20px;text-align:center}
-.start h2{color:var(--red2);font:500 27px serif}
-.start p{color:var(--muted);line-height:1.9}
-.start input{width:100%;height:50px;margin:16px 0 10px;padding:0 14px;border:1px solid #9b907d;border-radius:7px;background:#fffaf0}
-.primary{border-color:var(--red)!important;background:var(--red)!important;color:#fff!important}
+button:disabled{cursor:not-allowed;opacity:.45}
+.app{
+  width:min(100%,720px);
+  min-height:100dvh;
+  margin:auto;
+  padding-bottom:calc(92px + var(--safe-bottom));
+  background:var(--paper)
+}
+.header{
+  padding:15px 16px 12px;
+  background:#efe7d6;
+  border-bottom:1px solid var(--line)
+}
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+.brand h1{
+  margin:0;
+  color:var(--red);
+  font:700 29px/1.1 serif;
+  letter-spacing:2px
+}
+.brand p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:12px
+}
+.icon-btn{
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:#fff9ed;
+  color:var(--red);
+  font-size:20px
+}
+.start{
+  padding:45px 20px;
+  text-align:center
+}
+.start h2{
+  color:var(--red2);
+  font:500 28px serif
+}
+.start p{
+  color:var(--muted);
+  line-height:1.9
+}
+.start input{
+  width:100%;
+  height:50px;
+  margin:16px 0 10px;
+  padding:0 14px;
+  border:1px solid #9b907d;
+  border-radius:7px;
+  background:#fffaf0
+}
+.start-actions{display:grid;gap:9px}
+.primary{
+  border-color:var(--red)!important;
+  background:var(--red)!important;
+  color:#fff!important
+}
 .wide{width:100%}
-.main-btn{min-height:50px;padding:10px 14px;border:1px solid #958a77;border-radius:7px;background:#fffaf0;color:var(--ink);font-weight:700}
-.game{display:none}.game.active{display:block}
-.sticky{position:sticky;top:0;z-index:15;padding:9px 12px;background:rgba(239,231,214,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-.progress-row{display:flex;justify-content:space-between;margin-bottom:7px;color:var(--muted);font-size:12px}
-.progress{height:5px;border-radius:9px;background:#d4c8b4;overflow:hidden}.progress i{display:block;height:100%;background:var(--red);transition:width .3s}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}
-.stat{padding:6px 2px;border:1px solid var(--line);background:#e4dac7;text-align:center;border-radius:5px}
-.stat b{display:block;color:var(--red2);font-size:16px}.stat span{color:var(--muted);font-size:10px}
+.main-btn{
+  min-height:50px;
+  padding:10px 14px;
+  border:1px solid #958a77;
+  border-radius:7px;
+  background:#fffaf0;
+  color:var(--ink);
+  font-weight:700
+}
+.game{display:none}
+.game.active{display:block}
+.sticky{
+  position:sticky;
+  top:0;
+  z-index:15;
+  padding:9px 12px;
+  background:rgba(239,231,214,.96);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(10px)
+}
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+  color:var(--muted);
+  font-size:12px
+}
+.progress{
+  height:5px;
+  border-radius:9px;
+  background:#d4c8b4;
+  overflow:hidden
+}
+.progress i{
+  display:block;
+  height:100%;
+  background:var(--red);
+  transition:width .3s
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:5px;
+  margin-top:8px
+}
+.stat{
+  padding:6px 2px;
+  border:1px solid var(--line);
+  background:#e4dac7;
+  text-align:center;
+  border-radius:5px
+}
+.stat b{
+  display:block;
+  color:var(--red2);
+  font-size:15px
+}
+.stat span{
+  color:var(--muted);
+  font-size:9px
+}
 .content{padding:14px}
-.scene{padding:18px;border:1px solid var(--line);border-radius:9px;background:#fff9ed;box-shadow:0 8px 24px rgba(62,45,30,.07)}
-.label{color:var(--gold);font-size:12px;letter-spacing:1px}
-.scene h2{margin:8px 0 12px;color:var(--red2);font:500 26px serif}
-.story{min-height:126px;line-height:1.95;white-space:pre-line;color:#474a43}
-.goal{margin-top:15px;padding:11px 12px;border-left:3px solid var(--green);background:#e9e2d2;color:#555b53;font-size:13px;line-height:1.7}
+.scene{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff9ed;
+  box-shadow:0 8px 24px rgba(62,45,30,.07)
+}
+.label{
+  color:var(--gold);
+  font-size:12px;
+  letter-spacing:1px
+}
+.scene h2{
+  margin:8px 0 12px;
+  color:var(--red2);
+  font:500 26px serif
+}
+.story{
+  min-height:118px;
+  line-height:1.95;
+  white-space:pre-line;
+  color:#474a43
+}
+.goal{
+  margin-top:15px;
+  padding:11px 12px;
+  border-left:3px solid var(--green);
+  background:#e9e2d2;
+  color:#555b53;
+  font-size:13px;
+  line-height:1.7
+}
 .goal b{color:var(--green)}
-.assets{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
-.box{padding:11px;border:1px solid var(--line);border-radius:7px;background:#e8dfce}
-.box b{display:block;margin-bottom:5px;color:var(--green);font-size:13px}.box span{color:var(--muted);font-size:12px;line-height:1.6}
-.log{margin-top:12px;padding:12px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.8}
-.log b{color:var(--red2)}.log-list{max-height:110px;overflow:auto}.log-list div{border-bottom:1px dashed #cec1ab}
-.bottom-bar{position:fixed;z-index:20;left:50%;bottom:0;transform:translateX(-50%);display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;width:min(100%,680px);padding:9px 12px calc(9px + var(--safe-bottom));background:rgba(228,218,199,.97);border-top:1px solid var(--line);backdrop-filter:blur(12px)}
-.bottom-bar button{min-height:47px;border:1px solid #958a77;border-radius:7px;background:#fff9ed;color:var(--ink);font-weight:700}
-.overlay{position:fixed;z-index:100;inset:0;display:none;align-items:center;justify-content:center;padding:7vh 5vw;background:rgba(18,24,21,.46);backdrop-filter:blur(7px)}
+.assets{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:11px
+}
+.box{
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#e8dfce
+}
+.box b{
+  display:block;
+  margin-bottom:5px;
+  color:var(--green);
+  font-size:13px
+}
+.box span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.65
+}
+.free-panel{
+  display:none;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin-top:11px
+}
+.free-panel.active{display:grid}
+.info-card{
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#eee5d4
+}
+.info-card b{
+  display:block;
+  color:var(--red2);
+  font-size:13px;
+  margin-bottom:5px
+}
+.info-card span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6
+}
+.log{
+  margin-top:12px;
+  padding:12px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8
+}
+.log b{color:var(--red2)}
+.log-list{
+  max-height:150px;
+  overflow:auto
+}
+.log-list div{
+  padding:3px 0;
+  border-bottom:1px dashed #cec1ab
+}
+.bottom-bar{
+  position:fixed;
+  z-index:20;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  width:min(100%,720px);
+  padding:9px 10px calc(9px + var(--safe-bottom));
+  background:rgba(228,218,199,.97);
+  border-top:1px solid var(--line);
+  backdrop-filter:blur(12px)
+}
+.bottom-bar button{
+  min-height:47px;
+  padding:7px 3px;
+  border:1px solid #958a77;
+  border-radius:7px;
+  background:#fff9ed;
+  color:var(--ink);
+  font-weight:700;
+  font-size:13px
+}
+.overlay{
+  position:fixed;
+  z-index:100;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:7vh 4vw;
+  background:rgba(18,24,21,.48);
+  backdrop-filter:blur(7px)
+}
 .overlay.open{display:flex}
-.modal{position:relative;width:min(92vw,600px);max-height:80dvh;overflow:auto;padding:48px 17px 18px;border:1px solid #b7a98e;border-radius:13px;background:var(--paper);box-shadow:0 22px 70px rgba(0,0,0,.32)}
-.close{position:absolute;top:10px;width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#fff9ed;color:var(--red);font-size:20px}.close.right{right:11px}.close.left{left:11px}
-.modal h2{margin:0 42px 7px;color:var(--red2);font:500 24px serif;text-align:center}.modal-desc{margin:0 0 14px;color:var(--muted);text-align:center;font-size:12px;line-height:1.6}
-.choice-list{display:grid;gap:9px}.choice{width:100%;min-height:58px;padding:11px 13px;border:1px solid #9b907d;border-radius:8px;background:#fff9ed;text-align:left;color:var(--ink)}
-.choice strong{display:block;margin-bottom:4px}.choice small{color:var(--muted);line-height:1.5}.choice:active{background:#ded1b8}
-.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 3px;border-bottom:1px solid var(--line)}
-.setting span{font-size:14px}.setting select{min-width:122px;height:40px;padding:0 8px;border:1px solid #9b907d;border-radius:6px;background:#fff9ed}
-.toggle{width:52px;height:30px;padding:3px;border:0;border-radius:18px;background:#aaa}.toggle i{display:block;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}.toggle.on{background:var(--green)}.toggle.on i{transform:translateX(22px)}
-.shop-item{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
-.shop-item b{display:block;color:var(--red2)}.shop-item small{color:var(--muted)}.buy{min-width:90px;min-height:42px;border:1px solid var(--red);border-radius:6px;background:#fff9ed;color:var(--red)}
-.buy:disabled{opacity:.45}
-.notice{margin-top:12px;color:var(--muted);font-size:12px;text-align:center}
-.ending{display:none;padding:45px 20px;text-align:center}.ending.active{display:block}.ending h2{color:var(--red2);font:500 30px serif}.ending p{color:#50544d;line-height:1.9;white-space:pre-line}
-.motion-dot{display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:#6e927a}
-@media(max-width:390px){.stats{gap:3px}.stat b{font-size:14px}.stat span{font-size:9px}.assets{grid-template-columns:1fr}.story{min-height:145px}.scene h2{font-size:23px}}
+.modal{
+  position:relative;
+  width:min(94vw,620px);
+  max-height:82dvh;
+  overflow:auto;
+  padding:48px 17px 18px;
+  border:1px solid #b7a98e;
+  border-radius:13px;
+  background:var(--paper);
+  box-shadow:0 22px 70px rgba(0,0,0,.32)
+}
+.close{
+  position:absolute;
+  top:10px;
+  width:36px;
+  height:36px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:#fff9ed;
+  color:var(--red);
+  font-size:20px
+}
+.close.right{right:11px}
+.close.left{left:11px}
+.modal h2{
+  margin:0 42px 7px;
+  color:var(--red2);
+  font:500 24px serif;
+  text-align:center
+}
+.modal h3{
+  margin:18px 0 8px;
+  color:var(--green);
+  font-size:15px
+}
+.modal-desc{
+  margin:0 0 14px;
+  color:var(--muted);
+  text-align:center;
+  font-size:12px;
+  line-height:1.65
+}
+.choice-list{display:grid;gap:9px}
+.choice{
+  width:100%;
+  min-height:58px;
+  padding:11px 13px;
+  border:1px solid #9b907d;
+  border-radius:8px;
+  background:#fff9ed;
+  text-align:left;
+  color:var(--ink)
+}
+.choice strong{
+  display:block;
+  margin-bottom:4px;
+  color:var(--red2)
+}
+.choice small{
+  color:var(--muted);
+  line-height:1.55
+}
+.choice em{
+  display:block;
+  margin-top:5px;
+  color:var(--green);
+  font-size:11px;
+  font-style:normal
+}
+.choice:active{background:#ded1b8}
+.setting{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:13px 3px;
+  border-bottom:1px solid var(--line)
+}
+.setting span{font-size:14px}
+.setting select{
+  min-width:122px;
+  height:40px;
+  padding:0 8px;
+  border:1px solid #9b907d;
+  border-radius:6px;
+  background:#fff9ed
+}
+.toggle{
+  width:52px;
+  height:30px;
+  padding:3px;
+  border:0;
+  border-radius:18px;
+  background:#aaa
+}
+.toggle i{
+  display:block;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#fff;
+  transition:.2s
+}
+.toggle.on{background:var(--green)}
+.toggle.on i{transform:translateX(22px)}
+.shop-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:9px;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid var(--line)
+}
+.shop-item b{
+  display:block;
+  color:var(--red2)
+}
+.shop-item small{
+  color:var(--muted);
+  line-height:1.5
+}
+.buy{
+  min-width:92px;
+  min-height:42px;
+  border:1px solid var(--red);
+  border-radius:6px;
+  background:#fff9ed;
+  color:var(--red)
+}
+.map-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px
+}
+.map-place{
+  min-height:76px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff9ed;
+  text-align:left
+}
+.map-place.active{
+  border-color:var(--red);
+  background:#eadbca
+}
+.map-place b{
+  display:block;
+  color:var(--red2);
+  margin-bottom:4px
+}
+.map-place small{
+  color:var(--muted);
+  line-height:1.45
+}
+.save-slot{
+  padding:12px 0;
+  border-bottom:1px solid var(--line)
+}
+.save-slot b{
+  display:block;
+  color:var(--red2);
+  margin-bottom:7px
+}
+.save-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+.notice{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  line-height:1.6
+}
+.danger{
+  border-color:#9e4940!important;
+  color:#8c3029!important
+}
+.toast{
+  position:fixed;
+  z-index:200;
+  left:50%;
+  bottom:calc(102px + var(--safe-bottom));
+  transform:translate(-50%,20px);
+  width:min(88vw,480px);
+  padding:11px 14px;
+  border-radius:8px;
+  background:rgba(40,44,41,.94);
+  color:#fff;
+  text-align:center;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.22s
+}
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0)
+}
+.motion-dot{
+  display:inline-block;
+  width:7px;
+  height:7px;
+  margin-right:5px;
+  border-radius:50%;
+  background:#6e927a
+}
+@media(max-width:430px){
+  .stats{gap:3px}
+  .stat b{font-size:13px}
+  .stat span{font-size:8px}
+  .assets,.free-panel{grid-template-columns:1fr}
+  .story{min-height:140px}
+  .scene h2{font-size:23px}
+  .bottom-bar button{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition:none!important}
+}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="header">
     <div class="header-row">
-      <div class="brand"><h1>问道浮生</h1><p>一屋二人，山河半生</p></div>
-      <button class="icon-btn" id="topSettings" aria-label="设置">⚙</button>
+      <div class="brand">
+        <h1>问道浮生</h1>
+        <p>一屋二人，山河半生 · 自由行动试玩版</p>
+      </div>
+      <button class="icon-btn" id="topMenu" aria-label="菜单">☰</button>
     </div>
   </header>
 
   <section class="start" id="start">
     <h2>从一场相遇开始</h2>
-    <p>你将在十个相互关联的回合中安身、谋生并作出承诺。十回合后，新的家庭道路才真正开始。</p>
+    <p>
+      先经历十回合序章，再选择家庭道路与职业专精。<br>
+      此后可在青石城中长期生活、谋生、修炼并调查世子之死。
+    </p>
     <input id="nameInput" maxlength="8" placeholder="请输入你的名字或道号">
-    <button class="main-btn primary wide" id="begin">踏入尘世</button>
+    <div class="start-actions">
+      <button class="main-btn primary wide" id="begin">开始新的旅程</button>
+      <button class="main-btn wide" id="continueGame" style="display:none">继续自动存档</button>
+    </div>
   </section>
 
   <section class="game" id="game">
     <div class="sticky">
-      <div class="progress-row"><b id="roundText">第 1 / 10 回合</b><span><i class="motion-dot" id="motionDot"></i><span id="saveText">已存档</span></span></div>
+      <div class="progress-row">
+        <b id="phaseText">第一回</b>
+        <span>
+          <i class="motion-dot" id="motionDot"></i>
+          <span id="saveText">已自动存档</span>
+        </span>
+      </div>
       <div class="progress"><i id="progress"></i></div>
       <div class="stats">
         <div class="stat"><b id="coin">60</b><span>铜钱</span></div>
         <div class="stat"><b id="food">12</b><span>食物</span></div>
         <div class="stat"><b id="bond">0</b><span>情谊</span></div>
         <div class="stat"><b id="qi">0</b><span>修为</span></div>
+        <div class="stat"><b id="ap">—</b><span>行动力</span></div>
         <div class="stat"><b id="members">2/0</b><span>人口/房位</span></div>
       </div>
     </div>
@@ -102,26 +564,54 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
         <div class="label" id="label"></div>
         <h2 id="title"></h2>
         <div class="story" id="story"></div>
-        <div class="goal"><b>当前目标：</b><span id="goal"></span></div>
+        <div class="goal">
+          <b>当前目标：</b>
+          <span id="goal"></span>
+        </div>
       </article>
+
       <div class="assets">
-        <div class="box"><b>装备与心法</b><span id="equipment">无</span></div>
-        <div class="box"><b>永久资产</b><span id="property">尚无房屋</span></div>
+        <div class="box">
+          <b>装备与心法</b>
+          <span id="equipment">无</span>
+        </div>
+        <div class="box">
+          <b>永久资产</b>
+          <span id="property">尚无房屋</span>
+        </div>
       </div>
-      <div class="log"><b>浮生录</b><div class="log-list" id="logs"></div></div>
+
+      <div class="free-panel" id="freePanel">
+        <div class="info-card">
+          <b>职业与地点</b>
+          <span id="careerInfo"></span>
+        </div>
+        <div class="info-card">
+          <b>势力关系</b>
+          <span id="factionInfo"></span>
+        </div>
+        <div class="info-card">
+          <b>调查进度</b>
+          <span id="caseInfo"></span>
+        </div>
+        <div class="info-card">
+          <b>今日人物</b>
+          <span id="npcInfo"></span>
+        </div>
+      </div>
+
+      <div class="log">
+        <b>浮生录</b>
+        <div class="log-list" id="logs"></div>
+      </div>
     </div>
 
     <nav class="bottom-bar">
+      <button id="mapButton">地图</button>
+      <button class="primary" id="actionButton">作出选择</button>
       <button id="shopButton">市集</button>
-      <button class="primary" id="choiceButton">作出选择</button>
-      <button id="settingsButton">设置</button>
+      <button id="menuButton">菜单</button>
     </nav>
-  </section>
-
-  <section class="ending" id="ending">
-    <h2 id="endingTitle"></h2>
-    <p id="endingText"></p>
-    <button class="main-btn primary wide" id="again">重新开始</button>
   </section>
 </main>
 
@@ -132,263 +622,1888 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const SAVE_KEY = "wendao-fusheng-v4";
+const SAVE_KEY = "wendao-fusheng-v5";
+const LEGACY_KEY = "wendao-fusheng-v4";
+const SLOT_PREFIX = "wendao-fusheng-v5-slot-";
+
+const $ = id => document.getElementById(id);
+
+const weaponNames = ["无", "木剑", "青锋剑", "玄铁剑"];
+const armorNames = ["无", "布甲", "皮甲", "玄铁甲"];
+const methodNames = ["无", "吐纳诀", "守心诀", "两仪心法"];
+
+const professions = {
+  apothecary:{
+    name:"药师",
+    desc:"药行工作与山野采集收益更高，更容易识别药物和毒理。"
+  },
+  guard:{
+    name:"护卫",
+    desc:"巡逻和护送收益更高，可以更早取得巡检司内部消息。"
+  },
+  scholar:{
+    name:"书生",
+    desc:"修炼和查阅档案收益更高，更容易分析证词与旧案。"
+  }
+};
+
+const places = {
+  home:{
+    name:"住处",
+    desc:"陪伴家人、修炼、整理证据和结束一天。"
+  },
+  market:{
+    name:"青石市集",
+    desc:"购买物资、打听消息，商旅往来频繁。"
+  },
+  medicine:{
+    name:"回春药行",
+    desc:"沈禾工作的药行，也是药材账目汇集之处。"
+  },
+  guard:{
+    name:"巡检司",
+    desc:"城防、巡逻和世子出行记录都保存在这里。"
+  },
+  academy:{
+    name:"白鹿书院",
+    desc:"收藏医书、地方志和历年案件卷宗。"
+  },
+  palace:{
+    name:"临川王府",
+    desc:"世子身亡之地，戒备森严，需要关系或证据。"
+  },
+  outskirts:{
+    name:"城外山野",
+    desc:"采集、狩猎、修行，也可能遇见走私者。"
+  }
+};
 
 const mainTurns = [
-  {label:"第一回 · 雨巷",title:"檐下相逢",story:"秋雨封住城门。你在旧茶铺的屋檐下遇见沈禾，她抱着一只装满药草的竹篓，却付不起进城的路钱。\n\n远处巡夜人的灯正慢慢靠近。",goal:"决定是否帮助这个陌生人。",choices:[
-    ["替她支付路钱","你们一同进城，她答应日后偿还。",{coin:-8,bond:4}],
-    ["陪她寻找小路","泥泞难行，却让你们有了第一次长谈。",{food:-2,bond:6,qi:1}],
-    ["各走各路","你保住了钱财，但记住了她回头时的眼神。",{coin:3,bond:-1}]
-  ]},
-  {label:"第二回 · 城南",title:"共同谋生",story:"三日后，你在城南再次遇见沈禾。她正在药铺门口争取一份短工，掌柜却只肯雇一个人。",goal:"在生计和关系之间取得平衡。",choices:[
-    ["把工作让给她","她有了稳定收入，也开始真正信任你。",{bond:7,food:2}],
-    ["提议共同分工","你负责搬货，她负责辨药，掌柜勉强答应。",{coin:12,bond:5,food:-1}],
-    ["独自接下工作","你赚到了钱，关系却出现一道细小裂痕。",{coin:18,bond:-4}]
-  ]},
-  {label:"第三回 · 药香",title:"寒夜发热",story:"连日劳作后，沈禾在寒夜里病倒。医馆要收十枚铜钱，市集也能买到便宜但来路不明的药。",goal:"让沈禾平安度过这场病。",choices:[
-    ["请医馆诊治","病很快退去，她把这份照顾记在心里。",{coin:-10,bond:8}],
-    ["亲自煎药守夜","你用已有知识照顾她，整夜没有合眼。",{food:-2,bond:6,qi:3}],
-    ["购买便宜药物","药有效，却让她多受了两天苦。",{coin:-4,bond:1}]
-  ]},
-  {label:"第四回 · 灯火",title:"寻常一夜",story:"没有突发灾祸，也没有必须立刻回答的问题。\n\n你们围着小炉分食热汤，听屋外风吹过石阶。这是一个空过回合，却也许是你们第一次感到日子可以安稳。",goal:"度过这一晚，让时间自然向前。",empty:true},
-  {label:"第五回 · 市集",title:"第一笔积蓄",story:"药铺结算了工钱。沈禾希望先囤食物，你则发现市集里出现了武器、防具、心法和房屋居住权。",goal:"决定这笔积蓄更应该用在哪里。",choices:[
-    ["优先储备食物","能吃饱，才有资格谈更远的将来。",{coin:-8,food:12,bond:4}],
-    ["留钱购买装备","你准备面对城外越来越多的盗匪。",{coin:18,bond:1}],
-    ["开始筹备住处","离一间真正属于你们的房子更近了。",{coin:25,bond:3}]
-  ]},
-  {label:"第六回 · 风声",title:"山道遇袭",story:"送药途中，盗匪封住山道。你们的装备与修为将影响处理方式；若什么都没有，只能依靠判断和彼此配合。",goal:"保护药材并一同返回城里。",dynamic:"bandit"},
-  {label:"第七回 · 屋檐",title:"何处为家",story:"房东突然涨租。沈禾问你：漂泊只是暂时，还是你从未想过共同的将来？",goal:"回应她对安稳生活的期待。",choices:[
-    ["承诺购买永久住处","承诺本身没有屋瓦，却让方向变得清楚。",{bond:9,coin:10}],
-    ["先租更便宜的房间","现实压力暂时缓解，但安家仍要等待。",{coin:15,bond:2}],
-    ["认为四海皆可为家","她没有反驳，只是沉默地收好行李。",{qi:4,bond:-5}]
-  ]},
-  {label:"第八回 · 初雪",title:"相守无言",story:"初雪落下，你们在药铺里整理旧账。\n\n没有争吵，没有奇遇。沈禾把一杯热茶推到你面前，你也替她关上漏风的窗。这是第二个空过回合。",goal:"让平静本身成为关系的一部分。",empty:true},
-  {label:"第九回 · 旧债",title:"掌柜的请求",story:"药铺掌柜年轻时私采灵矿，如今旧事败露。他请求你们隐瞒，报酬足以支付大半房款。沈禾把决定权交给你。",goal:"决定家庭的根基建立在什么之上。",choices:[
-    ["拒绝并公开真相","钱来得慢一些，但你们不必害怕夜里敲门声。",{bond:7,qi:4,coin:-3}],
-    ["收下报酬并保密","房屋近在眼前，这个秘密也会长期跟随。",{coin:55,bond:-4}],
-    ["劝掌柜主动补偿矿工","掌柜答应归还收益，你们得到众人的感谢。",{coin:18,bond:9,qi:3}]
-  ]},
-  {label:"第十回 · 春信",title:"十回之后",story:"春天到来。沈禾把这些日子的账册放在桌上：食物、钱财、房屋、装备，以及你们之间未曾写下的情谊。\n\n她问你，是否愿意把往后的生活也写在同一本账册里。",goal:"完成十回合主线，确认两个人的共同未来。",choices:[
-    ["许下相守承诺","你们决定不再把彼此称作旅伴。",{bond:12,coin:-8}],
-    ["先解决现实压力","承诺没有盛大仪式，却有清楚的计划。",{coin:20,bond:5}],
-    ["以修行见证此心","你们在山碑前共同立誓。",{qi:8,bond:8}]
-  ]}
+  {
+    label:"第一回 · 雨巷",
+    title:"檐下相逢",
+    story:"秋雨封住城门。你在旧茶铺的屋檐下遇见沈禾，她抱着一只装满药草的竹篓，却付不起进城的路钱。\n\n远处巡夜人的灯正慢慢靠近。",
+    goal:"决定是否帮助这个陌生人。",
+    choices:[
+      ["替她支付路钱","你们一同进城，她答应日后偿还。",{coin:-8,bond:4}],
+      ["陪她寻找小路","泥泞难行，却让你们有了第一次长谈。",{food:-2,bond:6,qi:1}],
+      ["各走各路","你保住了钱财，却记住了她回头时的眼神。",{coin:3,bond:-1}]
+    ]
+  },
+  {
+    label:"第二回 · 城南",
+    title:"共同谋生",
+    story:"三日后，你在城南再次遇见沈禾。她正在药铺门口争取一份短工，掌柜却只肯雇一个人。",
+    goal:"在生计和关系之间取得平衡。",
+    choices:[
+      ["把工作让给她","她有了稳定收入，也开始真正信任你。",{bond:7,food:2}],
+      ["提议共同分工","你负责搬货，她负责辨药，掌柜勉强答应。",{coin:12,bond:5,food:-1}],
+      ["独自接下工作","你赚到了钱，关系却出现一道细小裂痕。",{coin:18,bond:-4}]
+    ]
+  },
+  {
+    label:"第三回 · 药香",
+    title:"寒夜发热",
+    story:"连日劳作后，沈禾在寒夜里病倒。医馆要收十枚铜钱，市集也能买到便宜但来路不明的药。",
+    goal:"让沈禾平安度过这场病。",
+    choices:[
+      ["请医馆诊治","病很快退去，她把这份照顾记在心里。",{coin:-10,bond:8}],
+      ["亲自煎药守夜","你用已有知识照顾她，整夜没有合眼。",{food:-2,bond:6,qi:3}],
+      ["购买便宜药物","药有效，却让她多受了两天苦。",{coin:-4,bond:1}]
+    ]
+  },
+  {
+    label:"第四回 · 灯火",
+    title:"寻常一夜",
+    story:"你们围着小炉分食热汤，听屋外风吹过石阶。\n\n没有突发灾祸。这或许是你们第一次感到，日子也可以这样安稳。",
+    goal:"让时间自然向前。",
+    empty:true
+  },
+  {
+    label:"第五回 · 市集",
+    title:"第一笔积蓄",
+    story:"药行结算了工钱。沈禾希望先囤食物，你却发现市集里出现了武器、防具、心法和永久房屋居住权。",
+    goal:"决定积蓄应该用在哪里。",
+    choices:[
+      ["优先储备食物","能吃饱，才有资格谈更远的将来。",{coin:-8,food:12,bond:4}],
+      ["留钱购买装备","你准备面对城外越来越多的盗匪。",{coin:18,bond:1}],
+      ["开始筹备住处","离真正属于你们的房子更近了。",{coin:25,bond:3}]
+    ]
+  },
+  {
+    label:"第六回 · 风声",
+    title:"山道遇袭",
+    story:"送药途中，盗匪封住山道。装备与心法会提供新的解决方式；若什么都没有，只能依靠判断和配合。",
+    goal:"保护药材并一同返回城里。",
+    dynamic:"bandit"
+  },
+  {
+    label:"第七回 · 屋檐",
+    title:"何处为家",
+    story:"房东突然涨租。沈禾问你：漂泊只是暂时，还是你从未想过共同的将来？",
+    goal:"回应她对安稳生活的期待。",
+    choices:[
+      ["承诺购买永久住处","承诺本身没有屋瓦，却让方向变得清楚。",{bond:9,coin:10}],
+      ["先租更便宜的房间","现实压力暂时缓解，但安家仍要等待。",{coin:15,bond:2}],
+      ["认为四海皆可为家","她没有反驳，只是沉默地收好行李。",{qi:4,bond:-5}]
+    ]
+  },
+  {
+    label:"第八回 · 初雪",
+    title:"相守无言",
+    story:"初雪落下。沈禾把一杯热茶推到你面前，你也替她关上漏风的窗。\n\n平静本身，也逐渐成为关系的一部分。",
+    goal:"度过这个平静回合。",
+    empty:true
+  },
+  {
+    label:"第九回 · 旧债",
+    title:"掌柜的请求",
+    story:"药行掌柜年轻时私采灵矿，如今旧事败露。他请求你们隐瞒，报酬足以支付大半房款。",
+    goal:"决定家庭的根基建立在什么之上。",
+    choices:[
+      ["拒绝并公开真相","钱来得慢一些，但不必害怕夜里敲门声。",{bond:7,qi:4,coin:-3}],
+      ["收下报酬并保密","房屋近在眼前，秘密也会长期跟随。",{coin:55,bond:-4}],
+      ["劝掌柜主动补偿矿工","他答应归还收益，你们得到众人的感谢。",{coin:18,bond:9,qi:3}]
+    ]
+  },
+  {
+    label:"第十回 · 春信",
+    title:"十回之后",
+    story:"春天到来。沈禾把这些日子的账册放在桌上：食物、钱财、房屋、装备，以及未曾写下的情谊。\n\n她问你，是否愿意把往后的生活写在同一本账册里。",
+    goal:"确认两个人的共同未来。",
+    choices:[
+      ["许下相守承诺","你们决定不再把彼此称作旅伴。",{bond:12,coin:-8}],
+      ["先解决现实压力","承诺没有盛大仪式，却有清楚的计划。",{coin:20,bond:5}],
+      ["以修行见证此心","你们在山碑前共同立誓。",{qi:8,bond:8}]
+    ]
+  }
 ];
 
-const familyEvents = [
-  {title:"新成员的啼哭",story:"孩子的到来让房间变得拥挤，食物消耗也明显增加。沈禾希望你减少冒险，多留在家中。",goal:"平衡家庭开支与个人道路。",choices:[
-    ["增加工作时间","收入增加，但陪伴变少。",{coin:28,food:-4,bond:-2}],
-    ["在家照顾孩子","日子清贫，关系却更加紧密。",{food:-5,bond:10}],
-    ["依靠房屋与积蓄", "只有拥有永久房屋时才较为从容。",{coin:-10,bond:8},"house"]
-  ]},
-  {title:"冬季存粮",story:"孩子比预想中更能吃。若食物不足，整个家庭都会受到影响。",goal:"为全家准备过冬资源。与市集购买的食物会直接影响结果。",choices:[
-    ["大量购粮","用铜钱换来安稳的冬天。",{coin:-20,food:20,bond:4}],
-    ["进山狩猎","武器越好，这个选择越安全。",{food:16,qi:2},"weapon"],
-    ["节省口粮","撑过冬天，但所有人都很疲惫。",{food:5,bond:-4}]
-  ]},
-  {title:"房间是否足够",story:"亲人准备来城里帮忙照看孩子。永久房屋最多容纳六人，没有房屋则只能拒绝或临时租住。",goal:"安排家庭成员的居住空间。",dynamic:"familyHome"},
-  {title:"夜路护送",story:"沈禾需要把一批急用药送到邻村。武器、防具和心法都会提供新的处理方法。",goal:"确保家人平安返回。",dynamic:"escort"},
-  {title:"第二个春天",story:"经历忙乱的一年后，孩子已经会扶着桌角走路。你们终于能重新谈论个人理想。",goal:"决定家庭下一阶段的发展。",choices:[
-    ["经营家庭药铺","稳定收入，也能陪伴家人。",{coin:35,bond:8}],
-    ["继续修习心法","你希望获得守护家庭的力量。",{qi:12,bond:2}],
-    ["改善永久住宅","有房屋时可为未来腾出更多空间。",{coin:-15,bond:7},"house"]
-  ]}
-];
+const clueData = {
+  ledger:"药行残缺账页",
+  route:"被改动的巡夜路线",
+  toxin:"寒髓散毒理记载",
+  cup:"世子酒杯中的银蓝沉淀",
+  seal:"北境商队的伪造货印",
+  smuggler:"城外走私者的口供",
+  testimony:"侍女云枝的证词",
+  herb:"沈禾辨认出的配药手法"
+};
 
-const coupleEvents = [
-  {title:"只属于两人的远行",story:"没有育儿压力后，你们决定暂时离开城镇。沈禾想看海，你则听说北方山中有失传心法。",goal:"决定二人共同生活的方向。",choices:[
-    ["一起去看海","花费不少，却留下难以替代的回忆。",{coin:-18,bond:12}],
-    ["同赴北山修行","危险与收获都由两个人承担。",{food:-5,qi:12,bond:6}],
-    ["留城经营药铺","平稳积累共同资产。",{coin:32,bond:4}]
-  ]},
-  {title:"旧友来信",story:"沈禾的旧友邀请她去外地管理药行，至少离开半年。她没有立刻拒绝，而是先询问你的想法。",goal:"尊重彼此选择，同时维持关系。",choices:[
-    ["支持她独自前往","距离没有削弱信任。",{bond:10,coin:16}],
-    ["陪她一起前往","你们再次成为同行的旅伴。",{food:-4,bond:12}],
-    ["希望她留下","她最终留下，但心中仍有遗憾。",{bond:-6,coin:10}]
-  ]},
-  {title:"空房间",story:"买下永久房屋后，多出的房间始终空着；若尚未买房，你们则继续住在租来的小屋。",goal:"定义二人世界中的“家”。",dynamic:"coupleHome"},
-  {title:"山雨再临",story:"多年前相遇时的秋雨再次落下。城外有村民求援，山路却比当年更危险。",goal:"根据现有装备决定是否出发。",dynamic:"escort"},
-  {title:"共同的名字",story:"你们准备给药铺、居所或共同修行的心法取一个名字。走到这里，生活已不再只是生存。",goal:"确定二人未来长期经营的方向。",choices:[
-    ["开设浮生药铺","以医药帮助更多普通人。",{coin:38,bond:7}],
-    ["建立双修书院","把一路体悟传给后来者。",{qi:15,bond:7}],
-    ["关门继续远行","房屋仍在，世界也仍然辽阔。",{food:-6,bond:10,qi:6}]
-  ]}
-];
+function freshState(){
+  return {
+    version:5,
+    name:"",
+    mode:"prologue",
+    turn:0,
+    route:"",
+    profession:"",
+    profXP:0,
+    coin:60,
+    food:12,
+    bond:0,
+    qi:0,
+    members:2,
+    house:false,
+    weapon:0,
+    armor:0,
+    method:0,
+    day:1,
+    ap:3,
+    location:"home",
+    factions:{
+      medicine:0,
+      guard:0,
+      academy:0
+    },
+    npcBond:{
+      shen:0,
+      xu:0,
+      lin:0,
+      chen:0,
+      yun:0
+    },
+    clues:[],
+    caseResolved:false,
+    caseResult:"",
+    suspicion:0,
+    logs:[],
+    settings:{
+      closeSide:"right",
+      backdrop:true,
+      reducedMotion:false
+    }
+  };
+}
 
-let state={version:4,name:"",phase:"main",round:0,post:0,route:"",coin:60,food:12,bond:0,qi:0,members:2,house:false,weapon:0,armor:0,method:0,logs:[],settings:{closeSide:"right",backdrop:true,fps:60}};
-let modalType="";
-const $=id=>document.getElementById(id);
-const weaponNames=["无","木剑","青锋剑","玄铁剑"];
-const armorNames=["无","布甲","皮甲","玄铁甲"];
-const methodNames=["无","吐纳诀","守心诀","两仪心法"];
+let state = freshState();
+let toastTimer = 0;
 
-function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state));$("saveText").textContent="已自动存档"}
-function capacity(){return state.house?6:0}
-function apply(e={}){["coin","food","bond","qi"].forEach(k=>state[k]+=e[k]||0);state.coin=Math.max(0,state.coin);state.food=Math.max(0,state.food);state.bond=Math.max(-20,state.bond);state.qi=Math.max(0,state.qi)}
-function upkeep(){const need=Math.max(1,Math.ceil(state.members/2));state.food-=need;if(state.food<0){state.food=0;state.bond-=2;state.logs.unshift("食物不足，家庭关系受到压力。")}}
-function currentScene(){
-  if(state.phase==="main") return buildMain(mainTurns[state.round]);
-  const list=state.route==="family"?familyEvents:coupleEvents;
-  return buildPost(list[state.post]);
+function esc(value){
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
 }
-function buildMain(e){
-  if(!e.dynamic)return e;
-  const choices=[];
-  if(state.weapon>0)choices.push(["持武器正面威慑","盗匪认出你手中的兵刃，不敢贸然靠近。",{coin:8,bond:5}]);
-  if(state.armor>0)choices.push(["护住沈禾突围","防具挡住了最危险的一击。",{food:-2,bond:7,qi:2}]);
-  if(state.method>0)choices.push(["运转心法寻找破绽","你用修行所得扰乱对方阵脚。",{qi:6,bond:4}]);
-  choices.push(["放下部分药材换取通行","你们平安返回，但损失了货物。",{coin:-12,bond:2}]);
-  return {...e,choices};
+
+function clampState(){
+  state.coin = Math.max(0, Number(state.coin) || 0);
+  state.food = Math.max(0, Number(state.food) || 0);
+  state.qi = Math.max(0, Number(state.qi) || 0);
+  state.bond = Math.max(-30, Number(state.bond) || 0);
+  state.ap = Math.max(0, Math.min(3, Number(state.ap) || 0));
+  state.members = Math.max(2, Math.min(6, Number(state.members) || 2));
 }
-function buildPost(e){
-  if(!e.dynamic)return e;
-  let choices=[];
-  if(e.dynamic==="familyHome"){
-    if(state.house&&state.members<6)choices.push(["接亲人同住","房屋拥有六个固定居住位，家中从此多了帮手。",{bond:8},"addMember"]);
-    if(!state.house)choices.push(["购买永久房屋居住权","需要先去市集购买，之后可重新查看本回合。",{},"needHouse"]);
-    choices.push(["为亲人租临时住处","解决眼前问题，但不是永久资产。",{coin:-22,bond:3}]);
-    choices.push(["婉拒亲人前来","省下开支，照顾孩子会更加辛苦。",{coin:5,bond:-4}]);
-  }
-  if(e.dynamic==="coupleHome"){
-    if(state.house)choices.push(["把空房改成书房","永久房屋让两个人都拥有独处空间。",{coin:-10,bond:9,qi:3}]);
-    else choices.push(["继续租住小屋","不被房产束缚，但每年仍要支付租金。",{coin:-12,bond:3}]);
-    choices.push(["邀请旧友偶尔留宿","家不必只有血缘关系才能共享。",{bond:6}]);
-    choices.push(["保持二人空间","安静而清晰的边界让关系更舒适。",{bond:7}]);
-  }
-  if(e.dynamic==="escort"){
-    if(state.weapon>0)choices.push(["持武器开路",`以${weaponNames[state.weapon]}震慑山中匪徒。`,{coin:12,bond:5,qi:2}]);
-    if(state.armor>0)choices.push(["穿防具同行",`${armorNames[state.armor]}让冒险变得更可控。`,{food:-2,bond:7}]);
-    if(state.method>0)choices.push(["以心法探查山路",`${methodNames[state.method]}帮助你提前发现危险。`,{qi:8,bond:5}]);
-    choices.push(["花钱雇佣护卫","稳妥，但会消耗不少积蓄。",{coin:-18,bond:4}]);
-    choices.push(["劝她推迟出发","避开危险，也可能耽误需要药物的人。",{bond:-3}]);
-  }
-  return {...e,choices};
+
+function mergeState(data){
+  const base = freshState();
+  return {
+    ...base,
+    ...data,
+    factions:{...base.factions,...(data.factions || {})},
+    npcBond:{...base.npcBond,...(data.npcBond || {})},
+    settings:{...base.settings,...(data.settings || {})},
+    clues:Array.isArray(data.clues) ? data.clues : [],
+    logs:Array.isArray(data.logs) ? data.logs : []
+  };
 }
+
+function migrateLegacy(old){
+  const next = freshState();
+
+  next.name = old.name || "无名客";
+  next.coin = old.coin ?? 60;
+  next.food = old.food ?? 12;
+  next.bond = old.bond ?? 0;
+  next.qi = old.qi ?? 0;
+  next.members = old.members ?? 2;
+  next.house = !!old.house;
+  next.weapon = old.weapon ?? 0;
+  next.armor = old.armor ?? 0;
+  next.method = old.method ?? 0;
+  next.logs = Array.isArray(old.logs) ? old.logs.slice(0,30) : [];
+  next.settings = {
+    ...next.settings,
+    ...(old.settings || {})
+  };
+
+  if(old.phase === "main"){
+    next.mode = "prologue";
+    next.turn = Math.min(9, old.round || 0);
+  }else{
+    next.mode = "free";
+    next.route = old.route || "couple";
+    next.profession = "apothecary";
+    next.day = Math.max(1, (old.post || 0) + 1);
+    next.ap = 3;
+  }
+
+  next.logs.unshift("系统：已将旧版存档迁移到自由行动试玩版。");
+  return next;
+}
+
+function saveAuto(){
+  clampState();
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  $("saveText").textContent = "已自动存档";
+}
+
+function readAuto(){
+  const raw = localStorage.getItem(SAVE_KEY);
+  if(raw){
+    try{
+      return mergeState(JSON.parse(raw));
+    }catch(error){
+      localStorage.removeItem(SAVE_KEY);
+    }
+  }
+
+  const legacy = localStorage.getItem(LEGACY_KEY);
+  if(legacy){
+    try{
+      return migrateLegacy(JSON.parse(legacy));
+    }catch(error){
+      return null;
+    }
+  }
+
+  return null;
+}
+
+function capacity(){
+  return state.house ? 6 : 0;
+}
+
+function applyEffects(effects = {}){
+  ["coin","food","bond","qi"].forEach(key => {
+    state[key] += Number(effects[key] || 0);
+  });
+
+  if(effects.medicine){
+    state.factions.medicine += effects.medicine;
+  }
+  if(effects.guard){
+    state.factions.guard += effects.guard;
+  }
+  if(effects.academy){
+    state.factions.academy += effects.academy;
+  }
+  if(effects.xp){
+    state.profXP += effects.xp;
+  }
+
+  clampState();
+}
+
+function log(text){
+  state.logs.unshift(text);
+  state.logs = state.logs.slice(0,60);
+}
+
+function showToast(text){
+  clearTimeout(toastTimer);
+  $("toast").textContent = text;
+  $("toast").classList.add("show");
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2200);
+}
+
+function openModal(html, locked = false){
+  $("modalBody").innerHTML = html;
+  $("closeModal").className = `close ${state.settings.closeSide}`;
+  $("closeModal").style.display = locked ? "none" : "";
+  $("overlay").classList.add("open");
+}
+
+function closeModal(){
+  $("overlay").classList.remove("open");
+  $("closeModal").style.display = "";
+}
+
+function currentDate(){
+  const year = 1 + Math.floor((state.day - 1) / 360);
+  const month = 1 + Math.floor(((state.day - 1) % 360) / 30);
+  const day = 1 + ((state.day - 1) % 30);
+  return `浮生${year}年 ${month}月${day}日`;
+}
+
+function weekday(){
+  return ((state.day - 1) % 7) + 1;
+}
+
+function weekdayName(){
+  return ["一","二","三","四","五","六","日"][weekday() - 1];
+}
+
+function periodName(){
+  if(state.ap === 3) return "清晨";
+  if(state.ap === 2) return "午后";
+  if(state.ap === 1) return "黄昏";
+  return "夜深";
+}
+
+function professionRank(){
+  if(state.profXP >= 80) return 4;
+  if(state.profXP >= 45) return 3;
+  if(state.profXP >= 20) return 2;
+  return 1;
+}
+
+function professionTitle(){
+  if(!state.profession) return "尚未选择";
+  const rankNames = ["","初习","熟手","行家","名士"];
+  return `${rankNames[professionRank()]}${professions[state.profession].name}`;
+}
+
+function currentNPCPlace(id){
+  const w = weekday();
+  const evening = state.ap <= 1;
+
+  if(id === "shen"){
+    if(evening) return "home";
+    if(state.route === "family" && state.day % 3 === 0) return "home";
+    if(w <= 5) return "medicine";
+    return w === 6 ? "market" : "outskirts";
+  }
+
+  if(id === "xu"){
+    if(w <= 5) return state.ap === 3 ? "guard" : "palace";
+    return "market";
+  }
+
+  if(id === "lin"){
+    if(w <= 5) return "academy";
+    return w === 6 ? "market" : "home";
+  }
+
+  if(id === "chen"){
+    return state.ap === 1 ? "medicine" : "market";
+  }
+
+  if(id === "yun"){
+    if(state.day % 2 === 0 && state.ap >= 2) return "palace";
+    return "home";
+  }
+
+  return "home";
+}
+
+const npcData = {
+  shen:{name:"沈禾",desc:"与你共同生活的药师。"},
+  xu:{name:"徐砚",desc:"负责城南巡逻的年轻校尉。"},
+  lin:{name:"林见微",desc:"白鹿书院整理卷宗的女先生。"},
+  chen:{name:"陈掌柜",desc:"熟悉各地商路和货印。"},
+  yun:{name:"云枝",desc:"曾在世子身边侍奉的王府侍女。"}
+};
+
+function npcsHere(){
+  return Object.keys(npcData).filter(id => currentNPCPlace(id) === state.location);
+}
+
+function buildBanditChoices(event){
+  const choices = [];
+
+  if(state.weapon > 0){
+    choices.push([
+      "持武器正面威慑",
+      "盗匪认出你手中的兵刃，不敢贸然靠近。",
+      {coin:8,bond:5}
+    ]);
+  }
+
+  if(state.armor > 0){
+    choices.push([
+      "护住沈禾突围",
+      "防具挡住了最危险的一击。",
+      {food:-2,bond:7,qi:2}
+    ]);
+  }
+
+  if(state.method > 0){
+    choices.push([
+      "运转心法寻找破绽",
+      "你用修行所得扰乱对方阵脚。",
+      {qi:6,bond:4}
+    ]);
+  }
+
+  choices.push([
+    "放下部分药材换取通行",
+    "你们平安返回，却损失了货物。",
+    {coin:-12,bond:2}
+  ]);
+
+  return {...event,choices};
+}
+
+function currentPrologue(){
+  const event = mainTurns[state.turn];
+  if(!event) return null;
+  return event.dynamic === "bandit" ? buildBanditChoices(event) : event;
+}
+
 function render(){
-  if(state.phase==="ending")return finish();
-  const e=currentScene();
-  $("label").textContent=e.label||(state.route==="family"?"家族篇 · 新芽":"二人篇 · 同行");
-  $("title").textContent=e.title;$("story").textContent=e.story;$("goal").textContent=e.goal;
-  if(state.phase==="main"){
-    $("roundText").textContent=`第 ${state.round+1} / 10 回合`;
-    $("progress").style.width=`${(state.round+1)*10}%`;
+  clampState();
+
+  const isFree = state.mode === "free";
+  $("freePanel").classList.toggle("active", isFree);
+  $("mapButton").disabled = !isFree;
+
+  if(state.mode === "prologue"){
+    const event = currentPrologue();
+
+    $("label").textContent = event.label;
+    $("title").textContent = event.title;
+    $("story").textContent = event.story;
+    $("goal").textContent = event.goal;
+    $("phaseText").textContent = `第 ${state.turn + 1} / 10 回合`;
+    $("progress").style.width = `${(state.turn + 1) * 10}%`;
+    $("actionButton").textContent = event.empty ? "度过本回合" : "作出选择";
+    $("ap").textContent = "—";
+  }else if(state.mode === "route"){
+    $("label").textContent = "序章完成";
+    $("title").textContent = "往后的生活";
+    $("story").textContent =
+      "十回合只是相识与安身的开始。\n\n接下来，你需要决定两个人将以怎样的家庭形态继续生活。";
+    $("goal").textContent = "选择迎接后代，或继续二人世界。";
+    $("phaseText").textContent = "人生转折";
+    $("progress").style.width = "100%";
+    $("actionButton").textContent = "选择家庭道路";
+    $("ap").textContent = "—";
+  }else if(state.mode === "profession"){
+    $("label").textContent = "自由生活准备";
+    $("title").textContent = "选择谋生之道";
+    $("story").textContent =
+      "青石城中没有一条道路能够解决所有问题。\n\n你的职业会影响工作收益、势力关系和调查方式，但不会永久封锁其他行动。";
+    $("goal").textContent = "选择药师、护卫或书生专精。";
+    $("phaseText").textContent = "选择职业";
+    $("progress").style.width = "100%";
+    $("actionButton").textContent = "选择职业";
+    $("ap").textContent = "—";
   }else{
-    $("roundText").textContent=`新生活 · 第 ${state.post+1} / 5 回合`;
-    $("progress").style.width=`${(state.post+1)*20}%`;
+    const here = npcsHere();
+    const routeText = state.route === "family"
+      ? "家中多了孩子的声音。每日食物压力更高，但家庭行动能提供更多情谊。"
+      : "你与沈禾继续维持二人生活，可以把更多资源用于旅行、修行和共同事业。";
+
+    $("label").textContent =
+      `${currentDate()} · 星期${weekdayName()} · ${periodName()}`;
+
+    $("title").textContent = places[state.location].name;
+
+    $("story").textContent =
+      `${places[state.location].desc}\n\n${routeText}\n\n` +
+      (here.length
+        ? `此刻在这里的人：${here.map(id => npcData[id].name).join("、")}。`
+        : "此刻没有熟识的人在这里。");
+
+    $("goal").textContent = state.caseResolved
+      ? `世子案已经了结。你可以继续经营家庭、提升职业、购买房屋或修行。`
+      : `调查世子之死：已取得 ${state.clues.length}/8 条线索。取得至少 6 条后，可回住处整理并提交证据。`;
+
+    $("phaseText").textContent =
+      `${currentDate()} · ${periodName()}`;
+
+    $("progress").style.width = `${(state.ap / 3) * 100}%`;
+    $("actionButton").textContent =
+      state.ap > 0 ? "当前地点行动" : "结束今日";
+    $("ap").textContent = `${state.ap}/3`;
+
+    $("careerInfo").textContent =
+      `${professionTitle()}｜经验 ${state.profXP}｜当前位置：${places[state.location].name}`;
+
+    $("factionInfo").textContent =
+      `药行 ${state.factions.medicine}｜巡检司 ${state.factions.guard}｜书院 ${state.factions.academy}`;
+
+    $("caseInfo").textContent = state.caseResolved
+      ? `已结案：${state.caseResult}`
+      : `线索 ${state.clues.length}/8｜警觉 ${state.suspicion}`;
+
+    $("npcInfo").textContent = here.length
+      ? here.map(id => npcData[id].name).join("、")
+      : "当前没有熟人";
   }
-  $("coin").textContent=state.coin;$("food").textContent=state.food;$("bond").textContent=state.bond;$("qi").textContent=state.qi;
-  $("members").textContent=`${state.members}/${capacity()}`;
-  $("equipment").textContent=`${weaponNames[state.weapon]}、${armorNames[state.armor]}、${methodNames[state.method]}`;
-  $("property").textContent=state.house?`永久房屋（${state.members}/6人）`:"尚无永久房屋";
-  $("logs").innerHTML=state.logs.slice(0,10).map(x=>`<div>${x}</div>`).join("")||"旅程刚刚开始。";
-  $("choiceButton").textContent=e.empty?"度过本回合":"作出选择";
-  save();
-  setTimeout(openChoices,180);
+
+  $("coin").textContent = state.coin;
+  $("food").textContent = state.food;
+  $("bond").textContent = state.bond;
+  $("qi").textContent = state.qi;
+  $("members").textContent = `${state.members}/${capacity()}`;
+
+  $("equipment").textContent =
+    `${weaponNames[state.weapon]}、${armorNames[state.armor]}、${methodNames[state.method]}`;
+
+  $("property").textContent = state.house
+    ? `永久房屋（${state.members}/6 人）`
+    : "租住小屋，无永久房位";
+
+  $("logs").innerHTML = state.logs.length
+    ? state.logs.slice(0,16).map(item => `<div>${esc(item)}</div>`).join("")
+    : "旅程刚刚开始。";
+
+  saveAuto();
 }
-function openChoices(){
-  const e=currentScene();modalType="choices";
-  let html=`<h2>${e.title}</h2><p class="modal-desc">${e.empty?"这是剧情过渡回合，不需要作出重大选择。":"选择会影响后续剧情、家庭与可用方案。"}</p><div class="choice-list">`;
-  if(e.empty){html+=`<button class="choice" data-empty="1"><strong>让时间继续</strong><small>消耗本回合所需食物，进入下一段剧情。</small></button>`}
-  else e.choices.forEach((c,i)=>{html+=`<button class="choice" data-choice="${i}"><strong>${c[0]}</strong><small>${c[1]}</small></button>`});
-  html+="</div>";openModal(html);
-  $("modalBody").querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>choose(e.choices[Number(b.dataset.choice)]));
-  const empty=$("modalBody").querySelector("[data-empty]");if(empty)empty.onclick=()=>choose(["平静度过这一夜","",{bond:2}]);
-}
-function choose(c){
-  if(c[3]==="needHouse"){closeModal();openShop();return}
-  if(c[3]==="house"&&!state.house){alert("此选项需要先在市集购买永久房屋居住权。");return}
-  if(c[3]==="weapon"&&!state.weapon){alert("此选项需要先在市集购买武器。");return}
-  if(c[3]==="addMember"){if(!state.house||state.members>=6){alert("房屋居住位不足。");return}state.members++}
-  apply(c[2]);upkeep();state.logs.unshift(`${state.phase==="main"?`第${state.round+1}回合`:`新生活第${state.post+1}回合`}：${c[0]}`);closeModal();
-  if(state.phase==="main"){
-    state.round++;
-    if(state.round>=10){save();setTimeout(openFamilyDecision,180);return}
+
+function openPrologueChoices(){
+  const event = currentPrologue();
+
+  let html = `
+    <h2>${event.title}</h2>
+    <p class="modal-desc">
+      ${event.empty
+        ? "这是一个平静的过渡回合。"
+        : "选择会改变资源、关系与后续可用方案。"}
+    </p>
+    <div class="choice-list">
+  `;
+
+  if(event.empty){
+    html += `
+      <button class="choice" data-empty="1">
+        <strong>让时间继续</strong>
+        <small>消耗基本食物，情谊增加 2。</small>
+      </button>
+    `;
   }else{
-    state.post++;
-    if(state.post>=5){state.phase="ending";save();finish();return}
+    event.choices.forEach((choice,index) => {
+      html += `
+        <button class="choice" data-choice="${index}">
+          <strong>${choice[0]}</strong>
+          <small>${choice[1]}</small>
+        </button>
+      `;
+    });
   }
+
+  html += "</div>";
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-choice]").forEach(button => {
+    button.onclick = () => choosePrologue(
+      event.choices[Number(button.dataset.choice)]
+    );
+  });
+
+  const empty = $("modalBody").querySelector("[data-empty]");
+  if(empty){
+    empty.onclick = () => choosePrologue([
+      "平静度过这一夜",
+      "",
+      {food:-1,bond:2}
+    ]);
+  }
+}
+
+function choosePrologue(choice){
+  applyEffects(choice[2]);
+  log(`第${state.turn + 1}回合：${choice[0]}。`);
+  state.turn++;
+  closeModal();
+
+  if(state.turn >= 10){
+    state.mode = "route";
+    render();
+    setTimeout(openRouteChoice,120);
+    return;
+  }
+
   render();
 }
-function openFamilyDecision(){
-  modalType="family";
-  openModal(`<h2>十回合后的选择</h2><p class="modal-desc">这不是结局，而是下一阶段生活的开端。</p><div class="choice-list"><button class="choice" data-route="family"><strong>迎接后代</strong><small>家庭人口变为三人。食物消耗增加，房屋空间和稳定收入会更重要。</small></button><button class="choice" data-route="couple"><strong>继续二人世界</strong><small>保持两人生活，把资源用于共同事业、旅行、修行或永久住宅。</small></button></div>`);
-  $("modalBody").querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>selectRoute(b.dataset.route));
+
+function openRouteChoice(){
+  openModal(`
+    <h2>十回合后的选择</h2>
+    <p class="modal-desc">
+      这不是结局，而是自由行动阶段的开端。
+    </p>
+    <div class="choice-list">
+      <button class="choice" data-route="family">
+        <strong>迎接后代</strong>
+        <small>
+          家庭人口变为三人，食物消耗增加。
+          照顾家人能够提高情谊，并会触发家庭事件。
+        </small>
+      </button>
+      <button class="choice" data-route="couple">
+        <strong>继续二人世界</strong>
+        <small>
+          保持两人生活，把资源用于共同事业、修行、旅行或永久住宅。
+        </small>
+      </button>
+    </div>
+  `, true);
+
+  $("modalBody").querySelectorAll("[data-route]").forEach(button => {
+    button.onclick = () => {
+      state.route = button.dataset.route;
+
+      if(state.route === "family"){
+        state.members = 3;
+        state.food = Math.max(0,state.food - 3);
+        state.bond += 5;
+        log("十回合后：你们决定迎接一个新的家庭成员。");
+      }else{
+        state.bond += 6;
+        log("十回合后：你们决定继续珍惜二人世界。");
+      }
+
+      state.mode = "profession";
+      closeModal();
+      render();
+      setTimeout(openProfessionChoice,120);
+    };
+  });
 }
-function selectRoute(route){state.route=route;state.phase="post";state.post=0;if(route==="family"){state.members=3;state.food=Math.max(0,state.food-4);state.bond+=5;state.logs.unshift("十回合后：你们决定迎接一个新的家庭成员。")}else{state.bond+=6;state.logs.unshift("十回合后：你们决定继续珍惜二人世界。")}closeModal();render()}
-function openModal(html){
-  $("modalBody").innerHTML=html;$("closeModal").className=`close ${state.settings.closeSide}`;$("overlay").classList.add("open")
+
+function openProfessionChoice(){
+  let html = `
+    <h2>选择职业专精</h2>
+    <p class="modal-desc">
+      职业会提供长期加成，但不会禁止其他地点的行动。
+    </p>
+    <div class="choice-list">
+  `;
+
+  Object.entries(professions).forEach(([id,profession]) => {
+    html += `
+      <button class="choice" data-profession="${id}">
+        <strong>${profession.name}</strong>
+        <small>${profession.desc}</small>
+      </button>
+    `;
+  });
+
+  html += "</div>";
+  openModal(html,true);
+
+  $("modalBody").querySelectorAll("[data-profession]").forEach(button => {
+    button.onclick = () => {
+      state.profession = button.dataset.profession;
+      state.mode = "free";
+      state.day = 1;
+      state.ap = 3;
+      state.location = "home";
+
+      if(state.profession === "apothecary"){
+        state.factions.medicine += 4;
+      }
+      if(state.profession === "guard"){
+        state.factions.guard += 4;
+        state.weapon = Math.max(1,state.weapon);
+      }
+      if(state.profession === "scholar"){
+        state.factions.academy += 4;
+        state.qi += 4;
+      }
+
+      log(`自由生活开始：你选择以${professions[state.profession].name}为业。`);
+      log("城中传来消息：临川王世子暴毙，死因被草草定为急病。");
+
+      closeModal();
+      render();
+      showToast("自由行动阶段已经开始");
+    };
+  });
 }
-function closeModal(){$("overlay").classList.remove("open")}
-function openSettings(){
-  modalType="settings";
-  openModal(`<h2>游戏设置</h2><p class="modal-desc">设置会保存在当前浏览器中。</p>
-  <div class="setting"><span>关闭按钮位置</span><select id="sideSelect"><option value="left">左上角</option><option value="right">右上角</option></select></div>
-  <div class="setting"><span>点击弹窗外关闭</span><button class="toggle ${state.settings.backdrop?"on":""}" id="backdropToggle"><i></i></button></div>
-  <div class="setting"><span>目标帧率</span><select id="fpsSelect"><option>30</option><option>60</option><option>90</option><option>120</option></select></div>
-  <p class="notice">实际帧率受屏幕刷新率、系统省电策略和浏览器限制。</p>
-  <button class="main-btn wide" id="restartGame">清除存档并重新开始</button>`);
-  $("sideSelect").value=state.settings.closeSide;$("fpsSelect").value=String(state.settings.fps);
-  $("sideSelect").onchange=e=>{state.settings.closeSide=e.target.value;$("closeModal").className=`close ${e.target.value}`;save()};
-  $("backdropToggle").onclick=e=>{state.settings.backdrop=!state.settings.backdrop;e.currentTarget.classList.toggle("on",state.settings.backdrop);save()};
-  $("fpsSelect").onchange=e=>{state.settings.fps=Number(e.target.value);save()};
-  $("restartGame").onclick=()=>{if(confirm("确定清除当前旅程吗？")){localStorage.removeItem(SAVE_KEY);location.reload()}};
+
+function openMap(){
+  if(state.mode !== "free") return;
+
+  let html = `
+    <h2>青石城舆图</h2>
+    <p class="modal-desc">
+      移动不消耗行动力，但夜深后只能结束当天。
+    </p>
+    <div class="map-grid">
+  `;
+
+  Object.entries(places).forEach(([id,place]) => {
+    const locked = id === "palace" &&
+      state.factions.guard < 5 &&
+      !state.clues.includes("route");
+
+    html += `
+      <button
+        class="map-place ${state.location === id ? "active" : ""}"
+        data-place="${id}"
+        ${locked ? "disabled" : ""}
+      >
+        <b>${place.name}</b>
+        <small>
+          ${locked
+            ? "需要巡检司关系达到 5，或先取得巡夜路线。"
+            : place.desc}
+        </small>
+      </button>
+    `;
+  });
+
+  html += "</div>";
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-place]").forEach(button => {
+    button.onclick = () => {
+      state.location = button.dataset.place;
+      closeModal();
+      log(`移动：来到${places[state.location].name}。`);
+      render();
+    };
+  });
 }
-function shopProducts(){return [
-  {name:"干粮包 × 10",desc:"食物增加10",cost:12,buy:()=>state.food+=10},
-  {name:weaponNames[Math.min(3,state.weapon+1)],desc:state.weapon>=3?"武器已升至最高级":"解锁战斗与护送选项",cost:[0,24,45,75][Math.min(3,state.weapon+1)],max:state.weapon>=3,buy:()=>state.weapon++},
-  {name:armorNames[Math.min(3,state.armor+1)],desc:state.armor>=3?"防具已升至最高级":"解锁防护类选项",cost:[0,22,42,72][Math.min(3,state.armor+1)],max:state.armor>=3,buy:()=>state.armor++},
-  {name:methodNames[Math.min(3,state.method+1)],desc:state.method>=3?"心法已升至最高级":"提高修为并解锁心法选项",cost:[0,28,50,80][Math.min(3,state.method+1)],max:state.method>=3,buy:()=>{state.method++;state.qi+=5}},
-  {name:"永久房屋居住权",desc:state.house?"已拥有；最多六人永久居住":"永久资产，最多容纳六人",cost:120,max:state.house,buy:()=>state.house=true}
-]}
-function openShop(){
-  modalType="shop";const ps=shopProducts();let html=`<h2>青石市集</h2><p class="modal-desc">购买不会消耗剧情回合。现有 ${state.coin} 枚铜钱。</p>`;
-  ps.forEach((p,i)=>html+=`<div class="shop-item"><div><b>${p.name}</b><small>${p.desc}</small></div><button class="buy" data-buy="${i}" ${p.max||state.coin<p.cost?"disabled":""}>${p.max?"已拥有":p.cost+" 铜钱"}</button></div>`);
-  openModal(html);$("modalBody").querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>buy(Number(b.dataset.buy)));
-}
-function buy(i){const p=shopProducts()[i];if(p.max||state.coin<p.cost)return;state.coin-=p.cost;p.buy();state.logs.unshift(`市集：购买${p.name}。`);save();renderWithoutPopup();openShop()}
-function renderWithoutPopup(){
-  $("coin").textContent=state.coin;$("food").textContent=state.food;$("qi").textContent=state.qi;$("members").textContent=`${state.members}/${capacity()}`;
-  $("equipment").textContent=`${weaponNames[state.weapon]}、${armorNames[state.armor]}、${methodNames[state.method]}`;
-  $("property").textContent=state.house?`永久房屋（${state.members}/6人）`:"尚无永久房屋";
-  $("logs").innerHTML=state.logs.slice(0,10).map(x=>`<div>${x}</div>`).join("");
-}
-function finish(){
-  closeModal();$("game").classList.remove("active");$("ending").classList.add("active");
-  let title="浮生有家",text="";
-  if(state.route==="family"){
-    if(state.house&&state.food>=10&&state.bond>=45){title="满屋春声";text="永久居所里有了新的脚步声。你们没有解决人生所有难题，却给家人留下了足够安稳的灯火。"}
-    else if(state.bond>=45){title="相守成家";text="房屋与钱财仍有不足，但每次困难来临时，你们都没有把另一个人独自留下。"}
-    else{text="新成员让生活变得忙碌而真实。关系仍需经营，这个家庭的故事才刚开始。"}
-  }else{
-    if(state.qi>=45&&state.bond>=45){title="两仪同心";text="你们没有选择传统的家庭道路，而是在共同修行与彼此尊重中走出了另一种圆满。"}
-    else if(state.house&&state.bond>=40){title="一屋二人";text="六个居住位的房屋里只住着两个人，却从不显得空。自由与陪伴成为你们共同认可的生活。"}
-    else{text="你们继续以伴侣和旅人的身份同行。没有后代并不代表没有未来，下一段路仍由两个人共同决定。"}
+
+function addClue(id){
+  if(state.clues.includes(id)){
+    return false;
   }
-  $("endingTitle").textContent=title;$("endingText").textContent=`${text}\n\n最终：铜钱 ${state.coin}｜食物 ${state.food}｜情谊 ${state.bond}｜修为 ${state.qi}\n${state.house?"拥有最多可住六人的永久房屋。":"尚未购买永久房屋。"}`;
+
+  state.clues.push(id);
+  log(`调查：取得线索“${clueData[id]}”。`);
+  showToast(`获得线索：${clueData[id]}`);
+  return true;
 }
 
-$("begin").onclick=()=>{state.name=$("nameInput").value.trim()||"无名客";$("start").style.display="none";$("game").classList.add("active");render()};
-$("choiceButton").onclick=openChoices;$("shopButton").onclick=openShop;$("settingsButton").onclick=openSettings;$("topSettings").onclick=openSettings;$("closeModal").onclick=closeModal;
-$("overlay").onclick=e=>{if(e.target===$("overlay")&&state.settings.backdrop)closeModal()};
-$("again").onclick=()=>{localStorage.removeItem(SAVE_KEY);location.reload()};
+function spendAction(cost,name,effects = {},detail = ""){
+  if(state.ap < cost){
+    showToast("今日行动力不足");
+    return false;
+  }
 
-let lastFrame=0,dotPhase=0;
-function animationLoop(t){
-  const interval=1000/state.settings.fps;
-  if(t-lastFrame>=interval){lastFrame=t;dotPhase=(dotPhase+1)%100;$("motionDot").style.opacity=String(.45+.55*Math.sin(dotPhase/12)**2)}
-  requestAnimationFrame(animationLoop)
+  state.ap -= cost;
+  applyEffects(effects);
+  log(`${currentDate()}：${name}${detail ? `，${detail}` : ""}。`);
+  closeModal();
+  render();
+
+  if(state.ap <= 0){
+    setTimeout(openEndDayConfirm,160);
+  }
+
+  return true;
 }
+
+function talkToNPC(id){
+  if(currentNPCPlace(id) !== state.location){
+    showToast("此人当前不在这里");
+    return;
+  }
+
+  if(state.ap < 1){
+    showToast("行动力不足");
+    return;
+  }
+
+  let detail = "";
+  const npc = npcData[id];
+  state.npcBond[id] += 2;
+
+  if(id === "shen"){
+    state.bond += state.route === "couple" ? 5 : 4;
+    detail = "你们交换了彼此这一天的见闻";
+
+    if(state.clues.includes("toxin") && !state.clues.includes("herb")){
+      addClue("herb");
+      detail = "沈禾认出了寒髓散中一种极少见的配药手法";
+    }
+  }
+
+  if(id === "xu"){
+    state.factions.guard += 2;
+    detail = "徐砚向你讲起王府当夜混乱的换岗命令";
+
+    if(
+      state.factions.guard >= 5 &&
+      !state.clues.includes("route")
+    ){
+      addClue("route");
+    }
+  }
+
+  if(id === "lin"){
+    state.factions.academy += 2;
+    state.qi += 1;
+    detail = "林见微愿意替你留意被人借走的旧卷宗";
+  }
+
+  if(id === "chen"){
+    state.factions.medicine += 1;
+    state.coin += 3;
+    detail = "陈掌柜告诉你，最近有人高价收购北境药材";
+
+    if(!state.clues.includes("seal") && state.day >= 3){
+      addClue("seal");
+    }
+  }
+
+  if(id === "yun"){
+    state.bond += 1;
+    detail = "云枝终于愿意谈起世子饮下药酒前发生的事";
+
+    if(
+      state.clues.includes("cup") &&
+      !state.clues.includes("testimony")
+    ){
+      addClue("testimony");
+    }
+  }
+
+  state.ap--;
+  log(`${currentDate()}：与${npc.name}交谈，${detail}。`);
+  closeModal();
+  render();
+
+  if(state.ap <= 0){
+    setTimeout(openEndDayConfirm,160);
+  }
+}
+
+function openSocial(){
+  const here = npcsHere();
+
+  if(!here.length){
+    showToast("这里暂时没有可以交谈的熟人");
+    return;
+  }
+
+  let html = `
+    <h2>与人交谈</h2>
+    <p class="modal-desc">交谈消耗 1 点行动力。</p>
+    <div class="choice-list">
+  `;
+
+  here.forEach(id => {
+    html += `
+      <button class="choice" data-npc="${id}" ${state.ap < 1 ? "disabled" : ""}>
+        <strong>${npcData[id].name}</strong>
+        <small>${npcData[id].desc}</small>
+        <em>熟悉程度：${state.npcBond[id]}</em>
+      </button>
+    `;
+  });
+
+  html += "</div>";
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-npc]").forEach(button => {
+    button.onclick = () => talkToNPC(button.dataset.npc);
+  });
+}
+
+function actionButton(name,desc,id,cost = 1,disabled = false){
+  return `
+    <button class="choice" data-action="${id}" ${disabled ? "disabled" : ""}>
+      <strong>${name}</strong>
+      <small>${desc}</small>
+      <em>${cost === 0 ? "不消耗行动力" : `消耗 ${cost} 点行动力`}</em>
+    </button>
+  `;
+}
+
+function openLocationActions(){
+  if(state.ap <= 0){
+    openEndDayConfirm();
+    return;
+  }
+
+  let html = `
+    <h2>${places[state.location].name}</h2>
+    <p class="modal-desc">
+      当前为${periodName()}，剩余 ${state.ap}/3 点行动力。
+    </p>
+    <div class="choice-list">
+  `;
+
+  if(state.location === "home"){
+    html += actionButton(
+      "静心修炼",
+      `运转${methodNames[state.method]}，提高修为。书生和心法会提高收益。`,
+      "cultivate"
+    );
+
+    if(state.route === "family"){
+      html += actionButton(
+        "照顾家人",
+        "消耗少量食物，显著提高家庭情谊。",
+        "familyCare"
+      );
+    }else{
+      html += actionButton(
+        "整理共同账册",
+        "与沈禾规划生活，少量增加铜钱和情谊。",
+        "couplePlan"
+      );
+    }
+
+    if(
+      !state.caseResolved &&
+      state.clues.length >= 6
+    ){
+      html += actionButton(
+        "整理并提交世子案证据",
+        "根据已经取得的线索指认真正的幕后之人。",
+        "resolveCase"
+      );
+    }
+
+    html += actionButton(
+      "提前结束今日",
+      "结算食物、租金和随机事件，进入下一天。",
+      "endDay",
+      0
+    );
+  }
+
+  if(state.location === "market"){
+    html += actionButton(
+      "替商户搬运货物",
+      "获得基础工钱。护卫能多获得少量收入。",
+      "marketWork"
+    );
+    html += actionButton(
+      "检查北境货印",
+      "调查近期进入青石城的异常商货。",
+      "marketClue",
+      1,
+      state.clues.includes("seal")
+    );
+  }
+
+  if(state.location === "medicine"){
+    html += actionButton(
+      "在药行工作",
+      "获得铜钱、职业经验和药行关系。药师收益更高。",
+      "medicineWork"
+    );
+    html += actionButton(
+      "核对药材账册",
+      "查看世子身亡前后被人撕去的药材记录。",
+      "ledgerClue",
+      1,
+      state.clues.includes("ledger")
+    );
+  }
+
+  if(state.location === "guard"){
+    html += actionButton(
+      "协助城中巡逻",
+      "获得铜钱、护卫经验和巡检司关系。",
+      "guardWork"
+    );
+    html += actionButton(
+      "查阅巡夜路线",
+      "护卫或巡检司关系足够时，可看出路线被人改动。",
+      "routeClue",
+      1,
+      state.clues.includes("route")
+    );
+  }
+
+  if(state.location === "academy"){
+    html += actionButton(
+      "研读旧卷",
+      "提高修为、书院关系和职业经验。",
+      "academyWork"
+    );
+    html += actionButton(
+      "查阅北境毒理",
+      "书生或书院关系足够时，可确认世子并非普通急病。",
+      "toxinClue",
+      1,
+      state.clues.includes("toxin")
+    );
+  }
+
+  if(state.location === "palace"){
+    html += actionButton(
+      "协助整理王府杂物",
+      "获得少量铜钱和巡检司关系。",
+      "palaceWork"
+    );
+    html += actionButton(
+      "检查世子遗留酒杯",
+      "需要巡检司关系或被改动的巡夜路线。",
+      "cupClue",
+      1,
+      state.clues.includes("cup")
+    );
+  }
+
+  if(state.location === "outskirts"){
+    html += actionButton(
+      "采集药草与野果",
+      "获得食物和少量修为。药师收益更高。",
+      "gather"
+    );
+    html += actionButton(
+      "探索废弃驿道",
+      "可能发现走私者，也可能只获得普通物资。",
+      "explore"
+    );
+    html += actionButton(
+      "持武器狩猎",
+      "需要武器，能够稳定获得较多食物。",
+      "hunt",
+      1,
+      state.weapon <= 0
+    );
+  }
+
+  if(npcsHere().length){
+    html += actionButton(
+      "与在场人物交谈",
+      `当前可交谈：${npcsHere().map(id => npcData[id].name).join("、")}。`,
+      "social"
+    );
+  }
+
+  html += "</div>";
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-action]").forEach(button => {
+    button.onclick = () => runLocationAction(button.dataset.action);
+  });
+}
+
+function runLocationAction(id){
+  if(id === "cultivate"){
+    const gain = 4 +
+      state.method * 2 +
+      (state.profession === "scholar" ? 3 : 0);
+
+    spendAction(
+      1,
+      "静心修炼",
+      {
+        qi:gain,
+        xp:state.profession === "scholar" ? 3 : 1
+      },
+      `修为增加 ${gain}`
+    );
+  }
+
+  if(id === "familyCare"){
+    spendAction(
+      1,
+      "留在家中照顾家人",
+      {food:-1,bond:7},
+      "屋内虽然忙乱，关系却更加紧密"
+    );
+  }
+
+  if(id === "couplePlan"){
+    spendAction(
+      1,
+      "与沈禾整理共同账册",
+      {coin:5,bond:5},
+      "你们重新确认了下一阶段的计划"
+    );
+  }
+
+  if(id === "marketWork"){
+    const coin = state.profession === "guard" ? 12 : 9;
+    spendAction(1,"替商户搬运货物",{coin,xp:2},`获得 ${coin} 枚铜钱`);
+  }
+
+  if(id === "marketClue"){
+    if(spendAction(1,"检查北境货印",{},"发现货印上的官府编号经过伪造")){
+      addClue("seal");
+      render();
+    }
+  }
+
+  if(id === "medicineWork"){
+    const coin = state.profession === "apothecary" ? 16 : 11;
+    spendAction(
+      1,
+      "在回春药行工作",
+      {coin,medicine:2,xp:3},
+      `获得 ${coin} 枚铜钱`
+    );
+  }
+
+  if(id === "ledgerClue"){
+    if(spendAction(1,"核对药材账册",{medicine:1},"找到被撕去账页留下的墨痕")){
+      addClue("ledger");
+      render();
+    }
+  }
+
+  if(id === "guardWork"){
+    const coin = state.profession === "guard" ? 16 : 10;
+    spendAction(
+      1,
+      "协助巡检司巡逻",
+      {coin,guard:2,xp:3},
+      `获得 ${coin} 枚铜钱`
+    );
+  }
+
+  if(id === "routeClue"){
+    if(
+      state.profession !== "guard" &&
+      state.factions.guard < 3
+    ){
+      showToast("需要护卫职业或至少 3 点巡检司关系");
+      return;
+    }
+
+    if(spendAction(1,"查阅巡夜路线",{guard:1},"发现世子身亡当夜有人临时调走守卫")){
+      addClue("route");
+      render();
+    }
+  }
+
+  if(id === "academyWork"){
+    const qi = state.profession === "scholar" ? 8 : 5;
+    spendAction(
+      1,
+      "在白鹿书院研读旧卷",
+      {qi,academy:2,xp:3},
+      `修为增加 ${qi}`
+    );
+  }
+
+  if(id === "toxinClue"){
+    if(
+      state.profession !== "scholar" &&
+      state.factions.academy < 3
+    ){
+      showToast("需要书生职业或至少 3 点书院关系");
+      return;
+    }
+
+    if(spendAction(1,"查阅北境毒理",{academy:1,qi:2},"确认寒髓散会伪装成急病")){
+      addClue("toxin");
+      render();
+    }
+  }
+
+  if(id === "palaceWork"){
+    spendAction(
+      1,
+      "协助整理王府杂物",
+      {coin:8,guard:1},
+      "你因此能在王府中停留更久"
+    );
+  }
+
+  if(id === "cupClue"){
+    if(
+      !state.clues.includes("route") &&
+      state.factions.guard < 5
+    ){
+      showToast("需要巡夜路线或至少 5 点巡检司关系");
+      return;
+    }
+
+    if(spendAction(1,"检查世子遗留酒杯",{guard:1},"杯底残留极细的银蓝色沉淀")){
+      addClue("cup");
+      render();
+    }
+  }
+
+  if(id === "gather"){
+    const food = state.profession === "apothecary" ? 10 : 7;
+    spendAction(
+      1,
+      "在山野采集",
+      {food,qi:2,xp:2},
+      `获得 ${food} 份食物`
+    );
+  }
+
+  if(id === "explore"){
+    if(state.ap < 1){
+      showToast("行动力不足");
+      return;
+    }
+
+    if(
+      state.clues.includes("seal") &&
+      !state.clues.includes("smuggler")
+    ){
+      state.ap--;
+      state.coin += 6;
+      state.factions.guard += 2;
+      addClue("smuggler");
+      log(`${currentDate()}：你在废弃驿道截住走私者，并取得口供。`);
+      closeModal();
+      render();
+
+      if(state.ap <= 0){
+        setTimeout(openEndDayConfirm,160);
+      }
+    }else{
+      const foundFood = 3 + Math.floor(Math.random() * 6);
+      spendAction(
+        1,
+        "探索废弃驿道",
+        {food:foundFood,qi:2},
+        `只发现零散物资，获得 ${foundFood} 份食物`
+      );
+    }
+  }
+
+  if(id === "hunt"){
+    if(state.weapon <= 0){
+      showToast("需要先购买武器");
+      return;
+    }
+
+    const food = 10 + state.weapon * 4;
+    spendAction(
+      1,
+      "持武器狩猎",
+      {food,qi:2},
+      `获得 ${food} 份食物`
+    );
+  }
+
+  if(id === "social"){
+    openSocial();
+  }
+
+  if(id === "resolveCase"){
+    openCaseResolution();
+  }
+
+  if(id === "endDay"){
+    openEndDayConfirm();
+  }
+}
+
+function openCaseResolution(){
+  if(state.clues.length < 6){
+    showToast("至少需要六条线索");
+    return;
+  }
+
+  openModal(`
+    <h2>提交世子案证据</h2>
+    <p class="modal-desc">
+      你已经取得 ${state.clues.length}/8 条线索。
+      指控错误会提高敌方警觉，但不会立刻结束游戏。
+    </p>
+    <div class="choice-list">
+      <button class="choice" data-accuse="gu">
+        <strong>指控内府司丞顾惟安</strong>
+        <small>
+          他负责王府酒药、人员调动和与北境商队的秘密往来。
+        </small>
+      </button>
+      <button class="choice" data-accuse="chen">
+        <strong>指控回春药行陈掌柜</strong>
+        <small>
+          药材账目确有异常，但他是否有机会接近世子仍不明确。
+        </small>
+      </button>
+      <button class="choice" data-accuse="assassin">
+        <strong>认定是北境刺客单独行凶</strong>
+        <small>
+          走私商队确实参与运送毒物，但王府内部必然有人配合。
+        </small>
+      </button>
+    </div>
+  `);
+
+  $("modalBody").querySelectorAll("[data-accuse]").forEach(button => {
+    button.onclick = () => resolveCase(button.dataset.accuse);
+  });
+}
+
+function resolveCase(target){
+  if(state.ap < 1){
+    showToast("今日行动力不足");
+    return;
+  }
+
+  state.ap--;
+
+  if(target === "gu"){
+    const relationTotal =
+      state.factions.medicine +
+      state.factions.guard +
+      state.factions.academy;
+
+    state.caseResolved = true;
+
+    if(state.clues.length >= 8 && relationTotal >= 24){
+      state.caseResult = "铁证如山";
+      state.coin += 100;
+      state.bond += 12;
+      state.qi += 10;
+      log("世子案：三方势力共同出面。顾惟安及走私同党被捕，案件真相大白。");
+    }else{
+      state.caseResult = "险中求真";
+      state.coin += 65;
+      state.bond += 8;
+      state.qi += 6;
+      log("世子案：证据足以击破顾惟安的辩解，但仍有部分同党逃离青石城。");
+    }
+
+    closeModal();
+    render();
+    openModal(`
+      <h2>${state.caseResult}</h2>
+      <p class="modal-desc">
+        世子并非死于急病。顾惟安借北境商队运入寒髓散，
+        又利用内府身份调走守卫，把毒物混入药酒。
+      </p>
+      <div class="goal">
+        <b>调查完成：</b>
+        你仍可继续自由生活、提升职业、经营家庭和购买永久房屋。
+      </div>
+      <button class="main-btn primary wide" id="continueLife">继续生活</button>
+    `);
+
+    $("continueLife").onclick = closeModal;
+  }else{
+    state.suspicion += 2;
+    state.factions.guard = Math.max(-10,state.factions.guard - 2);
+    log("世子案：这次指控无法解释所有证据，幕后之人的警觉提高了。");
+    closeModal();
+    render();
+    showToast("指控错误，仍可继续调查");
+  }
+}
+
+function randomDailyEvent(){
+  if(Math.random() > 0.42){
+    return "今日无额外事件。";
+  }
+
+  const events = [
+    {
+      text:"药行临时需要人手，沈禾带回了一笔额外工钱。",
+      effect:{coin:8,bond:2}
+    },
+    {
+      text:"连日阴雨使粮价上涨，部分存粮受潮。",
+      effect:{food:-3}
+    },
+    {
+      text:"你在门前帮助了一名迷路老人，邻里对你们更加信任。",
+      effect:{bond:3}
+    },
+    {
+      text:"修行时偶有所悟，气息运转比往常顺畅。",
+      effect:{qi:3}
+    }
+  ];
+
+  if(state.route === "family"){
+    events.push(
+      {
+        text:"孩子夜里发热，你们轮流守到天亮。",
+        effect:{coin:-5,food:-1,bond:5}
+      },
+      {
+        text:"亲友送来一篮食物，屋里久违地热闹起来。",
+        effect:{food:7,bond:3}
+      }
+    );
+  }else{
+    events.push(
+      {
+        text:"你与沈禾沿河散步，重新谈起多年前的雨巷。",
+        effect:{bond:6}
+      },
+      {
+        text:"外地药商寄来合作报酬，为远行计划添了一笔积蓄。",
+        effect:{coin:10}
+      }
+    );
+  }
+
+  const chosen = events[Math.floor(Math.random() * events.length)];
+  applyEffects(chosen.effect);
+  return chosen.text;
+}
+
+function openEndDayConfirm(){
+  openModal(`
+    <h2>结束今日</h2>
+    <p class="modal-desc">
+      结束后将消耗家庭食物，并可能结算租金和随机事件。
+    </p>
+    <div class="choice-list">
+      <button class="choice" id="confirmEnd">
+        <strong>休息并进入下一天</strong>
+        <small>
+          当前家庭人口 ${state.members} 人，预计消耗
+          ${Math.max(2,Math.ceil(state.members * .8))} 份食物。
+        </small>
+      </button>
+      <button class="choice" id="cancelEnd">
+        <strong>暂不休息</strong>
+        <small>返回当前地点。</small>
+      </button>
+    </div>
+  `);
+
+  $("confirmEnd").onclick = endDay;
+  $("cancelEnd").onclick = closeModal;
+}
+
+function endDay(){
+  const foodNeed = Math.max(2,Math.ceil(state.members * .8));
+  let report = [];
+
+  if(state.food >= foodNeed){
+    state.food -= foodNeed;
+    report.push(`家庭消耗 ${foodNeed} 份食物。`);
+  }else{
+    const shortage = foodNeed - state.food;
+    state.food = 0;
+    state.bond -= 2 + shortage;
+    report.push(`食物不足 ${shortage} 份，家庭情谊受到影响。`);
+  }
+
+  if(!state.house && state.day % 5 === 0){
+    const rent = 6;
+
+    if(state.coin >= rent){
+      state.coin -= rent;
+      report.push(`支付租金 ${rent} 枚铜钱。`);
+    }else{
+      state.coin = 0;
+      state.bond -= 3;
+      report.push("无力足额支付租金，房东再次催促。");
+    }
+  }
+
+  const eventText = randomDailyEvent();
+  report.push(eventText);
+
+  state.day++;
+  state.ap = 3;
+  state.location = "home";
+
+  log(`${currentDate()}：新的一天开始。${eventText}`);
+  closeModal();
+  render();
+
+  openModal(`
+    <h2>一日结算</h2>
+    <p class="modal-desc">${currentDate()} · 星期${weekdayName()}</p>
+    <div class="goal">
+      ${report.map(item => `<div>• ${esc(item)}</div>`).join("")}
+    </div>
+    <button class="main-btn primary wide" id="startNewDay">开始今日</button>
+  `);
+
+  $("startNewDay").onclick = closeModal;
+}
+
+function shopProducts(){
+  return [
+    {
+      name:"干粮包 × 10",
+      desc:"食物增加 10。",
+      cost:12,
+      max:false,
+      buy:() => state.food += 10
+    },
+    {
+      name:weaponNames[Math.min(3,state.weapon + 1)],
+      desc:state.weapon >= 3
+        ? "武器已经升至最高级。"
+        : "提高狩猎收益，并解锁部分护送方案。",
+      cost:[0,24,45,75][Math.min(3,state.weapon + 1)],
+      max:state.weapon >= 3,
+      buy:() => state.weapon++
+    },
+    {
+      name:armorNames[Math.min(3,state.armor + 1)],
+      desc:state.armor >= 3
+        ? "防具已经升至最高级。"
+        : "用于危险探索与家庭护送。",
+      cost:[0,22,42,72][Math.min(3,state.armor + 1)],
+      max:state.armor >= 3,
+      buy:() => state.armor++
+    },
+    {
+      name:methodNames[Math.min(3,state.method + 1)],
+      desc:state.method >= 3
+        ? "心法已经升至最高级。"
+        : "提高住处修炼收益，并立即增加修为。",
+      cost:[0,28,50,80][Math.min(3,state.method + 1)],
+      max:state.method >= 3,
+      buy:() => {
+        state.method++;
+        state.qi += 5;
+      }
+    },
+    {
+      name:"永久房屋居住权",
+      desc:state.house
+        ? "已拥有，最多六人永久居住。"
+        : "免除定期租金，最多容纳六人。",
+      cost:120,
+      max:state.house,
+      buy:() => state.house = true
+    }
+  ];
+}
+
+function openShop(){
+  const products = shopProducts();
+
+  let html = `
+    <h2>青石市集</h2>
+    <p class="modal-desc">
+      购买不消耗行动力。现有 ${state.coin} 枚铜钱。
+    </p>
+  `;
+
+  products.forEach((product,index) => {
+    html += `
+      <div class="shop-item">
+        <div>
+          <b>${product.name}</b>
+          <small>${product.desc}</small>
+        </div>
+        <button
+          class="buy"
+          data-buy="${index}"
+          ${product.max || state.coin < product.cost ? "disabled" : ""}
+        >
+          ${product.max ? "已拥有" : `${product.cost} 铜钱`}
+        </button>
+      </div>
+    `;
+  });
+
+  openModal(html);
+
+  $("modalBody").querySelectorAll("[data-buy]").forEach(button => {
+    button.onclick = () => buyProduct(Number(button.dataset.buy));
+  });
+}
+
+function buyProduct(index){
+  const product = shopProducts()[index];
+
+  if(product.max || state.coin < product.cost){
+    return;
+  }
+
+  state.coin -= product.cost;
+  product.buy();
+  log(`市集：购买${product.name}。`);
+  saveAuto();
+  render();
+  openShop();
+}
+
+function saveSlot(index){
+  localStorage.setItem(
+    SLOT_PREFIX + index,
+    JSON.stringify({
+      savedAt:new Date().toLocaleString(),
+      state
+    })
+  );
+  showToast(`已保存到存档槽 ${index}`);
+  openMenu();
+}
+
+function loadSlot(index){
+  const raw = localStorage.getItem(SLOT_PREFIX + index);
+
+  if(!raw){
+    showToast("该存档槽为空");
+    return;
+  }
+
+  try{
+    const data = JSON.parse(raw);
+    state = mergeState(data.state || data);
+    closeModal();
+    enterGame();
+    render();
+    showToast(`已读取存档槽 ${index}`);
+  }catch(error){
+    showToast("存档损坏，无法读取");
+  }
+}
+
+function deleteSlot(index){
+  if(!localStorage.getItem(SLOT_PREFIX + index)){
+    return;
+  }
+
+  if(confirm(`确定清除存档槽 ${index} 吗？`)){
+    localStorage.removeItem(SLOT_PREFIX + index);
+    openMenu();
+  }
+}
+
+function slotInfo(index){
+  const raw = localStorage.getItem(SLOT_PREFIX + index);
+
+  if(!raw){
+    return "空存档";
+  }
+
+  try{
+    const data = JSON.parse(raw);
+    const saved = data.state || data;
+    return `${data.savedAt || "旧存档"}｜${saved.name || "无名客"}｜${
+      saved.mode === "free"
+        ? `自由生活第 ${saved.day || 1} 日`
+        : `序章第 ${(saved.turn || 0) + 1} 回合`
+    }`;
+  }catch(error){
+    return "损坏的存档";
+  }
+}
+
+function openMenu(){
+  let slots = "";
+
+  for(let i = 1;i <= 3;i++){
+    slots += `
+      <div class="save-slot">
+        <b>存档槽 ${i}</b>
+        <div class="notice" style="text-align:left;margin:0 0 8px">
+          ${esc(slotInfo(i))}
+        </div>
+        <div class="save-actions">
+          <button class="main-btn" data-save="${i}">保存</button>
+          <button class="main-btn" data-load="${i}">读取</button>
+        </div>
+        <button
+          class="main-btn danger wide"
+          style="margin-top:7px;min-height:40px"
+          data-delete="${i}"
+        >清除该槽</button>
+      </div>
+    `;
+  }
+
+  openModal(`
+    <h2>旅程菜单</h2>
+    <p class="modal-desc">
+      自动存档会持续更新。手动存档槽彼此独立。
+    </p>
+
+    ${slots}
+
+    <h3>界面设置</h3>
+
+    <div class="setting">
+      <span>关闭按钮位置</span>
+      <select id="sideSelect">
+        <option value="left">左上角</option>
+        <option value="right">右上角</option>
+      </select>
+    </div>
+
+    <div class="setting">
+      <span>点击弹窗外关闭</span>
+      <button class="toggle ${state.settings.backdrop ? "on" : ""}" id="backdropToggle">
+        <i></i>
+      </button>
+    </div>
+
+    <button class="main-btn danger wide" id="restartGame" style="margin-top:18px">
+      清除自动存档并重新开始
+    </button>
+  `);
+
+  $("sideSelect").value = state.settings.closeSide;
+
+  $("sideSelect").onchange = event => {
+    state.settings.closeSide = event.target.value;
+    $("closeModal").className = `close ${event.target.value}`;
+    saveAuto();
+  };
+
+  $("backdropToggle").onclick = event => {
+    state.settings.backdrop = !state.settings.backdrop;
+    event.currentTarget.classList.toggle("on",state.settings.backdrop);
+    saveAuto();
+  };
+
+  $("modalBody").querySelectorAll("[data-save]").forEach(button => {
+    button.onclick = () => saveSlot(button.dataset.save);
+  });
+
+  $("modalBody").querySelectorAll("[data-load]").forEach(button => {
+    button.onclick = () => loadSlot(button.dataset.load);
+  });
+
+  $("modalBody").querySelectorAll("[data-delete]").forEach(button => {
+    button.onclick = () => deleteSlot(button.dataset.delete);
+  });
+
+  $("restartGame").onclick = () => {
+    if(confirm("确定清除自动存档并重新开始吗？手动存档槽不会被删除。")){
+      localStorage.removeItem(SAVE_KEY);
+      localStorage.removeItem(LEGACY_KEY);
+      location.reload();
+    }
+  };
+}
+
+function mainAction(){
+  if(state.mode === "prologue"){
+    openPrologueChoices();
+  }else if(state.mode === "route"){
+    openRouteChoice();
+  }else if(state.mode === "profession"){
+    openProfessionChoice();
+  }else{
+    openLocationActions();
+  }
+}
+
+function enterGame(){
+  $("start").style.display = "none";
+  $("game").classList.add("active");
+}
+
+$("begin").onclick = () => {
+  const manualSlotsExist = [1,2,3].some(index =>
+    localStorage.getItem(SLOT_PREFIX + index)
+  );
+
+  if(
+    (localStorage.getItem(SAVE_KEY) || manualSlotsExist) &&
+    !confirm("开始新旅程会覆盖自动存档，但不会删除手动存档槽。确定继续吗？")
+  ){
+    return;
+  }
+
+  state = freshState();
+  state.name = $("nameInput").value.trim() || "无名客";
+  log(`${state.name}踏入青石城，旅程由此开始。`);
+  enterGame();
+  render();
+};
+
+$("continueGame").onclick = () => {
+  const loaded = readAuto();
+
+  if(!loaded){
+    showToast("没有可读取的自动存档");
+    return;
+  }
+
+  state = loaded;
+  enterGame();
+  render();
+};
+
+$("actionButton").onclick = mainAction;
+$("mapButton").onclick = openMap;
+$("shopButton").onclick = openShop;
+$("menuButton").onclick = openMenu;
+$("topMenu").onclick = openMenu;
+$("closeModal").onclick = closeModal;
+
+$("overlay").onclick = event => {
+  if(
+    event.target === $("overlay") &&
+    state.settings.backdrop &&
+    $("closeModal").style.display !== "none"
+  ){
+    closeModal();
+  }
+};
+
+let lastFrame = 0;
+let dotPhase = 0;
+
+function animationLoop(time){
+  if(time - lastFrame >= 33){
+    lastFrame = time;
+    dotPhase = (dotPhase + 1) % 100;
+
+    if(!state.settings.reducedMotion){
+      $("motionDot").style.opacity =
+        String(.45 + .55 * Math.sin(dotPhase / 12) ** 2);
+    }
+  }
+
+  requestAnimationFrame(animationLoop);
+}
+
 requestAnimationFrame(animationLoop);
 
-const old=localStorage.getItem(SAVE_KEY);
-if(old){
-  try{
-    const loaded=JSON.parse(old);
-    state={...state,...loaded,settings:{...state.settings,...loaded.settings}};
-    if(state.phase==="ending")finish();
-    else{$("start").style.display="none";$("game").classList.add("active");render()}
-  }catch(e){localStorage.removeItem(SAVE_KEY)}
+const existing = readAuto();
+
+if(existing){
+  $("continueGame").style.display = "";
+  $("continueGame").textContent =
+    existing.mode === "free"
+      ? `继续：自由生活第 ${existing.day || 1} 日`
+      : `继续：序章第 ${(existing.turn || 0) + 1} 回合`;
 }
 </script>
 </body>
