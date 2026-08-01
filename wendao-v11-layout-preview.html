@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>问道浮生 · v11 布局二版预览</title>
+<style>
+:root{
+  --paper:#f2eadb;
+  --paper2:#eadfcd;
+  --ink:#2b302c;
+  --muted:#746f63;
+  --red:#843a31;
+  --red2:#5f2823;
+  --green:#50675a;
+  --line:#c6b89f;
+  --gold:#9b743a;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  margin:0;
+  background:#17201c;
+  color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+}
+button{font:inherit}
+.shell{
+  width:min(100vw,720px);
+  height:100dvh;
+  margin:auto;
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  background:var(--paper);
+  overflow:hidden;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:11px 14px 8px;
+  border-bottom:1px solid var(--line);
+  background:#efe5d2;
+}
+.brand h1{
+  margin:0;
+  color:var(--red);
+  font:700 24px/1.1 serif;
+}
+.version{
+  display:inline-block;
+  margin-left:5px;
+  padding:2px 7px;
+  border:1px solid var(--line);
+  border-radius:99px;
+  background:#fff9ed;
+  color:var(--green);
+  font:700 11px/1.2 "Microsoft YaHei","PingFang SC",sans-serif;
+  vertical-align:middle;
+}
+.brand p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+.menu{
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:#fff9ed;
+  color:var(--red);
+  font-weight:700;
+}
+.status{
+  display:flex;
+  gap:5px;
+  padding:7px 10px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper2);
+  overflow:hidden;
+}
+.pill{
+  flex:1 1 0;
+  min-width:0;
+  padding:4px 5px;
+  border:1px solid #c9bda7;
+  border-radius:99px;
+  background:#fff8eb;
+  text-align:center;
+  white-space:nowrap;
+}
+.pill b{
+  color:var(--red2);
+  font-size:12px;
+}
+.pill span{
+  margin-left:2px;
+  color:var(--muted);
+  font-size:9px;
+}
+.main{
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  overflow:hidden;
+}
+.read{
+  min-height:0;
+  padding:13px 14px 8px;
+  overflow:auto;
+  background:#f8f0e3;
+}
+.meta{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+  color:var(--gold);
+  font-size:11px;
+}
+.read h2{
+  margin:0 0 9px;
+  color:var(--red2);
+  font:600 24px/1.2 serif;
+}
+.story{
+  color:#444941;
+  font-size:15px;
+  line-height:1.72;
+}
+.summary{
+  margin-top:12px;
+  padding:9px 10px;
+  border-left:3px solid var(--green);
+  background:#ede3d1;
+  color:#4f5b52;
+  font-size:13px;
+  line-height:1.55;
+}
+.summary b{
+  color:var(--green);
+}
+.choices{
+  padding:8px 12px 9px;
+  border-top:1px solid var(--line);
+  background:#f2eadb;
+}
+.choice{
+  width:100%;
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  gap:9px;
+  align-items:center;
+  min-height:50px;
+  margin-bottom:7px;
+  padding:8px 9px;
+  border:1px solid #9b907d;
+  border-radius:8px;
+  background:#fff9ed;
+  text-align:left;
+}
+.choice:last-child{margin-bottom:0}
+.icon{
+  display:grid;
+  place-items:center;
+  width:36px;
+  height:36px;
+  border:1px solid #b9a98c;
+  border-radius:8px;
+  background:#f1e4d2;
+  color:var(--red2);
+  font-weight:700;
+}
+.choice strong{
+  display:block;
+  color:var(--red2);
+  font-size:14px;
+}
+.choice small{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.35;
+}
+.cost{
+  color:var(--green);
+  font-size:11px;
+  white-space:nowrap;
+}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+  padding:7px 10px calc(8px + var(--safe-bottom));
+  border-top:1px solid var(--line);
+  background:#ded2bd;
+}
+.tab{
+  min-height:38px;
+  border:1px solid #9c8f78;
+  border-radius:8px;
+  background:#fff9ed;
+  color:var(--ink);
+  font-size:12px;
+  font-weight:700;
+}
+.tab.active{
+  border-color:var(--red);
+  background:#ead2c8;
+  color:var(--red2);
+}
+@media(max-height:700px){
+  .brand h1{font-size:21px}
+  .story{font-size:14px;line-height:1.62}
+  .read{padding-top:10px}
+  .read h2{font-size:21px;margin-bottom:6px}
+  .summary{margin-top:9px;padding:7px 9px;font-size:12px}
+  .choice{min-height:46px}
+  .choice small{display:none}
+}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand">
+      <h1>问道浮生 <span class="version">v11 布局二版</span></h1>
+      <p>浮生1年1月4日 · 青石城 · 薄雾</p>
+    </div>
+    <button class="menu">存</button>
+  </header>
+
+  <section class="status">
+    <div class="pill"><b>186</b><span>铜钱</span></div>
+    <div class="pill"><b>10</b><span>食物</span></div>
+    <div class="pill"><b>82</b><span>健康</span></div>
+    <div class="pill"><b>4/5</b><span>行动</span></div>
+    <div class="pill"><b>凡身</b><span>境界</span></div>
+    <div class="pill"><b>3</b><span>灵石</span></div>
+  </section>
+
+  <section class="main">
+    <article class="read">
+      <div class="meta">
+        <span>青石城 · 茶摊</span>
+        <span>当前：序章第6回</span>
+      </div>
+      <h2>破庙后的第一缕灵息</h2>
+      <div class="story">
+        雨刚停，破庙后的泥地还软。你把湿透的袖口拧干，盘坐在半截石阶上，听见城里打更声隔着雾传来。
+        <br><br>
+        这一丝灵气并不强，甚至不够照亮指尖。可它顺着胸口往下沉的时候，你第一次觉得自己不是只在青石城讨生活，而是在给日后的路打底。
+        <br><br>
+        如果你此前帮过沈祈，他会在庙门外替你看着雨水；如果你选择独行，此刻只有茶摊脚夫告诉你的那条小路还算可靠。
+      </div>
+      <div class="summary">
+        <b>当前重点：</b>这版把阅读区放大，选项直接贴在剧情下方。第三层不再塞四宫格，第五层也不再像后台面板。
+      </div>
+    </article>
+
+    <section class="choices">
+      <button class="choice">
+        <span class="icon">修</span>
+        <span><strong>继续吐纳</strong><small>修为 +10，心性 +1。可能更早触到感气门槛。</small></span>
+        <em class="cost">1 行动</em>
+      </button>
+      <button class="choice">
+        <span class="icon">钱</span>
+        <span><strong>回南市找短工</strong><small>铜钱 +18。更快买下第一处建筑。</small></span>
+        <em class="cost">1 行动</em>
+      </button>
+      <button class="choice">
+        <span class="icon">人</span>
+        <span><strong>去茶摊打听</strong><small>不消耗行动力。获得人物见闻或北坡传闻。</small></span>
+        <em class="cost">0 行动</em>
+      </button>
+    </section>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active">行动</button>
+    <button class="tab">经营</button>
+    <button class="tab">背包</button>
+    <button class="tab">人物</button>
+    <button class="tab">记录</button>
+  </nav>
+</main>
+</body>
+</html>
