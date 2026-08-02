@@ -1,204 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>问道浮生 · v12 试玩版</title>
-<style>
-:root{--paper:#f2eadb;--paper2:#eadfcd;--ink:#2b302c;--muted:#746f63;--red:#843a31;--red2:#5f2823;--green:#50675a;--line:#c6b89f;--gold:#9b743a;--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}html,body{height:100%;overflow:hidden}body{margin:0;background:#17201c;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif}button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.45;cursor:not-allowed}
-.app{width:min(100vw,720px);height:100dvh;margin:auto;background:var(--paper);overflow:hidden}
-.start{height:100%;overflow:auto;padding:28px 18px calc(24px + var(--safe-bottom))}.start h1{margin:0;color:var(--red);font:700 32px/1.1 serif}.version{display:inline-block;margin-left:6px;padding:2px 7px;border:1px solid var(--line);border-radius:99px;background:#fff9ed;color:var(--green);font:700 11px/1.2 "Microsoft YaHei","PingFang SC",sans-serif;vertical-align:middle}.start-intro{margin:10px 0 16px;color:var(--muted);font-size:14px;line-height:1.8}
-.form-card,.branch,.card,.choice,.modal{border:1px solid var(--line);border-radius:8px;background:#fff9ed}.form-card{padding:14px}.field{margin-bottom:12px}.field label{display:block;margin-bottom:6px;color:var(--green);font-size:13px;font-weight:700}.field input,.field select{width:100%;height:44px;padding:0 11px;border:1px solid #9b907d;border-radius:7px;background:#fffaf0;color:var(--ink)}.field small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.5}
-.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.branch{min-height:70px;padding:9px;text-align:left}.branch.active{border-color:var(--red);background:#ead2c8}.branch.locked{opacity:.52;filter:grayscale(.35)}.branch b{display:block;color:var(--red2)}.branch small{color:var(--muted);line-height:1.45}.main-btn{min-height:48px;padding:10px 14px;border:1px solid #958a77;border-radius:7px;background:#fffaf0;color:var(--ink);font-weight:700}.primary{border-color:var(--red)!important;background:var(--red)!important;color:#fff!important}.wide{width:100%}.start-actions{display:grid;gap:9px;margin-top:13px}
-.game{display:none;height:100%;grid-template-rows:auto auto 1fr auto;overflow:hidden}.game.active{display:grid}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px 8px;border-bottom:1px solid var(--line);background:#efe5d2}.brand h1{margin:0;color:var(--red);font:700 24px/1.1 serif}.brand p{margin:3px 0 0;color:var(--muted);font-size:11px}.menu{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:#fff9ed;color:var(--red);font-weight:700}
-.status{display:flex;gap:5px;padding:7px 10px;border-bottom:1px solid var(--line);background:var(--paper2);overflow:hidden}.pill{flex:1 1 0;min-width:0;padding:4px 5px;border:1px solid #c9bda7;border-radius:99px;background:#fff8eb;text-align:center;white-space:nowrap}.pill.danger{background:#ead0c6}.pill b{color:var(--red2);font-size:12px}.pill span{margin-left:2px;color:var(--muted);font-size:9px}
-.main{min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}.read{min-height:0;padding:13px 14px 8px;overflow:auto;background:#f8f0e3}.meta{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;color:var(--gold);font-size:11px}.read h2{margin:0 0 9px;color:var(--red2);font:600 24px/1.2 serif}.story{color:#444941;font-size:15px;line-height:1.72;white-space:pre-line}.summary{margin-top:12px;padding:9px 10px;border-left:3px solid var(--green);background:#ede3d1;color:#4f5b52;font-size:13px;line-height:1.55}.summary b{color:var(--green)}
-.choices{padding:8px 12px 9px;border-top:1px solid var(--line);background:#f2eadb;max-height:42dvh;overflow:auto}.choice{width:100%;display:grid;grid-template-columns:38px 1fr auto;gap:9px;align-items:center;min-height:50px;margin-bottom:7px;padding:8px 9px;text-align:left}.choice:last-child{margin-bottom:0}.choice:active{background:#f3e3d1}.icon{display:grid;place-items:center;width:36px;height:36px;border:1px solid #b9a98c;border-radius:8px;background:#f1e4d2;color:var(--red2);font-weight:700}.choice strong{display:block;color:var(--red2);font-size:14px}.choice small{display:block;margin-top:2px;color:var(--muted);font-size:11px;line-height:1.35}.cost{color:var(--green);font-size:11px;white-space:nowrap;font-style:normal}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:7px 10px calc(8px + var(--safe-bottom));border-top:1px solid var(--line);background:#ded2bd}.tab{position:relative;min-height:38px;border:1px solid #9c8f78;border-radius:8px;background:#fff9ed;color:var(--ink);font-size:12px;font-weight:700}.tab.active{border-color:var(--red);background:#ead2c8;color:var(--red2)}.dot{position:absolute;top:-5px;right:-4px;min-width:16px;height:16px;border:2px solid #ded2bd;border-radius:9px;background:#b52e28;color:#fff;font:700 9px/12px sans-serif}
-.card{margin-bottom:8px;padding:10px}.card b{display:block;margin-bottom:4px;color:var(--red2)}.card small{display:block;color:var(--muted);line-height:1.5}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.attrs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.attr{padding:7px 5px;border:1px solid #d0c0a7;border-radius:7px;background:#fff9ed;text-align:center}.attr b{display:block;color:var(--red2)}.attr span{font-size:10px;color:var(--muted)}
-.factor{display:grid;grid-template-columns:52px 1fr;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.45}.factor span{color:#fff;text-align:center;border-radius:99px;padding:2px 6px;background:var(--green)}.factor.minus span{background:var(--red)}
-.overlay{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,25,22,.48);backdrop-filter:blur(6px)}.overlay.open{display:flex}.modal{width:min(92vw,560px);max-height:82dvh;overflow:auto;padding:16px;background:var(--paper)}.modal h2{margin:0 0 9px;color:var(--red2);font:600 22px serif}.modal-actions{display:grid;gap:8px;margin-top:12px}.toast{position:fixed;z-index:40;left:50%;bottom:calc(88px + var(--safe-bottom));transform:translate(-50%,20px);width:min(88vw,480px);padding:11px 14px;border-radius:8px;background:rgba(40,44,41,.95);color:#fff;text-align:center;font-size:13px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-height:700px){.brand h1{font-size:21px}.story{font-size:14px;line-height:1.62}.read{padding-top:10px}.read h2{font-size:21px;margin-bottom:6px}.summary{margin-top:9px;padding:7px 9px;font-size:12px}.choice{min-height:46px}.choice small{display:none}}
-@media(max-width:430px){.branch-grid,.grid2{grid-template-columns:1fr}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修行小队 - 据点养成</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main class="app">
-  <section class="start" id="start">
-    <h1>问道浮生 <span class="version">v12 试玩版</span></h1>
-    <p class="start-intro">v12 使用布局二版：阅读区更大，选项贴近剧情。内容上增加人物选择和轻交互，前期仍以买建筑、经营、修行和北坡首战为体验闭环。</p>
-    <div class="form-card">
-      <div class="field"><label for="nameInput">名字或道号</label><input id="nameInput" maxlength="8" placeholder="例如：云归"></div>
-      <div class="field"><label for="genderInput">性别</label><select id="genderInput"><option value="male">男</option><option value="female">女</option></select></div>
-      <div class="field"><label for="loveInput">情感倾向</label><select id="loveInput"><option value="male">男</option><option value="female">女</option><option value="bi">双</option><option value="unknown">暂不清楚</option></select><small>只影响恋爱可能，不影响友情、合作、雇佣和师友关系。</small></div>
-      <div class="field"><label>初始成长方向</label><div class="branch-grid" id="careerGrid"></div></div>
-      <div class="field"><label>细分方向</label><div class="branch-grid" id="branchGrid"></div><small>灰色隐藏职业只展示存在感，后续事件解锁。</small></div>
-    </div>
-    <div class="start-actions"><button class="main-btn primary wide" id="newGame">开始 v12 体验</button><button class="main-btn wide" id="continueGame" style="display:none">继续自动存档</button><button class="main-btn wide" id="clearSave">清除自动存档</button></div>
-  </section>
-  <section class="game" id="game">
-    <header class="top"><div class="brand"><h1>问道浮生 <span class="version">v12</span></h1><p id="subtitle"></p></div><button class="menu" id="saveBtn">存</button></header>
-    <section class="status" id="status"></section>
-    <section class="main">
-      <article class="read"><div class="meta"><span id="place"></span><span id="meta"></span></div><h2 id="title"></h2><div class="story" id="story"></div><div class="summary"><b id="summaryTitle"></b><span id="summaryText"></span></div></article>
-      <section class="choices" id="choices"></section>
-    </section>
-    <nav class="tabs"><button class="tab active" data-tab="action">行动<span class="dot" id="actionDot">!</span></button><button class="tab" data-tab="manage">经营<span class="dot" id="manageDot">!</span></button><button class="tab" data-tab="bag">背包</button><button class="tab" data-tab="person">人物</button><button class="tab" data-tab="record">记录</button></nav>
-  </section>
-</main>
-<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
-<div class="toast" id="toast"></div>
-<script>
-const SAVE_KEY="wendao-fusheng-v12";
-const VERSION="v12 试玩版";
-const $=id=>document.getElementById(id);
-const careers={
-  soldier:{name:"兵修",desc:"正面对抗、护卫、狩猎、守店。",branches:["灵剑","狂刀","枪神","棍舞","拳客"],hidden:["兽兵：地武/海灵/天幕"],attrs:{hp:88,physical:18,magic:6,defense:14,wisdom:10,stealth:10,social:11,body:18,mind:12}},
-  mage:{name:"法修",desc:"灵力推演、术法、异常调查。",branches:["焚烬","幽溟","苍雷"],hidden:["兽语者","疗愈者"],attrs:{hp:76,physical:8,magic:18,defense:8,wisdom:18,stealth:10,social:12,body:11,mind:17}},
-  shadow:{name:"影修",desc:"潜入、追踪、情报、先手处理。",branches:["隐弓","咒刃"],hidden:["伪装者"],attrs:{hp:80,physical:13,magic:8,defense:9,wisdom:14,stealth:19,social:13,body:13,mind:15}}
-};
-const peopleBase={
-  shen:{name:"沈祈",role:"药行跑腿",tag:"谨慎",desc:"常见外伤病人，知道药行和城外伤势的消息。"},
-  luo:{name:"老罗",role:"脚夫头",tag:"市井",desc:"熟悉南市短工、粮价和空铺门路。"},
-  qin:{name:"秦照",role:"巡检司文书",tag:"规矩",desc:"知道城门、巡查和北坡禁令的边角消息。"},
-  yan:{name:"燕娘",role:"茶摊老板",tag:"消息",desc:"能听到商队、伙计、客人和旧案传闻。"}
-};
-const buildings={
-  courtyard:{name:"小院",cost:150,stockName:"家用物资",buyCost:14,use:0,base:0,desc:"安稳住处",bonus:"每日健康恢复更稳定。"},
-  restaurant:{name:"饭馆",cost:175,stockName:"食材",buyCost:18,use:4,base:24,desc:"饭食生意",bonus:"消耗食材换铜钱，客人会带来市井消息。"},
-  teahouse:{name:"茶馆",cost:165,stockName:"茶叶",buyCost:16,use:3,base:21,desc:"消息生意",bonus:"情报收益高，容易触发人物交互。"},
-  medicine:{name:"药铺",cost:195,stockName:"药材",buyCost:22,use:2,base:27,desc:"伤病生意",bonus:"治疗方便，容易接触异常伤势。"},
-  weapon:{name:"武器铺",cost:210,stockName:"铁料",buyCost:24,use:2,base:30,desc:"修士和护卫常来",bonus:"更容易触发护卫和兵修事件。"},
-  bookshop:{name:"书斋",cost:185,stockName:"纸墨",buyCost:18,use:2,base:20,desc:"账簿经文",bonus:"灵智成长和调查更稳定。"}
-};
-let chosenCareer="soldier",chosenBranch="灵剑",state=null,toastTimer=null;
-function random(a){return a[Math.floor(Math.random()*a.length)]}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function save(){if(state)localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
-function load(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
-function toast(t){$("toast").textContent=t;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),1500)}
-function log(t){state.log.unshift(t);state.log=state.log.slice(0,14)}
-function showModal(html){$("modal").innerHTML=html;$("overlay").classList.add("open")}
-function closeModal(){$("overlay").classList.remove("open")}
-function setScene(o){Object.assign(state.scene,o)}
-function choice(icon,title,desc,cost,fn,disabled=false){return`<button class="choice" onclick="${fn}" ${disabled?"disabled":""}><span class="icon">${icon}</span><span><strong>${title}</strong><small>${desc}</small></span><em class="cost">${cost}</em></button>`}
-function freshState(){
-  const c=careers[chosenCareer];
-  return {player:{name:$("nameInput").value.trim()||"无名客",gender:$("genderInput").value,love:$("loveInput").value,career:chosenCareer,careerName:c.name,branch:chosenBranch},mode:"prologue",prologue:0,pending:null,route:"未定",day:1,ap:5,coin:72,food:8,health:88,realm:"凡身",qi:10,spirit:1,tab:"action",activePerson:null,companion:null,known:{},buildings:[],activeBuilding:null,business:{},employees:[],items:["干粮 x2"],flags:{heardBeast:false,inspectedSlope:false,battleDone:false,gameOver:false},attrs:{...c.attrs},scene:{place:"青石城外 · 城门",meta:"序章第1/10回",title:"城门将闭",story:"暮色压在青石城外，城门口排着赶路人。\n\n一名药行青年被守门兵拦下，说通行钱少了四枚。旁边脚夫老罗骂了句晦气，茶摊燕娘则像什么都听见了，却只低头添水。\n\n这一步会决定你是否和沈祈有后续交集。",summaryTitle:"关键分叉：",summary:"帮他、旁观或独自入城，后续人物线会不同。"},log:["你抵达青石城外。"],saveVersion:VERSION};
-}
-function addPerson(id,trust=1,close=0){if(!state.known[id])state.known[id]={...peopleBase[id],trust,close,conflict:0,last:peopleBase[id].desc};else{state.known[id].trust+=trust;state.known[id].close+=close}}
-function renderCareer(){
-  $("careerGrid").innerHTML=Object.entries(careers).map(([id,c])=>`<button class="branch ${chosenCareer===id?"active":""}" data-career="${id}"><b>${c.name}</b><small>${c.desc}</small></button>`).join("");
-  $("careerGrid").querySelectorAll("[data-career]").forEach(b=>b.onclick=()=>{chosenCareer=b.dataset.career;chosenBranch=careers[chosenCareer].branches[0];renderCareer()});
-  const c=careers[chosenCareer];
-  $("branchGrid").innerHTML=c.branches.map(x=>`<button class="branch ${chosenBranch===x?"active":""}" data-branch="${x}"><b>${x}</b><small>本次体验可选。</small></button>`).join("")+c.hidden.map(x=>`<button class="branch locked" disabled><b>${x}</b><small>隐藏职业，后续解锁。</small></button>`).join("");
-  $("branchGrid").querySelectorAll("[data-branch]").forEach(b=>b.onclick=()=>{chosenBranch=b.dataset.branch;renderCareer()});
-}
-function begin(){state=freshState();$("start").style.display="none";$("game").classList.add("active");render()}
-function enterLoaded(s){state=s;$("start").style.display="none";$("game").classList.add("active");render()}
-function spendAp(n=1){if(state.ap<n){toast("行动力不足");return false}state.ap-=n;return true}
-function afterPrologue(r){state.pending=r;setScene({place:r.place,meta:`序章第${state.prologue+1}/10回 · 结果`,title:r.title,story:r.story,summaryTitle:"选择结果：",summary:r.summary});log(`序章：${r.summary}`);render()}
-function continuePrologue(){state.pending=null;state.prologue++;if(state.prologue>=10){finishPrologue();return}render()}
-function choosePrologue(k){
-  if(state.prologue===0){
-    if(k==="help"){state.coin-=4;addPerson("shen",8,3);state.companion="shen";afterPrologue({place:"青石城外 · 城门",title:"替沈祈补钱",story:"你替药行青年补上四枚铜钱。守门兵收钱放人，他压低声音说自己叫沈祈。\n\n他没有立刻变成亲近的人，只是记住了你在城门前伸过手。",summary:"铜钱 -4，认识沈祈，沈祈信任 +8。"});return}
-    if(k==="watch"){state.attrs.wisdom++;addPerson("shen",2,0);addPerson("qin",1,0);afterPrologue({place:"青石城外 · 城门",title:"先看清局势",story:"你没有插手，只记下守门兵索钱的手法。巡检司文书秦照从旁经过，也看见了这一幕。\n\n沈祈回头看你一眼，大概知道你没有完全置身事外。",summary:"灵智 +1，认识沈祈和秦照，但关系很浅。"});return}
-    addPerson("luo",3,1);state.coin+=2;afterPrologue({place:"青石城外 · 侧门",title:"跟着脚夫入城",story:"你没有停留，跟着脚夫老罗从侧门挤进城。身后的争执被城门声吞没。\n\n从这一刻起，你不会被强行写进沈祈的共同生活线。",summary:"铜钱 +2，认识老罗，进入独行/市井线。"});return
-  }
-  if(k==="money"){state.coin+=18;state.route="经营";addPerson("luo",1,0);afterPrologue({place:"青石城 · 南市",title:"短工与空铺",story:"你在南市搬账箱，掌柜当场结钱。老罗顺口告诉你，东街有两间空铺，门板旧，价钱却还算能谈。",summary:"铜钱 +18，老罗信任 +1，经营路线加深。"});return}
-  if(k==="food"){state.food+=4;state.health=Math.min(100,state.health+2);afterPrologue({place:"青石城 · 粮铺后巷",title:"换来陈粮",story:"你替粮铺搬湿袋，换回几份陈粮。米不香，但足以让今晚不那么难熬。",summary:"食物 +4，健康 +2。"});return}
-  if(k==="cultivate"){state.qi=Math.min(100,state.qi+10);state.attrs.mind++;afterPrologue({place:"青石城 · 破庙",title:"破庙灵息",story:"破庙后的泥地还软，你盘坐在石阶上吐纳。灵气很细，却确实顺着经脉走了一圈。",summary:"修为 +10，心性 +1。"});return}
-  if(k==="talk"){addPerson(random(["luo","yan","qin"]),2,1);state.attrs.social++;afterPrologue({place:"青石城 · 茶摊",title:"茶摊半碗热水",story:"你在燕娘的茶摊坐了一会儿。有人谈粮价，有人谈北坡兽影，也有人把王子旧案当闲话说。\n\n你现在还够不到那种大事，但能先认识说话有用的人。",summary:"随机认识或加深一名 NPC，社交 +1。"});return}
-  state.coin+=26;state.health-=8;state.items.push("腥气木刺 x1");afterPrologue({place:"青石城 · 城墙根",title:"夜搬私货",story:"你替人搬了几箱不愿见光的货。钱给得快，手背却被木刺划开，箱缝里有淡淡腥气。",summary:"铜钱 +26，健康 -8，获得腥气木刺。"});return
-}
-function prologueInfo(){
-  const solo=!state.known.shen||state.companion!=="shen";
-  const titles=["城中第一夜","南市找活","屋檐下的雨","茶摊传闻","空铺门板","破庙灵息","药行外伤","账房算盘","城外风声","入城定计"];
-  const i=state.prologue;
-  const story=solo?[
-    "你独自挤进便宜通铺，隔壁脚夫磨牙，窗缝里灌进冷风。老罗说南市明早有活，燕娘说茶摊也缺人搬水。",
-    "南市清早就有人招短工。你可以攒钱，也可以先去听茶摊消息。",
-    "雨落下来，屋顶漏水。你得决定先顾身体，还是继续攒钱。",
-    "茶摊有人谈北坡，也有人谈十年前王子旧案。后者离你太远，前者可能离饭碗更近。",
-    "你看见几处空铺，门板旧，却比通铺更像未来。",
-    "破庙后有一丝灵气。没人替你守门，但也没人打扰你。",
-    "药行门口抬进一个外伤护卫。你不认识沈祈，只能从伙计嘴里听到半句。",
-    "账房缺临时人手。算对有钱，算错扣钱。",
-    "城外风里有兽腥，老猎户说北坡别去。",
-    "十日过去，你摸清青石城最浅的一层：短工能活，产业才能喘气。"][i]:
-    ["你和沈祈暂住同一条旧巷。他没有把相识当亲近，只在门口留了半块干饼。","沈祈问你要不要一起找活，但不会替你决定。","雨落下来，沈祈的药包被淋湿。他沉默地摊开药材。","茶摊有人谈北坡，沈祈听得很认真。","你看见几处空铺，沈祈说药行掌柜也提过这些地方。","破庙后有一丝灵气。沈祈守在庙外，没有催你。","药行抬进一个外伤护卫，伤口不像刀，也不像普通野兽。","账房缺临时人手，沈祈说会算账的人更容易买下铺子。","城外风里有兽腥，沈祈提醒你：想查，也先有退路。","十日过去，沈祈只是你选择出来的合作者，不是系统指定的伴侣。"][i];
-  return {title:titles[i],story};
-}
-function syncScene(){
-  if(state.mode==="prologue"&&!state.pending){
-    if(state.prologue===0){setScene({place:"青石城外 · 城门",meta:"序章第1/10回",title:"城门将闭",story:"暮色压在青石城外，城门口排着赶路人。\n\n一名药行青年被守门兵拦下，说通行钱少了四枚。旁边脚夫老罗骂了句晦气，茶摊燕娘则像什么都听见了，却只低头添水。\n\n这一步会决定你是否和沈祈有后续交集。",summaryTitle:"关键分叉：",summary:"帮他、旁观或独自入城，后续人物线会不同。"});return}
-    const p=prologueInfo();setScene({place:"青石城 · 序章",meta:`序章第${state.prologue+1}/10回`,title:p.title,story:p.story,summaryTitle:"序章选择：",summary:"每回合结果会改变资源、人脉或路线，不强行固定伴侣。"});
-  }
-}
-function finishPrologue(){state.mode="free";state.day=1;state.ap=5;if(state.companion==="shen"&&state.known.shen)state.known.shen.income=8+Math.floor(state.known.shen.trust/8);setScene({place:"青石城 · 旧巷",meta:"自由生活第1日",title:"先买下一处地方",story:"十日过去，你已经知道青石城最浅的规则：短工能活，产业才能让人有余地。\n\n远处的王子旧案仍是茶摊谈资。现在与你最有关的是第一张契书、第一批库存和第一个愿意帮你做事的人。",summaryTitle:"阶段主线：",summary:"买下第一处建筑；可以继续结识人物、经营和准备北坡首战。"});render()}
-function render(){
-  if(!state)return;syncScene();
-  $("status").innerHTML=[["铜钱",state.coin],["食物",state.food],["健康",state.health],["行动",state.mode==="prologue"?"序":`${state.ap}/5`],["境界",state.realm],["灵石",state.spirit]].map(([l,v])=>`<div class="pill ${l==="健康"&&state.health<35?"danger":""}"><b>${v}</b><span>${l}</span></div>`).join("");
-  $("subtitle").textContent=state.mode==="prologue"?`序章第${Math.min(10,state.prologue+1)}回 · ${state.player.careerName}/${state.player.branch}`:`浮生1年1月${state.day}日 · ${state.player.careerName}/${state.player.branch}`;
-  $("place").textContent=state.scene.place;$("meta").textContent=state.scene.meta;$("title").textContent=state.scene.title;$("story").textContent=state.scene.story;$("summaryTitle").textContent=state.scene.summaryTitle;$("summaryText").textContent=state.scene.summary;
-  $("actionDot").style.display=state.mode==="prologue"||state.flags.heardBeast&&!state.flags.battleDone?"":"none";$("manageDot").style.display=state.mode==="free"?"":"none";
-  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===state.tab));
-  $("choices").innerHTML=renderChoices();save();
-}
-function setTab(t){if(state.mode==="prologue")t="action";state.tab=t;render()}
-function renderChoices(){if(state.mode==="prologue")return renderPrologueChoices();if(state.tab==="action")return renderAction();if(state.tab==="manage")return renderManage();if(state.tab==="bag")return renderBag();if(state.tab==="person")return renderPeople();return renderRecord()}
-function renderPrologueChoices(){
-  if(state.pending)return choice("续","继续下一回合","结果已经记录，进入下一段。","继续","continuePrologue()");
-  if(state.prologue===0)return choice("帮","替他补上四枚铜钱","认识沈祈，建立初始信任。","-4钱","choosePrologue('help')")+choice("看","先观察守门兵","认识沈祈和秦照，但关系很浅。","灵智+","choosePrologue('watch')")+choice("走","跟脚夫从侧门入城","进入独行/市井线，不强制沈祈后续。","+2钱","choosePrologue('ignore')");
-  return choice("钱","优先攒钱","接短工、记空铺，更快买建筑。","+18钱","choosePrologue('money')")+choice("粮","先顾温饱","换粮、保健康。","+4粮","choosePrologue('food')")+choice("修","抓住灵息","修为与心性提高。","+10修","choosePrologue('cultivate')")+choice("人","打听人和事","随机认识或加深一名 NPC。","社交+","choosePrologue('talk')")+choice("险","接危险快钱","钱更多，但健康下降。","+26钱","choosePrologue('risk')");
-}
-function continuePrologue(){state.pending=null;state.prologue++;if(state.prologue>=10)finishPrologue();else render()}
-function renderAction(){
-  if(state.flags.gameOver)return`<div class="card"><b>旅途终止</b><small>健康归零，无法继续行动。</small></div>`;
-  if(state.stage==="battle")return renderBattle();
-  return choice("工","南市短工","搬货、记账、听见空铺消息。","+30钱","doAction('work')")+choice("修","旧屋吐纳","修为 +12，心性 +1。","+12修","doAction('cultivate')")+choice("粮","市集买粮","不消耗行动力，花 12 铜钱买 6 食物。","0行动","doAction('buyFood')")+choice("人","找人说话","选择具体人物互动，不消耗行动力。","0行动","openTalkChoices()")+(state.flags.heardBeast&&!state.flags.battleDone?choice("探","观察北坡地形","首战获得地形优势。","1行动","inspectSlope()",state.flags.inspectedSlope)+choice("战","前往北坡废亭","触发首战。","1行动","goBattle()"):"")+choice("日","结束一天","弹出每日结算。","结算","nextDay()");
-}
-function doAction(t){
-  if(t==="buyFood"){if(state.coin<12){toast("买粮需要 12 铜钱");return}state.coin-=12;state.food+=6;setScene({place:"青石城 · 市集",meta:"买粮 · 0行动",title:"把粮袋重新扎紧",story:"你在粮摊前挑了不发霉的陈米，又添了几张粗饼。\n\n钱袋轻了些，但今晚不用空着肚子睡。",summaryTitle:"生活反馈：",summary:"铜钱 -12，食物 +6。"});log("市集：买粮，铜钱 -12，食物 +6。");render();return}
-  if(!spendAp())return;
-  if(t==="work"){state.coin+=30;state.attrs.social++;addPerson("luo",1,0);setScene({place:"青石城 · 南市",meta:"白日 · 短工",title:"汗水换来的三十枚钱",story:"你替布铺搬货，又帮酒肆卸下两坛酸酒。\n\n老罗拍了拍空铺门板，说东街那间饭馆旧是旧，但灶台还能用。",summaryTitle:"获得：",summary:"铜钱 +30，社交 +1，老罗信任 +1。"});log("短工：铜钱 +30，社交 +1，老罗信任 +1。")}
-  if(t==="cultivate"){state.qi=Math.min(100,state.qi+12);state.attrs.mind++;if(state.qi>=100)state.realm="感气边缘";setScene({place:"青石城 · 旧屋",meta:"夜里 · 吐纳",title:"屋檐下的灵息",story:"你在漏风的旧屋里吐纳，气息从胸口压到指尖。\n\n它仍微弱，却已经能在危险来临前提醒你。",summaryTitle:"修行反馈：",summary:`修为 +12，心性 +1，当前 ${state.qi}/100。`});log(`修行：修为 +12，心性 +1。`)}
-  render();
-}
-function openTalkChoices(){state.tab="person";setScene({place:"青石城 · 人物",meta:"交互 · 选择对象",title:"今晚找谁说话",story:"人与人的关系不会只靠一个数值决定。\n\n你可以找熟人问消息，也可以去茶摊认识新的人。不同人物会提供不同方向：药行、短工、巡检、茶摊、经营。",summaryTitle:"人物交互：",summary:"选择一个对象，进行一次不消耗行动力的轻交互。"});render()}
-function talkTo(id,topic){
-  addPerson(id,1,topic==="gift"?2:1);const p=state.known[id];
-  let text="",gain="";
-  if(topic==="news"){text=`${p.name}把今日听见的消息拣重要的告诉你。${id==="shen"?"药行又来了兽爪外伤。":id==="luo"?"东街空铺还能压价。":id==="qin"?"巡检司近日不许人夜入北坡。":"茶摊客人说北坡雾里有低吼。"}`;gain="获得见闻，信任 +1。";if(id==="yan"||id==="shen")state.flags.heardBeast=true}
-  if(topic==="ask"){text=`你向${p.name}请教青石城的规矩。对方没有全说透，却给你指出一个少踩坑的方向。`;state.attrs.social++;gain="社交 +1，亲近 +1。"}
-  if(topic==="gift"){if(state.food<=1){toast("食物不足");return}state.food--;text=`你分给${p.name}一份干粮。东西不贵，但人在青石城记得住这种小事。`;gain="食物 -1，亲近 +2。"}
-  p.last=text;setScene({place:`青石城 · ${p.name}`,meta:"人物交互 · 0行动",title:`与${p.name}交谈`,story:text,summaryTitle:"人物反馈：",summary:gain});log(`人物：与${p.name}交互。${gain}`);render();
-}
-function renderPeople(){
-  const ids=Object.keys(state.known);
-  const known=ids.length?ids.map(id=>{const p=state.known[id];return`<div class="card"><b>${p.name}｜${p.role}</b><small>${p.desc}<br>信任 ${p.trust}｜亲近 ${p.close}｜分歧 ${p.conflict}<br>${p.last||""}</small></div>`+choice("问",`问${p.name}消息`,"获得对应方向见闻。","0行动",`talkTo('${id}','news')`)+choice("谈",`向${p.name}请教`,"社交 +1，关系小幅推进。","0行动",`talkTo('${id}','ask')`)+choice("赠",`分给${p.name}干粮`,"食物 -1，亲近 +2。","0行动",`talkTo('${id}','gift')`)}).join(""):`<div class="card"><b>暂未认识人物</b><small>去行动页找人说话，或在序章选择打听人和事。</small></div>`;
-  return known+`<div class="card"><b>可认识的人</b><small>沈祈：药行消息。老罗：短工和空铺。秦照：巡检司规矩。燕娘：茶摊传闻。</small></div>`+choice("茶","去茶摊坐一会儿","随机认识或加深一名人物。","0行动","meetRandomPerson()");
-}
-function meetRandomPerson(){const id=random(["shen","luo","qin","yan"]);addPerson(id,2,1);setScene({place:"青石城 · 茶摊",meta:"人物 · 新交集",title:`遇见${peopleBase[id].name}`,story:`你在茶摊坐了一会儿，${peopleBase[id].name}正好也在。\n\n${peopleBase[id].desc}`,summaryTitle:"人物反馈：",summary:`认识或加深${peopleBase[id].name}，信任 +2，亲近 +1。`});log(`人物：茶摊遇见${peopleBase[id].name}。`);render()}
-function buyBuilding(id){const b=buildings[id];if(state.buildings.includes(id)){state.activeBuilding=id;toast(`已切换到${b.name}`);render();return}if(state.coin<b.cost){toast(`需要 ${b.cost} 铜钱`);return}state.coin-=b.cost;state.buildings.push(id);state.activeBuilding=id;state.business[id]={level:1,reputation:1,stock:id==="courtyard"?0:8,employees:[],last:"刚买下，还没有正式开张。"};setScene({place:`青石城 · ${b.name}`,meta:"傍晚 · 契书到手",title:`买下${b.name}`,story:"你按下指印，旧木桌上的契书终于归到你名下。\n\n它不是一串数字，而是你在乱世里第一块能慢慢经营的地方。",summaryTitle:"产业获得：",summary:`${b.bonus} 可继续购买其他建筑。`});log(`产业：买下${b.name}。`);render()}
-function renderManage(){return`<div class="grid2">${Object.entries(buildings).map(([id,b])=>`<button class="branch ${state.activeBuilding===id?"active":""}" onclick="buyBuilding('${id}')"><b>${state.buildings.includes(id)?"切换":"购买"}${b.name}</b><small>${state.buildings.includes(id)?businessText(id):`${b.cost} 铜钱｜${b.desc}`}</small></button>`).join("")}</div>${state.activeBuilding?renderActiveBusiness():"<div class='card'><b>经营说明</b><small>可以买多处建筑，独立库存。缺货会停业，伙计每日发工资。</small></div>"}`}
-function businessText(id){const b=state.business[id],bd=buildings[id];return id==="courtyard"?`已拥有｜${bd.bonus}`:`库存 ${b.stock} ${bd.stockName}｜口碑 ${b.reputation}｜伙计 ${b.employees.length}`}
-function renderActiveBusiness(){const id=state.activeBuilding,b=state.business[id],bd=buildings[id];return`<div class="card"><b>${bd.name}状态</b><small>${businessText(id)}<br>${b.last}</small></div>`+choice("扫","打理门面","口碑 +1，社交 +1。","1行动","manageAction('tidy')")+choice("货",id==="courtyard"?"整理住处":"采购库存",id==="courtyard"?"食物 +3。":`花 ${bd.buyCost} 铜钱补 ${bd.stockName}。`,"1行动","manageAction('stock')")+choice("雇","招募伙计","花 20 铜钱，获得有性格的员工。","1行动","manageAction('recruit')")}
-function manageAction(t){if(!state.activeBuilding){toast("先买建筑");return}if(!spendAp())return;const id=state.activeBuilding,b=state.business[id],bd=buildings[id];if(t==="tidy"){b.reputation++;state.attrs.social++;setScene({place:`青石城 · ${bd.name}`,meta:"经营 · 打理",title:"亲自打理门面",story:"你擦净门板，重新摆放桌案。路过的人不一定进来，却会多看一眼。",summaryTitle:"经营反馈：",summary:"口碑 +1，社交 +1。"});log(`经营：打理${bd.name}。`)}if(t==="stock"){if(id==="courtyard"){state.food+=3;setScene({place:"青石城 · 小院",meta:"经营 · 整理",title:"把旧屋变成家",story:"你修补窗缝，把角落清出来放粮。地方仍小，却已经比通铺安稳。",summaryTitle:"居住反馈：",summary:"食物 +3，小院每日恢复健康。"});log("小院：整理住处，食物 +3。");render();return}if(state.coin<bd.buyCost){state.ap++;toast(`补货需要 ${bd.buyCost} 铜钱`);return}state.coin-=bd.buyCost;b.stock+=10;setScene({place:`青石城 · ${bd.name}`,meta:"经营 · 补货",title:`补进${bd.stockName}`,story:`你跑了两处摊位，压价、验货、记账。\n\n${bd.stockName}堆上货架，明日才有正常生意。`,summaryTitle:"经营反馈：",summary:`铜钱 -${bd.buyCost}，${bd.stockName} +10。`});log(`经营：${bd.name}补货。`)}if(t==="recruit"){if(state.coin<20){state.ap++;toast("招募需要 20 铜钱");return}state.coin-=20;const e=randomEmployee();b.employees.push(e);state.employees.push({...e,building:bd.name});setScene({place:`青石城 · ${bd.name}`,meta:"经营 · 招募",title:`${e.name}前来试工`,story:`${e.name}是${e.type}，性格${e.personality}。\n\n优点是${e.strength}，缺点是${e.weakness}。这不是一串员工数，而是一个会在店里惹事或帮忙的人。`,summaryTitle:"人物加入：",summary:`伙计 +1，工资 ${e.wage}/日。`});log(`雇佣：${e.name}加入${bd.name}。`)}render()}
-function randomEmployee(){return{name:random(["阿槐","宋小满","裴九","柳青","秦照","周禾"]),type:random(["凡人","凡人","修士"]),personality:random(["勤快","嘴甜","寡言","精明","胆小","好奇"]),strength:random(["手脚麻利","会算账","懂客人脸色","识得药材","消息灵通"]),weakness:random(["容易紧张","偶尔偷懒","要价较高","不擅争执","身体一般"]),wage:random([5,6,8])}}
-function nextDay(){if(state.flags.gameOver)return;const before=`铜钱 ${state.coin}，食物 ${state.food}，健康 ${state.health}`;const lines=[];state.day++;state.ap=5;const need=state.companion?2:1;state.food-=need;lines.push(`食物 -${need}`);if(state.companion&&state.known[state.companion]){const inc=8+Math.floor(state.known[state.companion].trust/8);state.coin+=inc;lines.push(`${state.known[state.companion].name}收入 +${inc}`)}state.buildings.forEach(id=>{const bd=buildings[id],b=state.business[id];if(id==="courtyard"){state.health=Math.min(100,state.health+2);lines.push("小院休养：健康 +2");return}if(b.stock<bd.use){b.last=`缺${bd.stockName}，今日停业。`;lines.push(`${bd.name}缺货：收入 +0`)}else{const income=bd.base+b.level*5+b.reputation*2+b.employees.length*4;b.stock-=bd.use;state.coin+=income;b.last=`消耗${bd.stockName} ${bd.use}，收入 ${income} 铜钱。`;lines.push(`${bd.name}收入 +${income}，${bd.stockName} -${bd.use}`)}b.employees.forEach(e=>{state.coin-=e.wage;lines.push(`${e.name}工资 -${e.wage}`)})});if(state.food<0){state.food=0;state.health-=18;lines.push("断粮：健康 -18")}else if(state.food<=2){state.health-=5;lines.push("食物紧张：健康 -5")}if(state.health<=0){state.health=0;state.flags.gameOver=true;lines.push("健康归零：旅途终止")}if(state.day>=3&&!state.flags.heardBeast){state.flags.heardBeast=true;lines.push("茶摊传闻：北坡有兽影")}const after=`铜钱 ${state.coin}，食物 ${state.food}，健康 ${state.health}`;setScene({place:"青石城 · 夜",meta:`第${state.day-1}日结算`,title:"灯下结账",story:"一天结束，账本、粮袋、身体状况和店里的见闻都摆在你面前。\n\n日子不是数字跳动，而是一笔一笔压在纸上的痕迹。",summaryTitle:"今日变化：",summary:`${before} → ${after}`});log(`每日结算：${before} -> ${after}`);showModal(`<h2>浮生1年1月${state.day-1}日 · 夜</h2><div class="card"><b>今日结算</b><small>${lines.join("<br>")}</small></div><div class="card"><b>明日建议</b><small>${dailyAdvice()}</small></div><div class="modal-actions"><button class="main-btn primary" onclick="closeModal();render()">进入明日</button></div>`);render()}
-function dailyAdvice(){if(state.health<35)return"健康很危险，优先买粮、休息或处理伤势。";if(state.food<=2)return"食物只够一两天，建议买粮。";if(state.flags.heardBeast&&!state.flags.battleDone)return"北坡兽影仍在，可先问人或观察地形。";return"可以经营、修行、找人交互，或攒钱买第二处建筑。"}
-function inspectSlope(){if(!spendAp())return;state.flags.inspectedSlope=true;setScene({place:"城外 · 北坡外围",meta:"薄雾 · 远望",title:"废亭与塌墙",story:"你没有贸然深入，只在外围绕了一圈。\n\n废亭边的塌墙正好能卡住突进，血痕却比传闻里更新。",summaryTitle:"准备完成：",summary:"获得地形优势。首战设伏成功率提高。"});log("准备：观察北坡地形。");render()}
-function goBattle(){if(!spendAp())return;state.stage="battle";setScene({place:"城外 · 北坡废亭",meta:"薄雾 · 接敌",title:"薄雾中的喘息",story:"废亭半塌，一只受伤的地武魂兽伏在雾里。\n\n它肩背起伏，既痛且警惕。你现在不是在点一个战斗按钮，而是在处理一次准备过或没准备过的冲突。",summaryTitle:"当前判断：",summary:`最高成功率 ${bestBattleScore()}%。`});log("北坡：遭遇受伤地武魂兽。");render()}
-function battleScore(a){let s=42,p=[];if(state.player.career==="soldier"){s+=8;p.push("兵修正面承压 +8")}if(state.player.career==="mage"&&a==="soothe"){s+=9;p.push("法修读懂伤势 +9")}if(state.player.career==="shadow"&&a==="ambush"){s+=9;p.push("影修设伏先手 +9")}if(state.flags.inspectedSlope){s+=12;p.push("地形准备 +12")}if(state.realm==="感气边缘"){s+=8;p.push("感气边缘 +8")}if(a==="stand")s+=8;if(a==="ambush")s+=state.flags.inspectedSlope?12:4;if(a==="soothe")s+=state.attrs.social>=13?8:0;if(a==="run")s=76;if(state.health<50)s-=10;return{score:Math.max(18,Math.min(95,s)),plus:p}}
-function bestBattleScore(){return Math.max(...["stand","ambush","soothe","run"].map(x=>battleScore(x).score))}
-function renderBattle(){return choice("枪","架势迎击",`预计 ${battleScore("stand").score}%。体魄、防御、物攻参与。`,"战斗","resolveBattle('stand')")+choice("伏","借地形设伏",`预计 ${battleScore("ambush").score}%。提前观察地形收益高。`,"战斗","resolveBattle('ambush')")+choice("和","尝试安抚",`预计 ${battleScore("soothe").score}%。社交、灵智参与。`,"战斗","resolveBattle('soothe')")+choice("退","立刻撤离",`预计 ${battleScore("run").score}%。保命也是经营判断。`,"战斗","resolveBattle('run')")}
-function resolveBattle(a){const d=battleScore(a);let title,text,reward;if(a==="run"){title="撤离成功";text="你沿着来路退下山坡。魂兽没有追出太远，雾里只剩低吼。";reward="保住健康，获得北坡危险情报。"}else if(d.score>=75){title="小胜";text=a==="soothe"?"你绕开它的伤口低声安抚，魂兽最终退入林中，留下几片带灵气的鳞。":"你借塌墙和兵器逼退了它。它没有死，却记住了你的气息。";reward="获得魂兽鳞片、北坡线索、修为 +8。";state.spirit++;state.qi=Math.min(100,state.qi+8);state.items.push("魂兽鳞片 x1","北坡线索 x1")}else{title="险胜";text="你挡住最危险的一次冲撞，但手臂被震得发麻。魂兽拖着伤腿逃走。";reward="健康 -8，获得黑血线索、修为 +5。";state.health-=8;state.qi=Math.min(100,state.qi+5);state.items.push("黑血线索 x1")}state.flags.battleDone=true;state.stage="free";setScene({place:"城外 · 北坡归途",meta:"首战结束",title,story:text,summaryTitle:"本次收获：",summary:reward});log(`北坡首战：${title}。${reward}`);render()}
-function renderBag(){return state.items.map(i=>`<div class="card"><b>${i}</b><small>${i.includes("鳞片")?"可出售、入药或研究，后续开启魂兽线。":i.includes("线索")?"已加入记录，影响后续调查。":"基础补给。"}</small></div>`).join("")||`<div class="card"><b>空</b><small>暂无物品。</small></div>`}
-function renderRecord(){return`<div class="card"><b>v12 体验线</b><small>布局二版；10回合序章；多人物互动；多建筑经营；每日结算；北坡首战。</small></div>`+state.log.map((x,i)=>`<div class="card"><b>${i===0?"最新记录":"记录"}</b><small>${esc(x)}</small></div>`).join("")}
-$("newGame").onclick=begin;$("continueGame").onclick=()=>{const s=load();if(s)enterLoaded(s)};$("clearSave").onclick=()=>{localStorage.removeItem(SAVE_KEY);$("continueGame").style.display="none";toast("自动存档已清除")};$("saveBtn").onclick=()=>{save();toast("已保存")};document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("overlay").onclick=e=>{if(e.target===$("overlay"))closeModal()};
-renderCareer();const existing=load();if(existing){$("continueGame").style.display="";$("continueGame").textContent=`继续：${existing.mode==="prologue"?"序章第"+(existing.prologue+1)+"回":"第 "+existing.day+" 日"} · ${existing.saveVersion||"存档"}`}
-</script>
+    <main id="game-container">
+        <section id="resource-bar" aria-label="资源">
+            <div class="resource-item"><span>灵石</span><strong id="money">1000</strong></div>
+            <div class="resource-item"><span>装备</span><strong id="equipment-count">0</strong></div>
+            <div class="resource-item"><span>据点</span><strong id="hideout-count">1</strong></div>
+            <div class="resource-item"><span>天气</span><strong id="weather">晴朗 / 第 1 天</strong></div>
+        </section>
+
+        <section id="main-view">
+            <div id="team-panel">
+                <h1>当前小队</h1>
+                <div id="team-members"></div>
+                <button id="recruit-btn" class="action-btn">招募成员 500 灵石</button>
+            </div>
+
+            <div id="mission-panel">
+                <h1>任务大厅</h1>
+                <div id="mission-list"></div>
+            </div>
+        </section>
+
+        <section id="dialog-overlay" class="hidden" aria-label="角色互动窗口">
+            <div id="dialog-box">
+                <div id="dialog-character">
+                    <div id="character-avatar"></div>
+                    <div>
+                        <h2 id="character-name"></h2>
+                        <p id="character-status"></p>
+                    </div>
+                </div>
+                <p id="dialog-content"></p>
+                <div id="dialog-choices"></div>
+            </div>
+        </section>
+
+        <div id="notification" class="hidden"></div>
+    </main>
+
+    <script src="game.js"></script>
 </body>
 </html>
